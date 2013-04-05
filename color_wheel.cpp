@@ -132,6 +132,11 @@ void Color_Wheel::mouseReleaseEvent(QMouseEvent *)
     mouse_status = Nothing;
 }
 
+void Color_Wheel::resizeEvent(QResizeEvent *)
+{
+    render_rectangle();
+}
+
 void Color_Wheel::render_rectangle()
 {
     int sz = square_size();

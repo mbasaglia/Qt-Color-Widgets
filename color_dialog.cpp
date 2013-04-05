@@ -36,6 +36,7 @@ void Color_Dialog::update_widgets()
                       .arg(col.alpha(),2,16,QChar('0'))
                      );
     preview->setBackgroundBrush(col);
+    preview->repaint();
     wheel->setColor(col);
     blockSignals(false);
 }

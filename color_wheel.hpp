@@ -44,6 +44,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+    void resizeEvent(QResizeEvent *);
 
 private:
     qreal outer_radius() const
