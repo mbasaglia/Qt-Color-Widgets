@@ -4,7 +4,7 @@
 #include <QLineF>
 
 Color_Wheel::Color_Wheel(QWidget *parent) :
-    QWidget(parent), hue(80), sat(0), lum(0), alpha(255),
+    QWidget(parent), hue(0), sat(0), lum(0), alpha(255),
     wheel_width(20), mouse_status(Nothing)
 {
 }
