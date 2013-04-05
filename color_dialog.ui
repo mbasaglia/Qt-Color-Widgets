@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Color_Dialog</class>
+ <widget class="QDialog" name="Color_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>495</width>
+    <height>361</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Color_Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="Color_Wheel" name="wheel" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Color_Preview" name="preview">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>24</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="3" column="0" colspan="2">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSlider" name="slide_hue">
+         <property name="maximum">
+          <number>360</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSlider" name="slide_blue">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Hex</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSlider" name="slide_saturation">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Lightness</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSlider" name="slide_red">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSlider" name="slide_lightness">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QSlider" name="slide_green">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Alpha</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QSlider" name="slide_alpha">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Blue</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Green</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Red</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Hue</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Saturation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QLineEdit" name="edit_hex">
+         <property name="inputMask">
+          <string>HHHhhhhh</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Color_Preview</class>
+   <extends>QGraphicsView</extends>
+   <header>color_preview.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>Color_Wheel</class>
+   <extends>QWidget</extends>
+   <header>color_wheel.hpp</header>
+   <container>1</container>
+   <slots>
+    <signal>colorSelected(QColor)</signal>
+    <slot>setColor(QColor)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>351</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>351</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>294</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_hue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_hsl()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>433</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>568</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_saturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_hsl()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>429</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_lightness</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_hsl()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>442</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_red</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_rgba()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_green</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_rgba()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>538</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_blue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_rgba()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_rgba()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>531</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wheel</sender>
+   <signal>colorSelected(QColor)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>setColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>175</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>568</x>
+     <y>106</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>set_rgba()</slot>
+  <slot>set_hsl()</slot>
+  <slot>setColor(QColor)</slot>
+ </slots>
+</ui>
