@@ -1,16 +1,22 @@
 #ifndef COLOR_PREVIEW_HPP
 #define COLOR_PREVIEW_HPP
 
-#include <QGraphicsView>
+#include <QWidget>
 
-class Color_Preview : public QGraphicsView
+class Color_Preview : public QWidget
 {
     Q_OBJECT
+private:
+    QColor col;
+
 public:
     explicit Color_Preview(QWidget *parent = 0);
     
+public slots:
+    void setColor(QColor c);
 protected:
-    void drawBackground(QPainter *painter, const QRectF &rect);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 
 };
 

@@ -29,25 +29,33 @@
         </widget>
        </item>
        <item>
-        <widget class="Color_Preview" name="preview">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+        <widget class="QFrame" name="frame">
          <property name="minimumSize">
           <size>
            <width>0</width>
            <height>24</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>24</height>
-          </size>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
          </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="Color_Preview" name="preview" native="true"/>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -224,11 +232,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>Color_Preview</class>
-   <extends>QGraphicsView</extends>
-   <header>color_preview.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>Color_Wheel</class>
    <extends>QWidget</extends>
    <header>color_wheel.hpp</header>
@@ -237,6 +240,12 @@
     <signal>colorSelected(QColor)</signal>
     <slot>setColor(QColor)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>Color_Preview</class>
+   <extends>QWidget</extends>
+   <header>color_preview.hpp</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
