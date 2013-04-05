@@ -14,6 +14,11 @@ QColor Color_Wheel::color() const
     return QColor::fromHsl(hue,sat,lum,alpha);
 }
 
+QSize Color_Wheel::sizeHint() const
+{
+    return QSize(wheel_width*5,wheel_width*5);
+}
+
 
 void Color_Wheel::paintEvent(QPaintEvent * )
 {

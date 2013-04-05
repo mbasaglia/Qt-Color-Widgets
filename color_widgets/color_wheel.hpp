@@ -8,6 +8,9 @@
 class Color_Wheel : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(QColor color READ color WRITE setColor DESIGNABLE true STORED false )
+
 private:
     int hue, sat, lum, alpha;
     qreal wheel_width;
@@ -24,6 +27,9 @@ public:
     explicit Color_Wheel(QWidget *parent = 0);
 
     QColor color() const;
+
+
+    QSize sizeHint () const;
 
 public slots:
 

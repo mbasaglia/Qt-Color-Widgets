@@ -3,9 +3,16 @@
 
 #include <QWidget>
 
+/**
+    Simple widget that shows a preview of a color
+*/
 class Color_Preview : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor DESIGNABLE true)
+    Q_PROPERTY(Alpha_Mode alpha_mode READ alphaMode WRITE setAlphaMode DESIGNABLE true)
+    Q_PROPERTY(QBrush background READ getBackground WRITE setBackground DESIGNABLE true)
+    Q_ENUMS(Alpha_Mode)
 public:
     enum Alpha_Mode
     {
@@ -43,6 +50,13 @@ public:
         alpha_mode = am;
         repaint();
     }
+
+    QColor color() const
+    {
+        return col;
+    }
+
+    QSize sizeHint () const;
     
 public slots:
     void setColor(QColor c);
