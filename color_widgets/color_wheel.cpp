@@ -35,7 +35,7 @@ Color_Wheel::Color_Wheel(QWidget *parent) :
 
 QColor Color_Wheel::color() const
 {
-    return QColor::fromHsv(huem,sat,val);
+    return QColor::fromHsvF(huem,sat,val);
 }
 
 QSize Color_Wheel::sizeHint() const
@@ -82,7 +82,7 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     painter.setPen(QPen(Qt::black,3));
     painter.setBrush(Qt::NoBrush);
     QLineF ray(0,0,outer_radius(),0);
-    ray.setAngle(huem);
+    ray.setAngle(huem*360);
     QPointF h1 = ray.p2();
     ray.setLength(inner_radius());
     QPointF h2 = ray.p2();
@@ -92,18 +92,18 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     if ( sat_val_square.isNull() )
         render_rectangle();
 
-    painter.rotate(-huem-45);
+    painter.rotate(-huem*360-45);
     ray.setLength(inner_radius());
     ray.setAngle(135);
     painter.drawImage(ray.p2(),sat_val_square);
 
     // lum-sat selector
     //painter.rotate(135);
-    painter.setPen(QPen( val > 128 ? Qt::black : Qt::white ,3));
+    painter.setPen(QPen( val > 0.5 ? Qt::black : Qt::white ,3));
     painter.setBrush(Qt::NoBrush);
     double max_dist = square_size();
-    painter.drawEllipse(QPointF(sat/255.0*max_dist-max_dist/2,
-                                val/255.0*max_dist-max_dist/2
+    painter.drawEllipse(QPointF(sat*max_dist-max_dist/2,
+                                val*max_dist-max_dist/2
                                ),
                         selector_w,selector_w);
 
@@ -113,7 +113,7 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
 {
     if ( mouse_status == Drag_Circle )
     {
-        huem = line_to_point(ev->pos()).angle();
+        huem = line_to_point(ev->pos()).angle()/360.0;
         render_rectangle();
 
         emit colorSelected(color());
@@ -125,19 +125,19 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
         QLineF glob_mouse_ln = line_to_point(ev->pos());
         QLineF center_mouse_ln ( QPointF(0,0),
                                  glob_mouse_ln.p2() - glob_mouse_ln.p1() );
-        center_mouse_ln.setAngle(center_mouse_ln.angle()-huem-45);
+        center_mouse_ln.setAngle(center_mouse_ln.angle()-huem*360-45);
 
-        sat = center_mouse_ln.x2()/square_size()*255+128;
+        sat = center_mouse_ln.x2()/square_size()+0.5;
 
-        val = center_mouse_ln.y2()/square_size()*255+128;
+        val = center_mouse_ln.y2()/square_size()+0.5;
 
-        if ( sat > 255 )
-            sat = 255;
+        if ( sat > 1 )
+            sat = 1;
         else if ( sat < 0 )
             sat = 0;
 
-        if ( val> 255 )
-            val = 255;
+        if ( val > 1 )
+            val = 1;
         else if ( val < 0 )
             val = 0;
 
@@ -172,7 +172,6 @@ void Color_Wheel::resizeEvent(QResizeEvent *)
 void Color_Wheel::render_rectangle()
 {
     int sz = square_size();
-    double huef = huem/360.0;
     sat_val_square = QImage(sz,sz, QImage::Format_RGB32);
     //double max_dist = sz*sz*2;
     for(int i = 0; i < sz; ++i)
@@ -180,7 +179,7 @@ void Color_Wheel::render_rectangle()
         for(int j = 0;j < sz; ++j)
         {
             sat_val_square.setPixel( i,j,
-                    QColor::fromHsvF(huef,double(i)/sz,double(j)/sz).rgb());
+                    QColor::fromHsvF(huem,double(i)/sz,double(j)/sz).rgb());
             /*sat_lum_square.setPixel( i,j, QColor::fromHslF(
                                  huef,
                                  (i*i+(sz-j)*(sz-j))/max_dist,
@@ -193,32 +192,32 @@ void Color_Wheel::render_rectangle()
 
 void Color_Wheel::setColor(QColor c)
 {
-    int oldh = huem;
-    huem = c.hue();
-    sat = c.saturation();
-    val = c.value();
-    if ( oldh != huem )
+    qreal oldh = huem;
+    huem = c.hueF();
+    sat = c.saturationF();
+    val = c.valueF();
+    if ( !qFuzzyCompare(oldh+1,huem+1) )
         render_rectangle();
     update();
     emit colorChanged(c);
 }
 
-void Color_Wheel::setHue(int h)
+void Color_Wheel::setHue(qreal h)
 {
-    huem = qAbs(h%360);
+    huem = qMax(0.0,qMin(1.0,h));
     render_rectangle();
     update();
 }
 
-void Color_Wheel::setSaturation(int s)
+void Color_Wheel::setSaturation(qreal s)
 {
-    sat = qAbs(s%256);
+    sat = qMax(0.0,qMin(1.0,s));
     update();
 }
 
-void Color_Wheel::setValue(int v)
+void Color_Wheel::setValue(qreal v)
 {
-    val = qAbs(v%256);
+    val = qMax(0.0,qMin(1.0,v));
     update();
 }
 

@@ -34,13 +34,13 @@ class Color_Wheel : public QWidget
     Q_OBJECT
 
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true STORED false )
-    Q_PROPERTY(int hue READ hue WRITE setHue DESIGNABLE false )
-    Q_PROPERTY(int saturation READ saturation WRITE setSaturation DESIGNABLE false )
-    Q_PROPERTY(int value READ value WRITE setValue DESIGNABLE false )
+    Q_PROPERTY(qreal hue READ hue WRITE setHue DESIGNABLE false )
+    Q_PROPERTY(qreal saturation READ saturation WRITE setSaturation DESIGNABLE false )
+    Q_PROPERTY(qreal value READ value WRITE setValue DESIGNABLE false )
     Q_PROPERTY(unsigned wheelWidth READ wheelWidth WRITE setWheelWidth DESIGNABLE true )
 
 private:
-    int huem, sat, val;
+    qreal huem, sat, val;
     unsigned wheel_width;
     enum Mouse_Status
     {
@@ -58,9 +58,9 @@ public:
 
     QSize sizeHint () const;
 
-    int hue() const { return huem; }
-    int saturation() const { return sat; }
-    int value() const { return val; }
+    qreal hue() const { return huem; }
+    qreal saturation() const { return sat; }
+    qreal value() const { return val; }
     unsigned wheelWidth() const { return wheel_width; }
     void setWheelWidth(unsigned w);
 
@@ -68,17 +68,17 @@ public slots:
 
     void setColor(QColor c);
     /**
-     * @param h Hue [0-359]
+     * @param h Hue [0-1]
     */
-    void setHue(int h);
+    void setHue(qreal h);
     /**
-     * @param s Saturation [0-255]
+     * @param s Saturation [0-1]
     */
-    void setSaturation(int s);
+    void setSaturation(qreal s);
     /**
-     * @param v Value [0-255]
+     * @param v Value [0-1]
     */
-    void setValue(int v);
+    void setValue(qreal v);
 
 signals:
     /**

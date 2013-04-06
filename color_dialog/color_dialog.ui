@@ -44,25 +44,42 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="0" colspan="2">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="Gradient_Slider" name="slide_hue">
          <property name="maximum">
-          <number>360</number>
+          <number>359</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="Gradient_Slider" name="slide_blue">
+       <item row="2" column="1">
+        <widget class="Gradient_Slider" name="slide_value">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Saturation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Hue</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="Gradient_Slider" name="slide_saturation">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -78,35 +95,32 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="Gradient_Slider" name="slide_saturation">
-         <property name="maximum">
-          <number>255</number>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Blue</string>
          </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Value</string>
+       <item row="8" column="1">
+        <widget class="Gradient_Slider" name="slide_alpha">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
         <widget class="Gradient_Slider" name="slide_red">
-         <property name="maximum">
-          <number>255</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="Gradient_Slider" name="slide_value">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -125,27 +139,10 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_4">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Alpha</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="Gradient_Slider" name="slide_alpha">
-         <property name="maximum">
-          <number>255</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Blue</string>
+          <string>Value</string>
          </property>
         </widget>
        </item>
@@ -156,6 +153,13 @@
          </property>
         </widget>
        </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Alpha</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -163,21 +167,69 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Hue</string>
+       <item row="6" column="1">
+        <widget class="Gradient_Slider" name="slide_blue">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Saturation</string>
+       <item row="0" column="2">
+        <widget class="QSpinBox" name="spin_hue">
+         <property name="wrapping">
+          <bool>true</bool>
+         </property>
+         <property name="maximum">
+          <number>359</number>
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="1" column="2">
+        <widget class="QSpinBox" name="spin_saturation">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QSpinBox" name="spin_value">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QSpinBox" name="spin_red">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QSpinBox" name="spin_green">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QSpinBox" name="spin_blue">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QSpinBox" name="spin_alpha">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1" colspan="2">
         <widget class="QLineEdit" name="edit_hex">
          <property name="font">
           <font>
@@ -189,15 +241,15 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
+       <item row="7" column="0" colspan="3">
         <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
-        <widget class="Line" name="line_3">
+       <item row="3" column="0" colspan="3">
+        <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -281,8 +333,8 @@
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>433</x>
-     <y>27</y>
+     <x>427</x>
+     <y>33</y>
     </hint>
     <hint type="destinationlabel">
      <x>568</x>
@@ -297,8 +349,8 @@
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>62</y>
+     <x>427</x>
+     <y>67</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -313,8 +365,8 @@
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>442</x>
-     <y>92</y>
+     <x>427</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -329,8 +381,8 @@
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>142</y>
+     <x>427</x>
+     <y>148</y>
     </hint>
     <hint type="destinationlabel">
      <x>557</x>
@@ -345,8 +397,8 @@
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>483</x>
-     <y>172</y>
+     <x>427</x>
+     <y>182</y>
     </hint>
     <hint type="destinationlabel">
      <x>538</x>
@@ -361,8 +413,8 @@
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>483</x>
-     <y>202</y>
+     <x>427</x>
+     <y>216</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -377,8 +429,8 @@
    <slot>update_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>483</x>
-     <y>250</y>
+     <x>427</x>
+     <y>263</y>
     </hint>
     <hint type="destinationlabel">
      <x>531</x>
@@ -399,6 +451,230 @@
     <hint type="destinationlabel">
      <x>568</x>
      <y>106</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_hue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_hue</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_hue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_hue</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>452</x>
+     <y>37</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>23</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_saturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_saturation</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>397</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>446</x>
+     <y>66</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_saturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_saturation</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>461</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>343</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_value</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_value</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>392</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>452</x>
+     <y>97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_value</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_value</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>462</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>374</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_red</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_red</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>139</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>451</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_red</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_red</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>457</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>387</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_green</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_green</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>457</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_green</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_green</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>453</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_alpha</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_alpha</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>454</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_blue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_blue</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>358</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>464</x>
+     <y>212</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_blue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_blue</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>209</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>208</y>
     </hint>
    </hints>
   </connection>

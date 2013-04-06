@@ -33,27 +33,33 @@ void Color_Dialog::update_widgets()
 
     QColor col = color();
 
+    //slide_red->blockSignals(true);
     slide_red->setValue(col.red());
     slide_red->setFirstColor(QColor(0,col.green(),col.blue()));
     slide_red->setLastColor(QColor(255,col.green(),col.blue()));
+    //slide_red->blockSignals(false);
 
+    //slide_green->blockSignals(true);
     slide_green->setValue(col.green());
     slide_green->setFirstColor(QColor(col.red(),0,col.blue()));
     slide_green->setLastColor(QColor(col.red(),255,col.blue()));
+    //slide_green->blockSignals(false);
 
+    //slide_blue->blockSignals(true);
     slide_blue->setValue(col.blue());
     slide_blue->setFirstColor(QColor(col.red(),col.green(),0));
     slide_blue->setLastColor(QColor(col.red(),col.green(),255));
+    //slide_blue->blockSignals(false);
 
-    slide_hue->setValue(wheel->hue());
+    slide_hue->setValue(qRound(wheel->hue()*360.0));
 
-    slide_saturation->setValue(wheel->saturation());
-    slide_saturation->setFirstColor(QColor::fromHsv(wheel->hue(),0,wheel->value()));
-    slide_saturation->setLastColor(QColor::fromHsv(wheel->hue(),255,wheel->value()));
+    slide_saturation->setValue(qRound(wheel->saturation()*255.0));
+    slide_saturation->setFirstColor(QColor::fromHsvF(wheel->hue(),0,wheel->value()));
+    slide_saturation->setLastColor(QColor::fromHsvF(wheel->hue(),1,wheel->value()));
 
-    slide_value->setValue(wheel->value());
-    slide_value->setFirstColor(QColor::fromHsv(wheel->hue(),wheel->saturation(),0));
-    slide_value->setLastColor(QColor::fromHsv(wheel->hue(),wheel->saturation(),255));
+    slide_value->setValue(qRound(wheel->value()*255.0));
+    slide_value->setFirstColor(QColor::fromHsvF(wheel->hue(),wheel->saturation(),0));
+    slide_value->setLastColor(QColor::fromHsvF(wheel->hue(),wheel->saturation(),1));
 
 
     edit_hex->setText(QString("%1%2%3%4")
@@ -87,10 +93,10 @@ void Color_Dialog::set_rgb()
 {
     if ( !signalsBlocked() )
     {
-        QColor c ( slide_red->value(), slide_green->value(), slide_blue->value() );
-        if ( c.saturation() == 0 )
-            c = QColor::fromHsv(slide_hue->value(),0,c.value());
-        wheel->setColor(c);
+        QColor col ( slide_red->value(), slide_green->value(), slide_blue->value() );
+        if ( col.saturation() == 0 )
+            col = QColor::fromHsv(slide_hue->value(),0,col.value());
+        wheel->setColor(col);
         update_widgets();
     }
 }
