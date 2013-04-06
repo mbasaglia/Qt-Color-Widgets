@@ -57,7 +57,12 @@ QString Color_Wheel_Plugin::group() const
 
 QIcon Color_Wheel_Plugin::icon() const
 {
-    return QIcon();
+    Color_Wheel w;
+    w.resize(64,64);
+    w.setWheelWidth(8);
+    QPixmap pix(64,64);
+    w.render(&pix);
+    return QIcon(pix);
 }
 
 QString Color_Wheel_Plugin::toolTip() const
@@ -79,8 +84,14 @@ QString Color_Wheel_Plugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
            " <widget class=\"Color_Wheel\" name=\"Color_Wheel\">\n"
+           "  <property name=\"sizePolicy\">\n"
+           "   <sizepolicy hsizetype=\"Minimum\" vsizetype=\"Minimum\">\n"
+           "    <horstretch>0</horstretch>\n"
+           "    <verstretch>0</verstretch>\n"
+           "   </sizepolicy>\n"
+           "  </property>\n"
            " </widget>\n"
-            "</ui>\n";
+           "</ui>\n";
 }
 
 QString Color_Wheel_Plugin::includeFile() const

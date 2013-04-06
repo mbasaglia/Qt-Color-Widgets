@@ -29,7 +29,11 @@
         </widget>
        </item>
        <item>
-        <widget class="Color_Preview" name="preview"/>
+        <widget class="Color_Preview" name="preview">
+         <property name="alpha_mode" stdset="0">
+          <enum>Color_Preview::SplitAlpha</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
