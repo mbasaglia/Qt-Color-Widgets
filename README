@@ -9,6 +9,9 @@ The sources of the dialog itself are in the subdirectory color_dialog.
 The subdirectory color_widgets contains the specialized widgets used in
 Color_Dialog and they can be installed as a Qt Designer/Creator plugin.
 
+You can see a screenshot of the dialog at
+https://github.com/mbasaglia/Qt-Color-Picker/blob/master/screenshot.png
+
 License
 -------
 
