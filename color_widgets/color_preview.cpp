@@ -96,3 +96,8 @@ void Color_Preview::resizeEvent(QResizeEvent *)
     update();
 }
 
+void Color_Preview::mouseReleaseEvent(QMouseEvent *)
+{
+    emit clicked();
+}
+
