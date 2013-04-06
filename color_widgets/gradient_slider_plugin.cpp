@@ -68,7 +68,7 @@ QIcon Gradient_Slider_Plugin::icon() const
     cols.push_back(Qt::green);
     cols.push_back(Qt::yellow);
     cols.push_back(Qt::red);
-    w.setBackground(cols);
+    w.setColors(cols);
     QPixmap pix(64,64);
     pix.fill(Qt::transparent);
     w.render(&pix,QPoint(0,16));

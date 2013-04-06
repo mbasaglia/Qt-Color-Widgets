@@ -31,7 +31,7 @@ Color_Dialog::Color_Dialog(QWidget *parent) :
     for ( int i = 0; i < 360; i+= 360/6 )
         rainbow.push_back(QColor::fromHsv(i,255,255));
     rainbow.push_back(Qt::red);
-    slide_hue->setBackground(rainbow);
+    slide_hue->setColors(rainbow);
 }
 
 QColor Color_Dialog::color() const
@@ -82,6 +82,13 @@ void Color_Dialog::update_widgets()
     slide_value->setValue(qRound(wheel->value()*255.0));
     slide_value->setFirstColor(QColor::fromHsvF(wheel->hue(),wheel->saturation(),0));
     slide_value->setLastColor(QColor::fromHsvF(wheel->hue(),wheel->saturation(),1));
+
+
+    QColor apha_color = col;
+    apha_color.setAlpha(0);
+    slide_alpha->setFirstColor(apha_color);
+    apha_color.setAlpha(255);
+    slide_alpha->setLastColor(apha_color);
 
 
     edit_hex->setText(QString("%1%2%3%4")

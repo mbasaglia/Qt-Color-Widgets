@@ -32,10 +32,16 @@ class Color_Dialog : public QDialog, private Ui::Color_Dialog
 public:
     explicit Color_Dialog(QWidget *parent = 0);
 
+    /**
+     * Get currently selected color
+     */
     QColor color() const;
 
 public slots:
 
+    /**
+     * Change color
+     */
     void setColor(QColor c);
 
 signals:
@@ -45,11 +51,13 @@ signals:
     void colorChanged(QColor);
 
 protected slots:
+    /// Update all the Ui elements to match the selected color
     void update_widgets();
     /// Update from HSV sliders
     void set_hsv();
     /// Update from RGB sliders
     void set_rgb();
+
 private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);

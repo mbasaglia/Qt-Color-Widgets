@@ -30,67 +30,73 @@
 #include <QLinearGradient>
 
 Gradient_Slider::Gradient_Slider(QWidget *parent) :
-    QSlider(parent)
+    QSlider(parent), back( Qt::darkGray, Qt::DiagCrossPattern )
 {
-    back.push_back(Qt::black);
-    back.push_back(Qt::white);
+    col_list.push_back(Qt::black);
+    col_list.push_back(Qt::white);
 
     setOrientation(Qt::Horizontal);
 }
 
-void Gradient_Slider::setBackground(QVector<QColor> bg)
+void Gradient_Slider::setBackground(QBrush bg)
 {
     back = bg;
     update();
 }
 
-void Gradient_Slider::setBackgroundGradient(QLinearGradient bg)
+void Gradient_Slider::setColors(QVector<QColor> bg)
 {
-    back.clear();
+    col_list = bg;
+    update();
+}
+
+void Gradient_Slider::setGradient(QLinearGradient bg)
+{
+    col_list.clear();
     foreach(const QGradientStop& gs, bg.stops() )
     {
-        back.push_back(gs.second);
+        col_list.push_back(gs.second);
     }
     update();
 }
 
-QLinearGradient Gradient_Slider::backgroundGradient() const
+QLinearGradient Gradient_Slider::gradient() const
 {
     int ior = orientation() == Qt::Horizontal ? 1 : 0;
     QLinearGradient lg(0,0,ior,1-ior);
     lg.setCoordinateMode(QGradient::StretchToDeviceMode);
-    for(int i = 0; i < back.size(); i++)
-        lg.setColorAt(double(i)/(back.size()-1),back[i]);
+    for(int i = 0; i < col_list.size(); i++)
+        lg.setColorAt(double(i)/(col_list.size()-1),col_list[i]);
     return lg;
 }
 
 void Gradient_Slider::setFirstColor(QColor c)
 {
-    if ( back.empty() )
-        back.push_back(c);
+    if ( col_list.empty() )
+        col_list.push_back(c);
     else
-        back.front() = c;
+        col_list.front() = c;
     update();
 }
 
 void Gradient_Slider::setLastColor(QColor c)
 {
 
-    if ( back.size() < 2 )
-        back.push_back(c);
+    if ( col_list.size() < 2 )
+        col_list.push_back(c);
     else
-        back.back() = c;
+        col_list.back() = c;
     update();
 }
 
 QColor Gradient_Slider::firstColor() const
 {
-    return back.empty() ? QColor() : back.front();
+    return col_list.empty() ? QColor() : col_list.front();
 }
 
 QColor Gradient_Slider::lastColor() const
 {
-    return back.empty() ? QColor() : back.back();
+    return col_list.empty() ? QColor() : col_list.back();
 }
 
 
@@ -99,7 +105,8 @@ void Gradient_Slider::paintEvent(QPaintEvent *)
     QPainter p(this);
 
 
-    p.fillRect(1,1,geometry().width()-2,geometry().height()-2,backgroundGradient());
+    p.fillRect(1,1,geometry().width()-2,geometry().height()-2,back);
+    p.fillRect(1,1,geometry().width()-2,geometry().height()-2,gradient());
 
     QStyleOptionSlider opt_slider;
     initStyleOption(&opt_slider);

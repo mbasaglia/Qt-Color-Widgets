@@ -25,30 +25,67 @@
 
 #include <QSlider>
 
+/**
+ * \brief A slider that mover on top of a gradient
+ */
 class Gradient_Slider : public QSlider
 {
     Q_OBJECT
-    Q_PROPERTY(QVector<QColor> background READ background WRITE setBackground)
-    Q_PROPERTY(QLinearGradient backgroundGradient
-               READ backgroundGradient WRITE setBackgroundGradient STORED false)
+    Q_PROPERTY(QBrush background READ background WRITE setBackground)
+    Q_PROPERTY(QVector<QColor> colors READ colors WRITE setColors)
+    Q_PROPERTY(QLinearGradient gradient READ gradient WRITE setGradient STORED false)
     Q_PROPERTY(QColor firstColor READ firstColor WRITE setFirstColor STORED false)
     Q_PROPERTY(QColor lastColor READ lastColor WRITE setLastColor STORED false)
 
 private:
-    QVector<QColor> back;
+    QVector<QColor> col_list;
+    QBrush back;
 
 public:
     explicit Gradient_Slider(QWidget *parent = 0);
 
-    QVector<QColor> background() const { return back; }
-    void setBackground(QVector<QColor> bg);
+    /// Get the background, it's visible for transparent gradient stops
+    QBrush background() const { return back; }
+    /// Set the background, it's visible for transparent gradient stops
+    void setBackground(QBrush bg);
 
-    void setBackgroundGradient(QLinearGradient bg);
-    QLinearGradient backgroundGradient() const ;
+    /// Get the colors that make up the gradient
+    QVector<QColor> colors() const { return col_list; }
+    /// Set the colors that make up the gradient
+    void setColors(QVector<QColor> bg);
 
+    /**
+     * \brief Set the gradient
+     * \note  Only the color order is preserved, all stops will be equally spaced
+     */
+    void setGradient(QLinearGradient bg);
+    /// Get the gradient
+    QLinearGradient gradient() const ;
+
+    /**
+     * Set the first color of the gradient
+     *
+     * If the gradient is currently empty it will create a stop with the given color
+     */
     void setFirstColor(QColor c);
+    /**
+     * Set the last color of the gradient
+     *
+     * If the gradient is has less than two colors,
+     * it will create a stop with the given color
+     */
     void setLastColor(QColor c);
+    /**
+     * Get the first color
+     *
+     * Returns QColor() con empty gradient
+     */
     QColor firstColor() const;
+    /**
+     * Get the last color
+     *
+     * Returns QColor() con empty gradient
+     */
     QColor lastColor() const;
     
 protected:

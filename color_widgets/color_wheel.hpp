@@ -26,7 +26,12 @@
 #include <QWidget>
 #include <qmath.h>
 
-
+/**
+ * \brief Display an analog widget that allows the selection of a HSV color
+ *
+ * It has an outer wheel to select the Hue and an intenal square to select
+ * Saturation and Lightness.
+ */
 class Color_Wheel : public QWidget
 {
     Q_OBJECT
@@ -52,19 +57,31 @@ private:
 public:
     explicit Color_Wheel(QWidget *parent = 0);
 
+    /// Get current color
     QColor color() const;
 
     QSize sizeHint () const;
 
+    /// Get current hue in the range [0-1]
     qreal hue() const { return huem; }
+
+    /// Get current saturation in the range [0-1]
     qreal saturation() const { return sat; }
+
+    /// Get current value in the range [0-1]
     qreal value() const { return val; }
+
+    /// Get the width in pixels of the outer wheel
     unsigned wheelWidth() const { return wheel_width; }
+
+    /// Set the width in pixels of the outer wheel
     void setWheelWidth(unsigned w);
 
 public slots:
 
+    /// Set current color
     void setColor(QColor c);
+
     /**
      * @param h Hue [0-1]
     */
@@ -96,10 +113,12 @@ protected:
     void resizeEvent(QResizeEvent *);
 
 private:
+    /// Calculate outer wheel radius from idget center
     qreal outer_radius() const
     {
         return qMin(geometry().width(), geometry().height())/2;
     }
+    /// Calculate inner wheel radius from idget center
     qreal inner_radius() const
     {
         return outer_radius()-wheel_width;
@@ -109,6 +128,7 @@ private:
     {
         return QLineF (geometry().width()/2,geometry().height()/2, p.x(),p.y());
     }
+    /// Calculate the edge length of the inner square
     qreal square_size() const
     {
         return inner_radius()*qSqrt(2);

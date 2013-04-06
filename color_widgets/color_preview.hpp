@@ -38,41 +38,45 @@ class Color_Preview : public QWidget
 public:
     enum Alpha_Mode
     {
-        NoAlpha, ///< Show only solid color
-        SplitAlpha, ///< Show both solid and transparent
-        AllAlpha ///< show only transparent
+        NoAlpha,    ///< Show only solid color
+        SplitAlpha, ///< Show both solid and transparent side by side
+        AllAlpha    ///< show only transparent
     };
 
 private:
     QColor col; ///< color to be viewed
     QBrush back;///< Background brush, visible on transaprent color
-    Alpha_Mode alpha_mode;
+    Alpha_Mode alpha_mode; ///< How transparent colors are handled
 
 public:
     explicit Color_Preview(QWidget *parent = 0);
 
+    /// Change the background visible under transparent colors
     void setBackground(QBrush bk)
     {
         back = bk;
         update();
     }
 
+    /// Get the background visible under transparent colors
     QBrush getBackground() const
     {
         return back;
     }
 
+    /// Get how transparent colors are handled
     Alpha_Mode alphaMode() const
     {
         return alpha_mode;
     }
-
+    /// Set how transparent colors are handled
     void setAlphaMode(Alpha_Mode am)
     {
         alpha_mode = am;
         update();
     }
 
+    /// Get current color
     QColor color() const
     {
         return col;
@@ -81,9 +85,11 @@ public:
     QSize sizeHint () const;
     
 public slots:
+    /// Set current color
     void setColor(QColor c);
 
 signals:
+    /// Emitted when the user clicks on the widget
     void clicked();
 
 protected:
