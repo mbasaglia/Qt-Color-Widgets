@@ -28,7 +28,7 @@ void Color_Dialog::update_widgets()
     slide_blue->setValue(col.blue());
     slide_hue->setValue(col.hue());
     slide_saturation->setValue(col.saturation());
-    slide_lightness->setValue(col.lightness());
+    slide_value->setValue(col.value());
     edit_hex->setText(QString("%1%2%3%4")
                       .arg(col.red(),2,16,QChar('0'))
                       .arg(col.green(),2,16,QChar('0'))
@@ -40,11 +40,11 @@ void Color_Dialog::update_widgets()
     blockSignals(false);
 }
 
-void Color_Dialog::set_hsl()
+void Color_Dialog::set_hsv()
 {
     if ( !signalsBlocked() )
     {
-        col.setHsl(slide_hue->value(),slide_saturation->value(),slide_lightness->value());
+        col.setHsv(slide_hue->value(),slide_saturation->value(),slide_value->value());
         update_widgets();
         emit colorChanged(col);
     }

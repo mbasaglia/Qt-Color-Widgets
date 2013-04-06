@@ -27,7 +27,7 @@ signals:
 
 protected slots:
     void update_widgets();
-    void set_hsl();
+    void set_hsv();
     void set_rgba();
 private slots:
     void on_edit_hex_editingFinished();

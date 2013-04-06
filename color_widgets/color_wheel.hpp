@@ -36,7 +36,7 @@ class Color_Wheel : public QWidget
     Q_PROPERTY(QColor color READ color WRITE setColor DESIGNABLE true STORED false )
 
 private:
-    int hue, sat, lum, alpha;
+    int hue, sat, val, alpha;
     qreal wheel_width;
     enum Mouse_Status
     {
@@ -44,7 +44,7 @@ private:
         Drag_Circle,
         Drag_Square
     } mouse_status;
-    QImage sat_lum_square;
+    QImage sat_val_square;
 
 
 public:

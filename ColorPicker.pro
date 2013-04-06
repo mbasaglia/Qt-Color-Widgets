@@ -13,12 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        color_dialog.cpp \
-    color_preview.cpp \
-    color_wheel.cpp
+        color_dialog.cpp
 
-HEADERS  += color_dialog.hpp \
-    color_preview.hpp \
-    color_wheel.hpp
+HEADERS  += color_dialog.hpp
+
+include(color_widgets/color_widgets.pri)
 
 FORMS    += color_dialog.ui

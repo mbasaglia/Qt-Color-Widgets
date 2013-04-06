@@ -28,14 +28,14 @@
 #include <QLineF>
 
 Color_Wheel::Color_Wheel(QWidget *parent) :
-    QWidget(parent), hue(0), sat(0), lum(0), alpha(255),
+    QWidget(parent), hue(0), sat(0), val(0), alpha(255),
     wheel_width(20), mouse_status(Nothing)
 {
 }
 
 QColor Color_Wheel::color() const
 {
-    return QColor::fromHsl(hue,sat,lum,alpha);
+    return QColor::fromHsv(hue,sat,val,alpha);
 }
 
 QSize Color_Wheel::sizeHint() const
@@ -58,9 +58,9 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     QConicalGradient gradient_hue(0, 0, 0);
     for ( double a = 0; a < 1.0; a+=1.0/(hue_stops-1) )
     {
-        gradient_hue.setColorAt(a,QColor::fromHslF(a,1,0.5));
+        gradient_hue.setColorAt(a,QColor::fromHsvF(a,1,1));
     }
-    gradient_hue.setColorAt(1,QColor::fromHslF(0,1,0.5));
+    gradient_hue.setColorAt(1,QColor::fromHsvF(0,1,1));
 
     painter.translate(geometry().width()/2,geometry().height()/2);
 
@@ -82,20 +82,20 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     painter.drawLine(h1,h2);
 
     // lum-sat square
-    if ( sat_lum_square.isNull() )
+    if ( sat_val_square.isNull() )
         render_rectangle();
 
-    painter.rotate(-hue+45);
+    painter.rotate(-hue-45);
     ray.setLength(inner_radius());
     ray.setAngle(135);
-    painter.drawImage(ray.p2(),sat_lum_square);
+    painter.drawImage(ray.p2(),sat_val_square);
 
     // lum-sat selector
-    painter.rotate(45);
-    painter.setPen(QPen( lum > 128 ? Qt::black : Qt::white ,3));
+    painter.rotate(135);
+    painter.setPen(QPen( val > 128 ? Qt::black : Qt::white ,3));
     painter.setBrush(Qt::NoBrush);
     double max_dist = qSqrt(2)*square_size();
-    painter.drawEllipse(QPointF(lum/255.0*max_dist-max_dist/2,
+    painter.drawEllipse(QPointF(val/255.0*max_dist-max_dist/2,
                                 max_dist/2-sat/255.0*max_dist),
                         selector_w,selector_w);
 
@@ -132,11 +132,11 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
         QVector2D lumv(satl.p2());
         float lumF = QVector2D::dotProduct(mv,lumv) /
                 (square_size()*square_size()*qSqrt(2)) + 0.5;
-        lum = lumF*255;
-        if ( lum> 255 )
-            lum = 255;
-        else if ( lum < 0 )
-            lum = 0;
+        val = lumF*255;
+        if ( val> 255 )
+            val = 255;
+        else if ( val < 0 )
+            val = 0;
 
         emit colorSelected(color());
         emit colorChanged(color());
@@ -170,18 +170,19 @@ void Color_Wheel::render_rectangle()
 {
     int sz = square_size();
     double huef = hue/360.0;
-    sat_lum_square = QImage(sz,sz, QImage::Format_RGB32);
-    double max_dist = sz*sz*2;
+    sat_val_square = QImage(sz,sz, QImage::Format_RGB32);
+    //double max_dist = sz*sz*2;
     for(int i = 0; i < sz; ++i)
     {
         for(int j = 0;j < sz; ++j)
         {
-            //square.setPixel( i,j, QColor::fromHsl(col.hue(),255*i/sz,255*j/sz).rgb());
-            sat_lum_square.setPixel( i,j, QColor::fromHslF(
+            sat_val_square.setPixel( i,j,
+                    QColor::fromHsvF(huef,double(i)/sz,double(j)/sz).rgb());
+            /*sat_lum_square.setPixel( i,j, QColor::fromHslF(
                                  huef,
                                  (i*i+(sz-j)*(sz-j))/max_dist,
                                  (i*i+j*j)/max_dist
-                            ).rgb());
+                            ).rgb());*/
         }
     }
 }
@@ -190,9 +191,9 @@ void Color_Wheel::render_rectangle()
 void Color_Wheel::setColor(QColor c)
 {
     int oldh = hue;
-    hue = c.hslHue();
-    sat = c.hslSaturation();
-    lum = c.lightness();
+    hue = c.hue();
+    sat = c.saturation();
+    val = c.value();
     alpha = c.alpha();
     if ( oldh != hue )
         render_rectangle();
