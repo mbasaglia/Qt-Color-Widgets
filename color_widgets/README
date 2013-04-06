@@ -1,0 +1,26 @@
+
+Color Widgets for Qt
+====================
+
+
+Installing as a Designer Plugin
+-------------------------------
+
+Compile the library and install in
+(Qt SDK)/Tools/QtCreator/bin/designer/
+(Qt SDK)/(Qt Version)/(Toolchain)/plugins/designer
+
+ qmake && make && make install
+
+
+
+Using them in your application
+------------------------------
+
+include color_widgets.pri
+
+
+License
+-------
+
+LGPLv3+ see COPYING

@@ -15,36 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
-CONFIG += plugin
-QT += designer
-TARGET = color_widgets
-TEMPLATE = lib
 
+INCLUDEPATH += $$PWD
 
 SOURCES += \
-    color_preview_plugin.cpp \
-    color_wheel_plugin.cpp \
-    color_widget_plugin_collection.cpp
+    $$PWD/color_preview.cpp \
+    $$PWD/color_wheel.cpp
 
 HEADERS += \
-    color_preview_plugin.hpp \
-    color_wheel_plugin.hpp \
-    color_widget_plugin_collection.hpp
-
-include(color_widgets.pri)
-
-build_all:!build_pass {
- CONFIG -= build_all
- CONFIG += release
-}
-
-# install
-target.path += $$[QT_INSTALL_PLUGINS]/designer
-
-creator.files = lib$${TARGET}.so
-creator.path = $$[QT_INSTALL_PREFIX]/../../Tools/QtCreator/bin/designer
-INSTALLS += target creator
-
-OTHER_FILES += \
-    COPYING \
-    README
+    $$PWD/color_wheel.hpp \
+    $$PWD/color_preview.hpp
