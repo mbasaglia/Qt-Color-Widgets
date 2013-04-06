@@ -20,8 +20,10 @@ INCLUDEPATH += $$PWD
 
 SOURCES += \
     $$PWD/color_preview.cpp \
-    $$PWD/color_wheel.cpp
+    $$PWD/color_wheel.cpp \
+    $$PWD/gradient_slider.cpp
 
 HEADERS += \
     $$PWD/color_wheel.hpp \
-    $$PWD/color_preview.hpp
+    $$PWD/color_preview.hpp \
+    $$PWD/gradient_slider.hpp

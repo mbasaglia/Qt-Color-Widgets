@@ -24,12 +24,14 @@ TEMPLATE = lib
 SOURCES += \
     color_preview_plugin.cpp \
     color_wheel_plugin.cpp \
-    color_widget_plugin_collection.cpp
+    color_widget_plugin_collection.cpp \
+    gradient_slider_plugin.cpp
 
 HEADERS += \
     color_preview_plugin.hpp \
     color_wheel_plugin.hpp \
-    color_widget_plugin_collection.hpp
+    color_widget_plugin_collection.hpp \
+    gradient_slider_plugin.hpp
 
 include(color_widgets.pri)
 

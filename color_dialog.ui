@@ -47,7 +47,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QSlider" name="slide_hue">
+        <widget class="Gradient_Slider" name="slide_hue">
          <property name="maximum">
           <number>360</number>
          </property>
@@ -223,6 +223,11 @@
     <signal>colorSelected(QColor)</signal>
     <slot>setColor(QColor)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>Gradient_Slider</class>
+   <extends>QSlider</extends>
+   <header>gradient_slider.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
