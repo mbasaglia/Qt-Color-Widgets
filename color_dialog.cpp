@@ -87,10 +87,10 @@ void Color_Dialog::set_rgb()
 {
     if ( !signalsBlocked() )
     {
-        wheel->setColor(QColor(slide_red->value(),
-                        slide_green->value(),
-                        slide_blue->value()
-                       ));
+        QColor c ( slide_red->value(), slide_green->value(), slide_blue->value() );
+        if ( c.saturation() == 0 )
+            c = QColor::fromHsv(slide_hue->value(),0,c.value());
+        wheel->setColor(c);
         update_widgets();
     }
 }
