@@ -85,9 +85,13 @@ public:
 public slots:
     void setColor(QColor c);
 
+signals:
+    void clicked();
+
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 
 };
 
