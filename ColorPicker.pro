@@ -6,17 +6,19 @@
 
 QT       += core gui
 
+OBJECTS_DIR = out/obj
+MOC_DIR = out/generated
+UI_DIR = out/generated
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ColorPicker
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        color_dialog.cpp
+SOURCES += main.cpp
 
-HEADERS  += color_dialog.hpp
+HEADERS  +=
 
-include(color_widgets/color_widgets.pri)
+include(color_dialog/color_dialog.pri)
 
-FORMS    += color_dialog.ui

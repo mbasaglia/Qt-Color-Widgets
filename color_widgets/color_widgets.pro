@@ -19,6 +19,8 @@ CONFIG += plugin
 QT += designer
 TARGET = color_widgets
 TEMPLATE = lib
+OBJECTS_DIR = ../out/obj
+MOC_DIR = ../out/generated
 
 
 SOURCES += \
