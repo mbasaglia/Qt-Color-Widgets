@@ -14,7 +14,9 @@
    <string>Select Color</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="format-fill-color"/>
+   <iconset theme="format-fill-color">
+    <normaloff/>
+   </iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -367,7 +369,7 @@
    <sender>slide_alpha</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_alpha()</slot>
+   <slot>update_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>483</x>
@@ -383,7 +385,7 @@
    <sender>wheel</sender>
    <signal>colorSelected(QColor)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>setColor(QColor)</slot>
+   <slot>update_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>175</x>
@@ -401,6 +403,5 @@
   <slot>set_hsv()</slot>
   <slot>setColor(QColor)</slot>
   <slot>update_widgets()</slot>
-  <slot>set_alpha()</slot>
  </slots>
 </ui>

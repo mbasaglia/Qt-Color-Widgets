@@ -22,8 +22,8 @@ QColor Color_Dialog::color() const
 void Color_Dialog::setColor(QColor c)
 {
     wheel->setColor(c);
+    slide_alpha->setValue(c.alpha());
     update_widgets();
-    emit colorChanged(c);
 }
 
 
@@ -66,6 +66,8 @@ void Color_Dialog::update_widgets()
     preview->setColor(col);
 
     blockSignals(false);
+
+    emit colorChanged(col);
 }
 
 void Color_Dialog::set_hsv()
@@ -78,7 +80,6 @@ void Color_Dialog::set_hsv()
                 slide_value->value()
             ));
         update_widgets();
-        emit colorChanged(color());
     }
 }
 
@@ -91,15 +92,9 @@ void Color_Dialog::set_rgb()
                         slide_blue->value()
                        ));
         update_widgets();
-        emit colorChanged(color());
     }
 }
 
-void Color_Dialog::set_alpha()
-{
-    update_widgets();
-    emit colorChanged(color());
-}
 
 void Color_Dialog::on_edit_hex_editingFinished()
 {

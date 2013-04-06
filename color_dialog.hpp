@@ -24,9 +24,10 @@ signals:
 
 protected slots:
     void update_widgets();
+    /// Update from HSV sliders
     void set_hsv();
+    /// Update from RGB sliders
     void set_rgb();
-    void set_alpha();
 private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);
