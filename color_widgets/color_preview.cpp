@@ -42,7 +42,7 @@ QSize Color_Preview::sizeHint() const
 void Color_Preview::setColor(QColor c)
 {
     col = c;
-    repaint();
+    update();
 }
 
 void Color_Preview::paintEvent(QPaintEvent *)
@@ -64,7 +64,7 @@ void Color_Preview::paintEvent(QPaintEvent *)
     else if ( alpha_mode == AllAlpha )
         w = 0;
     painter.fillRect(1,1,w,geometry().height()-2,noalpha);
-    painter.fillRect(w,1,geometry().width()-w-2,geometry().height()-2,col);
+    painter.fillRect(w,1,geometry().width()-w-1,geometry().height()-2,col);
 
 
     painter.translate(-geometry().topLeft());
@@ -93,6 +93,6 @@ void Color_Preview::paintEvent(QPaintEvent *)
 
 void Color_Preview::resizeEvent(QResizeEvent *)
 {
-    repaint();
+    update();
 }
 

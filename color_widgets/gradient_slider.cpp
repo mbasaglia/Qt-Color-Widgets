@@ -43,7 +43,7 @@ Gradient_Slider::Gradient_Slider(QWidget *parent) :
 void Gradient_Slider::setBackground(QVector<QColor> bg)
 {
     back = bg;
-    repaint();
+    update();
 }
 
 void Gradient_Slider::setBackgroundGradient(QLinearGradient bg)
@@ -53,6 +53,7 @@ void Gradient_Slider::setBackgroundGradient(QLinearGradient bg)
     {
         back.push_back(gs.second);
     }
+    update();
 }
 
 QLinearGradient Gradient_Slider::backgroundGradient() const
@@ -71,6 +72,7 @@ void Gradient_Slider::setFirstColor(QColor c)
         back.push_back(c);
     else
         back.front() = c;
+    update();
 }
 
 void Gradient_Slider::setLastColor(QColor c)
@@ -80,6 +82,7 @@ void Gradient_Slider::setLastColor(QColor c)
         back.push_back(c);
     else
         back.back() = c;
+    update();
 }
 
 QColor Gradient_Slider::firstColor() const
@@ -98,18 +101,22 @@ void Gradient_Slider::paintEvent(QPaintEvent *)
     QPainter p(this);
 
 
-    p.fillRect(0,0,geometry().width(),geometry().height(),backgroundGradient());
+    p.fillRect(1,1,geometry().width()-2,geometry().height()-2,backgroundGradient());
 
-    QStyleOptionSlider opt;
-
-    initStyleOption(&opt);
-
-    opt.subControls = QStyle::SC_SliderHandle;
-
+    QStyleOptionSlider opt_slider;
+    initStyleOption(&opt_slider);
+    opt_slider.subControls = QStyle::SC_SliderHandle;
     if (isSliderDown())
-    {
-        opt.state |= QStyle::State_Sunken;
-    }
-    style()->drawComplexControl(QStyle::CC_Slider, &opt, &p, this);
+        opt_slider.state |= QStyle::State_Sunken;
+    style()->drawComplexControl(QStyle::CC_Slider, &opt_slider, &p, this);
+
+    QStyleOptionFrame opt_frame;
+    opt_frame.init(this);
+    opt_frame.frameShape = QFrame::StyledPanel;
+    opt_frame.rect = geometry();
+    opt_frame.state = QStyle::State_Sunken;
+    opt_frame.features = QStyleOptionFrame::Rounded;
+    p.translate(-geometry().topLeft());
+    style()->drawControl(QStyle::CE_ShapedFrame, &opt_frame, &p, this);
 
 }

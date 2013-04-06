@@ -47,7 +47,7 @@ void Color_Wheel::setWheelWidth(unsigned w)
 {
     wheel_width = w;
     render_rectangle();
-    repaint();
+    update();
 }
 
 
@@ -118,7 +118,7 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
 
         emit colorSelected(color());
         emit colorChanged(color());
-        repaint();
+        update();
     }
     else if ( mouse_status == Drag_Square )
     {
@@ -143,7 +143,7 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
 
         emit colorSelected(color());
         emit colorChanged(color());
-        repaint();
+        update();
     }
 }
 
@@ -199,7 +199,7 @@ void Color_Wheel::setColor(QColor c)
     val = c.value();
     if ( oldh != huem )
         render_rectangle();
-    repaint();
+    update();
     emit colorChanged(c);
 }
 
@@ -207,18 +207,18 @@ void Color_Wheel::setHue(int h)
 {
     huem = qAbs(h%360);
     render_rectangle();
-    repaint();
+    update();
 }
 
 void Color_Wheel::setSaturation(int s)
 {
     sat = qAbs(s%256);
-    repaint();
+    update();
 }
 
 void Color_Wheel::setValue(int v)
 {
     val = qAbs(v%256);
-    repaint();
+    update();
 }
 

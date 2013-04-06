@@ -4,16 +4,24 @@ Color_Dialog::Color_Dialog(QWidget *parent) :
     QDialog(parent)
 {
     setupUi(this);
+
+    QVector<QColor> rainbow;
+    for ( int i = 0; i < 360; i+= 360/6 )
+        rainbow.push_back(QColor::fromHsv(i,255,255));
+    rainbow.push_back(Qt::red);
+    slide_hue->setBackground(rainbow);
 }
 
 QColor Color_Dialog::color() const
 {
+    QColor col = wheel->color();
+    col.setAlpha(slide_alpha->value());
     return col;
 }
 
 void Color_Dialog::setColor(QColor c)
 {
-    col = c;
+    wheel->setColor(c);
     update_widgets();
     emit colorChanged(c);
 }
@@ -22,21 +30,41 @@ void Color_Dialog::setColor(QColor c)
 void Color_Dialog::update_widgets()
 {
     blockSignals(true);
-    slide_alpha->setValue(col.alpha());
+
+    QColor col = color();
+
     slide_red->setValue(col.red());
+    slide_red->setFirstColor(QColor(0,col.green(),col.blue()));
+    slide_red->setLastColor(QColor(255,col.green(),col.blue()));
+
     slide_green->setValue(col.green());
+    slide_green->setFirstColor(QColor(col.red(),0,col.blue()));
+    slide_green->setLastColor(QColor(col.red(),255,col.blue()));
+
     slide_blue->setValue(col.blue());
-    slide_hue->setValue(col.hue());
-    slide_saturation->setValue(col.saturation());
-    slide_value->setValue(col.value());
+    slide_blue->setFirstColor(QColor(col.red(),col.green(),0));
+    slide_blue->setLastColor(QColor(col.red(),col.green(),255));
+
+    slide_hue->setValue(wheel->hue());
+
+    slide_saturation->setValue(wheel->saturation());
+    slide_saturation->setFirstColor(QColor::fromHsv(wheel->hue(),0,wheel->value()));
+    slide_saturation->setLastColor(QColor::fromHsv(wheel->hue(),255,wheel->value()));
+
+    slide_value->setValue(wheel->value());
+    slide_value->setFirstColor(QColor::fromHsv(wheel->hue(),wheel->saturation(),0));
+    slide_value->setLastColor(QColor::fromHsv(wheel->hue(),wheel->saturation(),255));
+
+
     edit_hex->setText(QString("%1%2%3%4")
                       .arg(col.red(),2,16,QChar('0'))
                       .arg(col.green(),2,16,QChar('0'))
                       .arg(col.blue(),2,16,QChar('0'))
                       .arg(col.alpha(),2,16,QChar('0'))
                      );
+
     preview->setColor(col);
-    wheel->setColor(col);
+
     blockSignals(false);
 }
 
@@ -44,21 +72,33 @@ void Color_Dialog::set_hsv()
 {
     if ( !signalsBlocked() )
     {
-        col.setHsv(slide_hue->value(),slide_saturation->value(),slide_value->value());
+        wheel->setColor(QColor::fromHsv(
+                slide_hue->value(),
+                slide_saturation->value(),
+                slide_value->value()
+            ));
         update_widgets();
-        emit colorChanged(col);
+        emit colorChanged(color());
     }
 }
 
-void Color_Dialog::set_rgba()
+void Color_Dialog::set_rgb()
 {
     if ( !signalsBlocked() )
     {
-        col.setRgb(slide_red->value(),slide_green->value(),slide_blue->value(),
-                   slide_alpha->value());
+        wheel->setColor(QColor(slide_red->value(),
+                        slide_green->value(),
+                        slide_blue->value()
+                       ));
         update_widgets();
-        emit colorChanged(col);
+        emit colorChanged(color());
     }
+}
+
+void Color_Dialog::set_alpha()
+{
+    update_widgets();
+    emit colorChanged(color());
 }
 
 void Color_Dialog::on_edit_hex_editingFinished()
@@ -66,9 +106,10 @@ void Color_Dialog::on_edit_hex_editingFinished()
     QString xs = edit_hex->text().trimmed();
     if ( xs.size() == 3 )
     {
-        col.setRgb(QString(2,xs[0]).toInt(0,16),
-                   QString(2,xs[1]).toInt(0,16),
-                   QString(2,xs[2]).toInt(0,16) );
+        slide_red->setValue(QString(2,xs[0]).toInt(0,16));
+        slide_green->setValue(QString(2,xs[1]).toInt(0,16));
+        slide_blue->setValue(QString(2,xs[2]).toInt(0,16));
+        slide_alpha->setValue(255);
     }
     else
     {
@@ -76,15 +117,13 @@ void Color_Dialog::on_edit_hex_editingFinished()
         {
             xs += QString(8-xs.size(),'f');
         }
-        col.setRgb(xs.mid(0,2).toInt(0,16),
-                   xs.mid(2,2).toInt(0,16),
-                   xs.mid(4,2).toInt(0,16),
-                   xs.mid(6,2).toInt(0,16)
-                );
+        slide_red->setValue(xs.mid(0,2).toInt(0,16));
+        slide_green->setValue(xs.mid(2,2).toInt(0,16));
+        slide_blue->setValue(xs.mid(4,2).toInt(0,16));
+        slide_alpha->setValue(xs.mid(6,2).toInt(0,16));
     }
 
-    update_widgets();
-    emit colorChanged(col);
+    set_rgb();
 
 }
 
@@ -94,13 +133,11 @@ void Color_Dialog::on_edit_hex_textEdited(const QString &arg1)
     QString xs = arg1.trimmed();
     if ( xs.size() == 8 )
     {
-        col.setRgb(xs.mid(0,2).toInt(0,16),
-                   xs.mid(2,2).toInt(0,16),
-                   xs.mid(4,2).toInt(0,16),
-                   xs.mid(6,2).toInt(0,16)
-                );
+        slide_red->setValue(xs.mid(0,2).toInt(0,16));
+        slide_green->setValue(xs.mid(2,2).toInt(0,16));
+        slide_blue->setValue(xs.mid(4,2).toInt(0,16));
+        slide_alpha->setValue(xs.mid(6,2).toInt(0,16));
     }
 
-    update_widgets();
-    emit colorChanged(col);
+    set_rgb();
 }

@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Color_Dialog</string>
+   <string>Select Color</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="format-fill-color"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -57,7 +60,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QSlider" name="slide_blue">
+        <widget class="Gradient_Slider" name="slide_blue">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -74,7 +77,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSlider" name="slide_saturation">
+        <widget class="Gradient_Slider" name="slide_saturation">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -91,7 +94,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QSlider" name="slide_red">
+        <widget class="Gradient_Slider" name="slide_red">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -101,7 +104,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QSlider" name="slide_value">
+        <widget class="Gradient_Slider" name="slide_value">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -111,7 +114,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QSlider" name="slide_green">
+        <widget class="Gradient_Slider" name="slide_green">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -128,7 +131,7 @@
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QSlider" name="slide_alpha">
+        <widget class="Gradient_Slider" name="slide_alpha">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -268,7 +271,7 @@
    <sender>slide_hue</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_hsl()</slot>
+   <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>433</x>
@@ -284,7 +287,7 @@
    <sender>slide_saturation</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_hsl()</slot>
+   <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>429</x>
@@ -300,7 +303,7 @@
    <sender>slide_value</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_hsl()</slot>
+   <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>442</x>
@@ -316,7 +319,7 @@
    <sender>slide_red</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_rgba()</slot>
+   <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>437</x>
@@ -332,7 +335,7 @@
    <sender>slide_green</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_rgba()</slot>
+   <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>483</x>
@@ -348,7 +351,7 @@
    <sender>slide_blue</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_rgba()</slot>
+   <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>483</x>
@@ -364,7 +367,7 @@
    <sender>slide_alpha</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Color_Dialog</receiver>
-   <slot>set_rgba()</slot>
+   <slot>set_alpha()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>483</x>
@@ -394,8 +397,10 @@
   </connection>
  </connections>
  <slots>
-  <slot>set_rgba()</slot>
+  <slot>set_rgb()</slot>
   <slot>set_hsv()</slot>
   <slot>setColor(QColor)</slot>
+  <slot>update_widgets()</slot>
+  <slot>set_alpha()</slot>
  </slots>
 </ui>

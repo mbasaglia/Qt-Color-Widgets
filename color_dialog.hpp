@@ -7,9 +7,6 @@ class Color_Dialog : public QDialog, private Ui::Color_Dialog
 {
     Q_OBJECT
 
-private:
-    QColor col;
-
 public:
     explicit Color_Dialog(QWidget *parent = 0);
 
@@ -28,7 +25,8 @@ signals:
 protected slots:
     void update_widgets();
     void set_hsv();
-    void set_rgba();
+    void set_rgb();
+    void set_alpha();
 private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);

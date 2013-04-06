@@ -56,7 +56,7 @@ public:
     void setBackground(QBrush bk)
     {
         back = bk;
-        repaint();
+        update();
     }
 
     QBrush getBackground() const
@@ -72,7 +72,7 @@ public:
     void setAlphaMode(Alpha_Mode am)
     {
         alpha_mode = am;
-        repaint();
+        update();
     }
 
     QColor color() const
