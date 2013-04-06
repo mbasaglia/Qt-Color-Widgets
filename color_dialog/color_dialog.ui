@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
-    <height>361</height>
+    <width>491</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,13 +99,6 @@
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Blue</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0" colspan="2">
-        <widget class="Line" name="line_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -250,6 +243,13 @@
        </item>
        <item row="3" column="0" colspan="3">
         <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="3">
+        <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
