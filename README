@@ -5,7 +5,6 @@ Here is provided a color dialog that is more user-friendly than the default
 QColorDialog.
 
 The main project file contains a simple application that just shows the dialog.
-The sources of the dialog itself are in the subdirectory color_dialog.
 The subdirectory color_widgets contains the specialized widgets used in
 Color_Dialog and they can be installed as a Qt Designer/Creator plugin.
 

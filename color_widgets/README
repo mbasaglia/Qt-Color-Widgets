@@ -4,9 +4,12 @@ Color Widgets for Qt
 
 The provided widgets are:
 
-* Color Wheel, An analog widget used to select a color
-* Color Preview, A simple widget that dislay a color
-* Gradient Slider, A slider that has a gradient background
+* Color_Wheel, An analog widget used to select a color
+* Color_Preview, A simple widget that dislay a color
+* Gradient_Slider, A slider that has a gradient background
+* Color_Selector, A Color_Preview that shows a Color_Dialog when clicked
+* Color_Dialog (not designer plugin) A dialog that uses the above widgets
+    to provide a better user experience than QColorDialog
 
 Installing as a Designer Plugin
 -------------------------------

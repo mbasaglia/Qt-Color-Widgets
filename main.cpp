@@ -27,11 +27,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Color_Selector s;
-    s.show();
-    /*Color_Dialog w;
+    /*Color_Selector s;
+    s.show();*/
+    Color_Dialog w;
     w.setColor(QColor(172,169,64,128));
-    w.show();*/
+    w.show();
 
     /*QPixmap p(w.size());
     w.render(&p);
