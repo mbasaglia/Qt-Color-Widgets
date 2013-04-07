@@ -22,22 +22,37 @@
     along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "color_widget_plugin_collection.hpp"
-#include "color_preview_plugin.hpp"
-#include "color_wheel_plugin.hpp"
-#include "gradient_slider_plugin.hpp"
-#include "color_selector_plugin.hpp"
+#ifndef COLOR_SELECTOR_PLUGIN_HPP
+#define COLOR_SELECTOR_PLUGIN_HPP
 
-Color_Widget_Plugin_Collection::Color_Widget_Plugin_Collection(QObject *parent) :
-    QObject(parent)
-{
-    widgets.push_back(new Color_Preview_Plugin(this));
-    widgets.push_back(new Color_Wheel_Plugin(this));
-    widgets.push_back(new Gradient_Slider_Plugin(this));
-    widgets.push_back(new Color_Selector_Plugin(this));
-}
+#include <QDesignerCustomWidgetInterface>
 
-QList<QDesignerCustomWidgetInterface *> Color_Widget_Plugin_Collection::customWidgets() const
+class Color_Selector_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
-    return widgets;
-}
+    Q_OBJECT
+    Q_INTERFACES(QDesignerCustomWidgetInterface)
+
+public:
+    Color_Selector_Plugin(QObject *parent = 0);
+
+    void initialize(QDesignerFormEditorInterface *core);
+    bool isInitialized() const;
+
+    QWidget *createWidget(QWidget *parent);
+
+    QString name() const;
+    QString group() const;
+    QIcon icon() const;
+    QString toolTip() const;
+    QString whatsThis() const;
+    bool isContainer() const;
+
+    QString domXml() const;
+
+    QString includeFile() const;
+
+private:
+    bool initialized;
+};
+
+#endif // COLOR_SELECTOR_PLUGIN_HPP

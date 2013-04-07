@@ -41,6 +41,7 @@ void Color_Preview::setColor(QColor c)
 {
     col = c;
     update();
+    emit colorChanged(c);
 }
 
 void Color_Preview::paintEvent(QPaintEvent *)

@@ -20,9 +20,17 @@ INCLUDEPATH += $$PWD
 SOURCES += \
     $$PWD/color_preview.cpp \
     $$PWD/color_wheel.cpp \
-    $$PWD/gradient_slider.cpp
+    $$PWD/gradient_slider.cpp \
+    $$PWD/color_dialog.cpp \
+    $$PWD/color_selector.cpp
 
 HEADERS += \
     $$PWD/color_wheel.hpp \
     $$PWD/color_preview.hpp \
-    $$PWD/gradient_slider.hpp
+    $$PWD/gradient_slider.hpp \
+    $$PWD/color_dialog.hpp \
+    $$PWD/color_selector.hpp
+
+FORMS += \
+    $$PWD/color_dialog.ui
+

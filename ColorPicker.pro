@@ -30,7 +30,7 @@ SOURCES += main.cpp
 
 HEADERS  +=
 
-include(color_dialog/color_dialog.pri)
+include(color_widgets/color_widgets.pri)
 
 OTHER_FILES += \
     README

@@ -31,7 +31,7 @@
 class Color_Preview : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor DESIGNABLE true)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
     Q_PROPERTY(Alpha_Mode alpha_mode READ alphaMode WRITE setAlphaMode DESIGNABLE true)
     Q_PROPERTY(QBrush background READ getBackground WRITE setBackground DESIGNABLE true)
     Q_ENUMS(Alpha_Mode)
@@ -91,6 +91,9 @@ public slots:
 signals:
     /// Emitted when the user clicks on the widget
     void clicked();
+
+    /// Emitted on setColor
+    void colorChanged(QColor);
 
 protected:
     void paintEvent(QPaintEvent *);

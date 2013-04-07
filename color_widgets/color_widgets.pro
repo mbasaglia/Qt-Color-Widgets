@@ -20,19 +20,22 @@ TARGET = color_widgets
 TEMPLATE = lib
 OBJECTS_DIR = ../out/obj
 MOC_DIR = ../out/generated
+UI_DIR = ../out/generated
 
 
 SOURCES += \
     color_preview_plugin.cpp \
     color_wheel_plugin.cpp \
     color_widget_plugin_collection.cpp \
-    gradient_slider_plugin.cpp
+    gradient_slider_plugin.cpp \
+    color_selector_plugin.cpp
 
 HEADERS += \
     color_preview_plugin.hpp \
     color_wheel_plugin.hpp \
     color_widget_plugin_collection.hpp \
-    gradient_slider_plugin.hpp
+    gradient_slider_plugin.hpp \
+    color_selector_plugin.hpp
 
 include(color_widgets.pri)
 
@@ -44,10 +47,15 @@ build_all:!build_pass {
 # install
 target.path += $$[QT_INSTALL_PLUGINS]/designer
 
-creator.files = lib$${TARGET}.so
+unix{
+    LIB_TARGET = lib$${TARGET}.so
+}
+win32 {
+    LIB_TARGET = $${TARGET}.dll
+}
+creator.files =$$LIB_TARGET
 creator.path = $$[QT_INSTALL_PREFIX]/../../Tools/QtCreator/bin/designer
 INSTALLS += target creator
 
 OTHER_FILES += \
-    COPYING \
     README
