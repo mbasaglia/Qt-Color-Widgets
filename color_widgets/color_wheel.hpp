@@ -51,6 +51,7 @@ private:
         Drag_Circle,
         Drag_Square
     } mouse_status;
+    QPixmap hue_ring;
     QImage sat_val_square;
 
 
@@ -134,9 +135,13 @@ private:
         return inner_radius()*qSqrt(2);
     }
     /**
-     * Updates the internal square that displays the saturation-value selector
+     * Updates the inner square that displays the saturation-value selector
      */
     void render_rectangle();
+    /**
+     * Updates the outer ring that displays the hue selector
+     */
+    void render_ring();
 
 };
 

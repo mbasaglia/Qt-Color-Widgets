@@ -53,28 +53,17 @@ void Color_Wheel::paintEvent(QPaintEvent * )
 {
     double selector_w = 6;
 
-    // hue wheel
-    const int hue_stops = 24;
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-
-
-    QConicalGradient gradient_hue(0, 0, 0);
-    for ( double a = 0; a < 1.0; a+=1.0/(hue_stops-1) )
-    {
-        gradient_hue.setColorAt(a,QColor::fromHsvF(a,1,1));
-    }
-    gradient_hue.setColorAt(1,QColor::fromHsvF(0,1,1));
-
     painter.translate(geometry().width()/2,geometry().height()/2);
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QBrush(gradient_hue));
-    painter.drawEllipse(QPointF(0,0),outer_radius(),outer_radius());
+    // hue wheel
+    if ( hue_ring.isNull() )
+        render_ring();
 
-    painter.setBrush(palette().background());
-    painter.drawEllipse(QPointF(0,0),inner_radius(),inner_radius());
+    painter.drawPixmap(-outer_radius(),-outer_radius(),hue_ring);
+
+
 
     // hue selector
     painter.setPen(QPen(Qt::black,3));
@@ -165,6 +154,7 @@ void Color_Wheel::mouseReleaseEvent(QMouseEvent *ev)
 
 void Color_Wheel::resizeEvent(QResizeEvent *)
 {
+    render_ring();
     render_rectangle();
 }
 
@@ -172,20 +162,47 @@ void Color_Wheel::render_rectangle()
 {
     int sz = square_size();
     sat_val_square = QImage(sz,sz, QImage::Format_RGB32);
-    //double max_dist = sz*sz*2;
+
     for(int i = 0; i < sz; ++i)
     {
         for(int j = 0;j < sz; ++j)
         {
             sat_val_square.setPixel( i,j,
                     QColor::fromHsvF(huem,double(i)/sz,double(j)/sz).rgb());
-            /*sat_lum_square.setPixel( i,j, QColor::fromHslF(
-                                 huef,
-                                 (i*i+(sz-j)*(sz-j))/max_dist,
-                                 (i*i+j*j)/max_dist
-                            ).rgb());*/
         }
     }
+}
+
+void Color_Wheel::render_ring()
+{
+
+    hue_ring = QPixmap(outer_radius()*2,outer_radius()*2);
+    hue_ring.fill(Qt::transparent);
+    QPainter painter(&hue_ring);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+
+
+    const int hue_stops = 24;
+    static QConicalGradient gradient_hue(0, 0, 0);
+    if ( gradient_hue.stops().size() < hue_stops )
+    {
+        for ( double a = 0; a < 1.0; a+=1.0/(hue_stops-1) )
+        {
+            gradient_hue.setColorAt(a,QColor::fromHsvF(a,1,1));
+        }
+        gradient_hue.setColorAt(1,QColor::fromHsvF(0,1,1));
+    }
+
+    painter.translate(outer_radius(),outer_radius());
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QBrush(gradient_hue));
+    painter.drawEllipse(QPointF(0,0),outer_radius(),outer_radius());
+
+    painter.setBrush(Qt::transparent);//palette().background());
+    painter.drawEllipse(QPointF(0,0),inner_radius(),inner_radius());
+
 }
 
 
