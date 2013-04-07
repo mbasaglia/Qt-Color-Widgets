@@ -52,34 +52,36 @@ void Color_Dialog::setColor(QColor c)
 void Color_Dialog::update_widgets()
 {
     blockSignals(true);
+    foreach(QWidget* w, findChildren<QWidget*>())
+        w->blockSignals(true);
 
     QColor col = color();
 
-    //slide_red->blockSignals(true);
     slide_red->setValue(col.red());
+    spin_red->setValue(slide_red->value());
     slide_red->setFirstColor(QColor(0,col.green(),col.blue()));
     slide_red->setLastColor(QColor(255,col.green(),col.blue()));
-    //slide_red->blockSignals(false);
 
-    //slide_green->blockSignals(true);
     slide_green->setValue(col.green());
+    spin_green->setValue(slide_green->value());
     slide_green->setFirstColor(QColor(col.red(),0,col.blue()));
     slide_green->setLastColor(QColor(col.red(),255,col.blue()));
-    //slide_green->blockSignals(false);
 
-    //slide_blue->blockSignals(true);
     slide_blue->setValue(col.blue());
+    spin_blue->setValue(slide_blue->value());
     slide_blue->setFirstColor(QColor(col.red(),col.green(),0));
     slide_blue->setLastColor(QColor(col.red(),col.green(),255));
-    //slide_blue->blockSignals(false);
 
     slide_hue->setValue(qRound(wheel->hue()*360.0));
+    spin_hue->setValue(slide_hue->value());
 
     slide_saturation->setValue(qRound(wheel->saturation()*255.0));
+    spin_saturation->setValue(slide_saturation->value());
     slide_saturation->setFirstColor(QColor::fromHsvF(wheel->hue(),0,wheel->value()));
     slide_saturation->setLastColor(QColor::fromHsvF(wheel->hue(),1,wheel->value()));
 
     slide_value->setValue(qRound(wheel->value()*255.0));
+    spin_value->setValue(slide_value->value());
     slide_value->setFirstColor(QColor::fromHsvF(wheel->hue(),wheel->saturation(),0));
     slide_value->setLastColor(QColor::fromHsvF(wheel->hue(),wheel->saturation(),1));
 
@@ -89,6 +91,7 @@ void Color_Dialog::update_widgets()
     slide_alpha->setFirstColor(apha_color);
     apha_color.setAlpha(255);
     slide_alpha->setLastColor(apha_color);
+    spin_alpha->setValue(slide_alpha->value());
 
 
     edit_hex->setText(QString("%1%2%3%4")
@@ -101,6 +104,8 @@ void Color_Dialog::update_widgets()
     preview->setColor(col);
 
     blockSignals(false);
+    foreach(QWidget* w, findChildren<QWidget*>())
+        w->blockSignals(false);
 
     emit colorChanged(col);
 }
