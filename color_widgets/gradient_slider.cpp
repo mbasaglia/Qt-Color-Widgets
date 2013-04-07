@@ -35,6 +35,9 @@ Gradient_Slider::Gradient_Slider(QWidget *parent) :
     col_list.push_back(Qt::black);
     col_list.push_back(Qt::white);
 
+
+    back.setTexture(QPixmap(QString(":/color_widgets/alphaback.png")));
+
     setOrientation(Qt::Horizontal);
 }
 

@@ -157,8 +157,9 @@ void Color_Wheel::mousePressEvent(QMouseEvent *ev)
     }
 }
 
-void Color_Wheel::mouseReleaseEvent(QMouseEvent *)
+void Color_Wheel::mouseReleaseEvent(QMouseEvent *ev)
 {
+    mouseMoveEvent(ev);
     mouse_status = Nothing;
 }
 

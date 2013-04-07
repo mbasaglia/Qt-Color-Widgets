@@ -34,3 +34,6 @@ HEADERS += \
 FORMS += \
     $$PWD/color_dialog.ui
 
+RESOURCES += \
+    $$PWD/pattern.qrc
+

@@ -26,9 +26,10 @@
 //#include <QGuiApplication>
 
 Color_Preview::Color_Preview(QWidget *parent) :
-    QWidget(parent), col(Qt::red),back( Qt::darkGray, Qt::DiagCrossPattern ),
+    QWidget(parent), col(Qt::red), back( Qt::darkGray, Qt::DiagCrossPattern ),
     alpha_mode(NoAlpha)
 {
+    back.setTexture(QPixmap(QString(":/color_widgets/alphaback.png")));
     //setPalette(QGuiApplication::palette());
 }
 

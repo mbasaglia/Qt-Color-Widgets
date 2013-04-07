@@ -19,6 +19,7 @@ QT       += core gui
 OBJECTS_DIR = out/obj
 MOC_DIR = out/generated
 UI_DIR = out/generated
+RCC_DIR = out/generated
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

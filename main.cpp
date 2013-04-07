@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     /*Color_Selector s;
     s.show();*/
     Color_Dialog w;
-    w.setColor(QColor(172,169,64,128));
+    w.setColor(QColor(64,172,143,128));
     w.show();
 
     /*QPixmap p(w.size());
