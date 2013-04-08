@@ -38,7 +38,7 @@ HEADERS += \
     gradient_slider_plugin.hpp \
     color_selector_plugin.hpp
 
-include(color_widgets.pri)
+include(../color_widgets.pri)
 
 build_all:!build_pass {
  CONFIG -= build_all
@@ -58,5 +58,3 @@ creator.files =$$LIB_TARGET
 creator.path = $$[QT_INSTALL_PREFIX]/../../Tools/QtCreator/bin/designer
 INSTALLS += target creator
 
-OTHER_FILES += \
-    README

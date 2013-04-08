@@ -14,25 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
-QT       += core gui
 
-OBJECTS_DIR = out/obj
-MOC_DIR = out/generated
-UI_DIR = out/generated
-RCC_DIR = out/generated
+INCLUDEPATH += $$PWD/src
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+SOURCES += \
+    $$PWD/src/color_preview.cpp \
+    $$PWD/src/color_wheel.cpp \
+    $$PWD/src/gradient_slider.cpp \
+    $$PWD/src/color_dialog.cpp \
+    $$PWD/src/color_selector.cpp
 
-TARGET = ColorPicker
-TEMPLATE = app
+HEADERS += \
+    $$PWD/src/color_wheel.hpp \
+    $$PWD/src/color_preview.hpp \
+    $$PWD/src/gradient_slider.hpp \
+    $$PWD/src/color_dialog.hpp \
+    $$PWD/src/color_selector.hpp
 
+FORMS += \
+    $$PWD/src/color_dialog.ui
 
-SOURCES += main.cpp
-
-HEADERS  +=
-
-include(color_widgets/color_widgets.pri)
-
-OTHER_FILES += \
-    README
+RESOURCES += \
+    $$PWD/src/pattern.qrc
 
