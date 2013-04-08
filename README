@@ -20,7 +20,7 @@ Demonstration
 A simple demo of the widget is provided in ./demo
 
 You can see a screenshot of the dialog at
-https://github.com/mbasaglia/Qt-Color-Picker/blob/master/screenshot.png
+https://github.com/mbasaglia/Qt-Color-Picker/blob/master/demo/screenshot.png
 
 Using it in a project
 ---------------------
