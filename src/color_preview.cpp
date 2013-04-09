@@ -23,6 +23,7 @@
 #include "color_preview.hpp"
 #include <QStylePainter>
 #include <QStyleOptionFrame>
+#include "paint_border.hpp"
 //#include <QGuiApplication>
 
 Color_Preview::Color_Preview(QWidget *parent) :
@@ -51,7 +52,7 @@ void Color_Preview::paintEvent(QPaintEvent *)
 
 
     QStylePainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    //painter.setRenderHint(QPainter::Antialiasing);
 
     QColor noalpha = col;
     noalpha.setAlpha(255);
@@ -66,29 +67,32 @@ void Color_Preview::paintEvent(QPaintEvent *)
     painter.fillRect(1,1,w,geometry().height()-2,noalpha);
     painter.fillRect(w,1,geometry().width()-w-1,geometry().height()-2,col);
 
+    paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
+    paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
 
-    painter.translate(-geometry().topLeft());
+    paint_br_border(painter,size(),palette().color(QPalette::Midlight),1);
+    paint_br_border(painter,size(),palette().color(QPalette::Button),0);
+
+    /*painter.translate(-geometry().topLeft());
 
 
-    QStyleOptionFrame opt;
+    QStyleOptionFrameV3 opt;
 
     opt.init(this);
-
-    opt.frameShape = QFrame::StyledPanel;
 
     opt.rect = geometry();
 
     opt.lineWidth = 2;
     opt.midLineWidth = 2;
 
-
     opt.state = QStyle::State_Sunken;
-    opt.features = QStyleOptionFrame::Rounded;
+
+    opt.frameShape = QFrame::StyledPanel;
 
     //opt.palette = palette();
     //opt.palette.setColor(QPalette::Base, Qt::transparent);
     //style()->drawPrimitive(QStyle::PE_PanelLineEdit,&opt,&painter,this);
-    painter.drawControl(QStyle::CE_ShapedFrame, opt);
+    painter.drawControl(QStyle::CE_ShapedFrame, opt);*/
 }
 
 void Color_Preview::resizeEvent(QResizeEvent *)

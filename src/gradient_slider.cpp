@@ -23,11 +23,7 @@
 #include "gradient_slider.hpp"
 #include <QPainter>
 #include <QStyleOptionSlider>
-
-
-#include "gradient_slider.hpp"
-#include <QPainter>
-#include <QLinearGradient>
+#include "paint_border.hpp"
 
 Gradient_Slider::Gradient_Slider(QWidget *parent) :
     QSlider(parent), back( Qt::darkGray, Qt::DiagCrossPattern )
@@ -105,26 +101,39 @@ QColor Gradient_Slider::lastColor() const
 
 void Gradient_Slider::paintEvent(QPaintEvent *)
 {
-    QPainter p(this);
+    QPainter painter(this);
 
 
-    p.fillRect(1,1,geometry().width()-2,geometry().height()-2,back);
-    p.fillRect(1,1,geometry().width()-2,geometry().height()-2,gradient());
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(back);
+    painter.drawRect(1,1,geometry().width()-2,geometry().height()-2);
+    painter.setBrush(gradient());
+    painter.drawRect(1,1,geometry().width()-2,geometry().height()-2);
+
+    paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
+    /*paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
+
+    paint_br_border(painter,size(),palette().color(QPalette::Light),1);*/
+    paint_br_border(painter,size(),palette().color(QPalette::Midlight),0);
 
     QStyleOptionSlider opt_slider;
     initStyleOption(&opt_slider);
     opt_slider.subControls = QStyle::SC_SliderHandle;
     if (isSliderDown())
         opt_slider.state |= QStyle::State_Sunken;
-    style()->drawComplexControl(QStyle::CC_Slider, &opt_slider, &p, this);
+    style()->drawComplexControl(QStyle::CC_Slider, &opt_slider, &painter, this);
 
-    QStyleOptionFrame opt_frame;
+
+
+    /*QStyleOptionFrameV3 opt_frame;
     opt_frame.init(this);
     opt_frame.frameShape = QFrame::StyledPanel;
     opt_frame.rect = geometry();
     opt_frame.state = QStyle::State_Sunken;
-    opt_frame.features = QStyleOptionFrame::Rounded;
-    p.translate(-geometry().topLeft());
-    style()->drawControl(QStyle::CE_ShapedFrame, &opt_frame, &p, this);
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::NoBrush);
+    painter.translate(-geometry().topLeft());
+    style()->drawControl(QStyle::CE_ShapedFrame, &opt_frame, &painter, this);*/
 
 }

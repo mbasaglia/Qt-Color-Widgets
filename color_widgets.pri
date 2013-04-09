@@ -29,7 +29,8 @@ HEADERS += \
     $$PWD/src/color_preview.hpp \
     $$PWD/src/gradient_slider.hpp \
     $$PWD/src/color_dialog.hpp \
-    $$PWD/src/color_selector.hpp
+    $$PWD/src/color_selector.hpp \
+    ../src/paint_border.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui
