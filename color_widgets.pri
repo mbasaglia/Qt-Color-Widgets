@@ -30,7 +30,7 @@ HEADERS += \
     $$PWD/src/gradient_slider.hpp \
     $$PWD/src/color_dialog.hpp \
     $$PWD/src/color_selector.hpp \
-    ../src/paint_border.hpp
+    $$PWD/src/paint_border.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui
