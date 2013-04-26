@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "color_list_widget.hpp"
 #include <QHeaderView>
-
+#include <QVBoxLayout>
 
 
 Color_List_Widget_Item::Color_List_Widget_Item(int row, QColor color,
@@ -38,10 +38,13 @@ Color_List_Widget_Item::Color_List_Widget_Item(int row, QColor color,
     selector->setColor(color);
     up->setIcon(QIcon::fromTheme("go-up"));
     up->setText(tr("Move Up"));
+    up->setToolTip(up->text());
     down->setIcon(QIcon::fromTheme("go-down"));
     down->setText(tr("Move Down"));
+    down->setToolTip(down->text());
     remove->setIcon(QIcon::fromTheme("list-remove"));
     remove->setText(tr("Remove"));
+    remove->setToolTip(tr("Remove Color"));
 
     connect(up,SIGNAL(clicked()),SLOT(up_clicked()));
     connect(down,SIGNAL(clicked()),SLOT(down_clicked()));
@@ -53,17 +56,17 @@ Color_List_Widget_Item::Color_List_Widget_Item(int row, QColor color,
 void Color_List_Widget_Item::create_row( QColor color, Color_List_Widget* parent)
 {
 
-    int row = parent->rowCount();
-    parent->insertRow(row);
+    int row = parent->count();
+    parent->table->insertRow(row);
 
     Color_List_Widget_Item *item = new Color_List_Widget_Item(row, color,parent);
 
-    parent->setRowHeight(row,24);
+    parent->table->setRowHeight(row,24);
 
-    parent->setCellWidget(row,0,item->selector);
-    parent->setCellWidget(row,1,item->up);
-    parent->setCellWidget(row,2,item->down);
-    parent->setCellWidget(row,3,item->remove);
+    parent->table->setCellWidget(row,0,item->selector);
+    parent->table->setCellWidget(row,1,item->up);
+    parent->table->setCellWidget(row,2,item->down);
+    parent->table->setCellWidget(row,3,item->remove);
 
     QTableWidgetItem* twit = new QTableWidgetItem;
     twit->setData(Qt::UserRole,QVariant(QMetaType::QObjectStar, item));
@@ -89,14 +92,13 @@ void Color_List_Widget_Item::up_clicked()
 
 void Color_List_Widget_Item::down_clicked()
 {
-    if ( row+1 < parent->rowCount() )
+    if ( row+1 < parent->count() )
     {
         QColor c = parent->color(row+1);
         parent->setColor(row+1,selector->color());
         parent->setColor(row,c);
     }
 }
-
 
 void Color_List_Widget_Item::color_changed(QColor c)
 {
@@ -110,22 +112,27 @@ void Color_List_Widget_Item::row_removed(int orow )
 }
 
 
-
 Color_List_Widget::Color_List_Widget(QWidget *parent) :
-    QTableWidget(parent)
+    QWidget(parent), table ( new QTableWidget(this) )
 {
-    insertColumn(0);
-    insertColumn(1);
-    insertColumn(2);
-    insertColumn(3);
+    QVBoxLayout *verticalLayout = new QVBoxLayout(this);
+    verticalLayout->setContentsMargins(0, 0, 0, 0);
+    table = new QTableWidget(this);
+    verticalLayout->addWidget(table);
 
-    setColumnWidth(0,128);
-    setColumnWidth(1,24);
-    setColumnWidth(2,24);
-    setColumnWidth(3,24);
 
-    horizontalHeader()->hide();
-    verticalHeader()->hide();
+    table->insertColumn(0);
+    table->insertColumn(1);
+    table->insertColumn(2);
+    table->insertColumn(3);
+
+    table->setColumnWidth(0,128);
+    table->setColumnWidth(1,24);
+    table->setColumnWidth(2,24);
+    table->setColumnWidth(3,24);
+
+    table->horizontalHeader()->hide();
+    table->verticalHeader()->hide();
 }
 
 void Color_List_Widget::append(QColor c)
@@ -139,7 +146,7 @@ void Color_List_Widget::append(QColor c)
 
 void Color_List_Widget::setColor(int row, QColor c)
 {
-    Color_Selector *selector = qobject_cast<Color_Selector*>(cellWidget(row,0));
+    Color_Selector *selector = qobject_cast<Color_Selector*>(table->cellWidget(row,0));
     if ( selector )
     {
         selector->setColor(c);
@@ -149,18 +156,23 @@ void Color_List_Widget::setColor(int row, QColor c)
 
 QColor Color_List_Widget::color(int row) const
 {
-    Color_Selector *selector = qobject_cast<Color_Selector*>(cellWidget(row,0));
+    Color_Selector *selector = qobject_cast<Color_Selector*>(table->cellWidget(row,0));
     if ( selector )
         return selector->color();
     return QColor();
 }
 
+int Color_List_Widget::count() const
+{
+    return table->rowCount();
+}
+
 
 void Color_List_Widget::remove(int row)
 {
-    removeRow(row);
+    table->removeRow(row);
     emit removed(row);
-    if ( rowCount() == 0 && default_color.isValid() )
+    if ( table->rowCount() == 0 && default_color.isValid() )
         append(default_color);
 }
 

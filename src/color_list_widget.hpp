@@ -59,13 +59,15 @@ private slots:
     void row_removed(int);
 };
 
-class Color_List_Widget : public QTableWidget
+class Color_List_Widget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QColor default_color READ defaultColor WRITE setDefaultColor)
 
     friend class Color_List_Widget_Item;
 
 private:
+    QTableWidget* table;
     QColor default_color; ///< If invalid, no default color
     QList<Color_List_Widget_Item*> old; ///< Items to be deleted
 
@@ -73,16 +75,23 @@ private:
 public:
     explicit Color_List_Widget(QWidget *parent = 0);
     
-    void append(QColor c);
     void setColor(int row,QColor c);
     QColor color(int row) const;
-
+    /// Get the number of colors
+    int count() const;
+    /**
+     *  \brief remove given row
+     *
+     *  If the last row is removed and defaultColor is valid, a new row with the
+     *  default color is created
+    */
     void remove(int row);
 
     void setDefaultColor(QColor color) { default_color = color; }
     QColor defaultColor() const { return default_color; }
 
 signals:
+    void append(QColor c);
     void colorChanged(int row,QColor c);
     void removed(int);
 };
