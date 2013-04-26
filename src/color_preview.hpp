@@ -83,6 +83,8 @@ public:
     }
 
     QSize sizeHint () const;
+
+    void paint(QPainter &painter, QRect rect) const;
     
 public slots:
     /// Set current color

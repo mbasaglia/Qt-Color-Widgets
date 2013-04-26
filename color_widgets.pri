@@ -22,7 +22,9 @@ SOURCES += \
     $$PWD/src/color_wheel.cpp \
     $$PWD/src/gradient_slider.cpp \
     $$PWD/src/color_dialog.cpp \
-    $$PWD/src/color_selector.cpp
+    $$PWD/src/color_selector.cpp \
+    $$PWD/src/color_list_model.cpp \
+    $$PWD/src/color_delegate.hpp
 
 HEADERS += \
     $$PWD/src/color_wheel.hpp \
@@ -30,7 +32,9 @@ HEADERS += \
     $$PWD/src/gradient_slider.hpp \
     $$PWD/src/color_dialog.hpp \
     $$PWD/src/color_selector.hpp \
-    $$PWD/src/paint_border.hpp
+    $$PWD/src/paint_border.hpp \
+    $$PWD/src/color_delegate.hpp \
+    $$PWD/src/color_list_model.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui

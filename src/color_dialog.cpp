@@ -41,6 +41,11 @@ QColor Color_Dialog::color() const
     return col;
 }
 
+QSize Color_Dialog::sizeHint() const
+{
+    return QSize(400,0);
+}
+
 void Color_Dialog::setColor(QColor c)
 {
     wheel->setColor(c);

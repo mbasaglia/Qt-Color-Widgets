@@ -39,6 +39,29 @@ QSize Color_Preview::sizeHint() const
     return QSize(24,24);
 }
 
+void Color_Preview::paint(QPainter &painter, QRect rect) const
+{
+
+    QColor noalpha = col;
+    noalpha.setAlpha(255);
+
+    painter.fillRect(1,1,rect.width()-2,rect.height()-2, back );
+
+    int w = rect.width()-2;
+    if ( alpha_mode == SplitAlpha )
+        w /= 2;
+    else if ( alpha_mode == AllAlpha )
+        w = 0;
+    painter.fillRect(1,1,w,rect.height()-2,noalpha);
+    painter.fillRect(w,1,rect.width()-w-1,rect.height()-2,col);
+
+    paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
+    paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
+
+    paint_br_border(painter,size(),palette().color(QPalette::Midlight),1);
+    paint_br_border(painter,size(),palette().color(QPalette::Button),0);
+}
+
 void Color_Preview::setColor(QColor c)
 {
     col = c;
@@ -48,51 +71,12 @@ void Color_Preview::setColor(QColor c)
 
 void Color_Preview::paintEvent(QPaintEvent *)
 {
-
-
-
     QStylePainter painter(this);
     //painter.setRenderHint(QPainter::Antialiasing);
 
-    QColor noalpha = col;
-    noalpha.setAlpha(255);
 
-    painter.fillRect(1,1,geometry().width()-2,geometry().height()-2, back );
+    paint(painter,geometry());
 
-    int w = geometry().width()-2;
-    if ( alpha_mode == SplitAlpha )
-        w /= 2;
-    else if ( alpha_mode == AllAlpha )
-        w = 0;
-    painter.fillRect(1,1,w,geometry().height()-2,noalpha);
-    painter.fillRect(w,1,geometry().width()-w-1,geometry().height()-2,col);
-
-    paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
-    paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
-
-    paint_br_border(painter,size(),palette().color(QPalette::Midlight),1);
-    paint_br_border(painter,size(),palette().color(QPalette::Button),0);
-
-    /*painter.translate(-geometry().topLeft());
-
-
-    QStyleOptionFrameV3 opt;
-
-    opt.init(this);
-
-    opt.rect = geometry();
-
-    opt.lineWidth = 2;
-    opt.midLineWidth = 2;
-
-    opt.state = QStyle::State_Sunken;
-
-    opt.frameShape = QFrame::StyledPanel;
-
-    //opt.palette = palette();
-    //opt.palette.setColor(QPalette::Base, Qt::transparent);
-    //style()->drawPrimitive(QStyle::PE_PanelLineEdit,&opt,&painter,this);
-    painter.drawControl(QStyle::CE_ShapedFrame, opt);*/
 }
 
 void Color_Preview::resizeEvent(QResizeEvent *)

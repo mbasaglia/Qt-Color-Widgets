@@ -37,6 +37,8 @@ public:
      */
     QColor color() const;
 
+    QSize sizeHint() const;
+
 public slots:
 
     /**
