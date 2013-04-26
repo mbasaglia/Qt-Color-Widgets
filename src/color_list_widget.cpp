@@ -79,35 +79,21 @@ void Color_List_Widget_Item::remove_clicked()
 
 void Color_List_Widget_Item::up_clicked()
 {
-    QTableWidgetItem* twit = parent->item(row-1,0);
-    if ( twit )
+    if ( row > 0 )
     {
-        Color_List_Widget_Item* item = qobject_cast<Color_List_Widget_Item*>(
-                        qvariant_cast<QObject *>(twit->data(Qt::UserRole)));
-        if ( item )
-        {
-            // swap colors
-            QColor c = item->selector->color();
-            item->selector->setColor(selector->color());
-            selector->setColor(c);
-        }
+        QColor c = parent->color(row-1);
+        parent->setColor(row-1,selector->color());
+        parent->setColor(row,c);
     }
 }
 
 void Color_List_Widget_Item::down_clicked()
 {
-    QTableWidgetItem* twit = parent->item(row+1,0);
-    if ( twit )
+    if ( row+1 < parent->rowCount() )
     {
-        Color_List_Widget_Item* item = qobject_cast<Color_List_Widget_Item*>(
-                        qvariant_cast<QObject *>(twit->data(Qt::UserRole)));
-        if ( item )
-        {
-            // swap colors
-            QColor c = item->selector->color();
-            item->selector->setColor(selector->color());
-            selector->setColor(c);
-        }
+        QColor c = parent->color(row+1);
+        parent->setColor(row+1,selector->color());
+        parent->setColor(row,c);
     }
 }
 
