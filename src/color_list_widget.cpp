@@ -135,7 +135,7 @@ Color_List_Widget::Color_List_Widget(QWidget *parent) :
     table->verticalHeader()->hide();
 }
 
-void Color_List_Widget::append(QColor c)
+void Color_List_Widget::addColor(QColor c)
 {
     foreach(Color_List_Widget_Item* item,old)
         delete item;
@@ -172,7 +172,5 @@ void Color_List_Widget::remove(int row)
 {
     table->removeRow(row);
     emit removed(row);
-    if ( table->rowCount() == 0 && default_color.isValid() )
-        append(default_color);
 }
 

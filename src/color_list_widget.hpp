@@ -62,13 +62,11 @@ private slots:
 class Color_List_Widget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QColor default_color READ defaultColor WRITE setDefaultColor)
 
     friend class Color_List_Widget_Item;
 
 private:
     QTableWidget* table;
-    QColor default_color; ///< If invalid, no default color
     QList<Color_List_Widget_Item*> old; ///< Items to be deleted
 
 
@@ -87,11 +85,10 @@ public:
     */
     void remove(int row);
 
-    void setDefaultColor(QColor color) { default_color = color; }
-    QColor defaultColor() const { return default_color; }
+public slots:
+    void addColor(QColor c);
 
 signals:
-    void append(QColor c);
     void colorChanged(int row,QColor c);
     void removed(int);
 };
