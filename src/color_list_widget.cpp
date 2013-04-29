@@ -53,10 +53,8 @@ Color_List_Widget_Item::Color_List_Widget_Item(int row, QColor color,
     connect(parent,SIGNAL(removed(int)),SLOT(row_removed(int)));
 }
 
-void Color_List_Widget_Item::create_row( QColor color, Color_List_Widget* parent)
+void Color_List_Widget_Item::create_row( int row, QColor color, Color_List_Widget* parent)
 {
-
-    int row = parent->count();
     parent->table->insertRow(row);
 
     Color_List_Widget_Item *item = new Color_List_Widget_Item(row, color,parent);
@@ -102,6 +100,7 @@ void Color_List_Widget_Item::down_clicked()
 
 void Color_List_Widget_Item::color_changed(QColor c)
 {
+    parent->m_colors[row] = c;
     emit parent->colorChanged(row,c);
 }
 
@@ -140,8 +139,9 @@ void Color_List_Widget::addColor(QColor c)
     foreach(Color_List_Widget_Item* item,old)
         delete item;
     old.clear();
-
-    Color_List_Widget_Item::create_row(c,this);
+    Color_List_Widget_Item::create_row(count(),c,this);
+    m_colors.push_back(c);
+    emit colorsChanged(m_colors);
 }
 
 void Color_List_Widget::setColor(int row, QColor c)
@@ -150,27 +150,42 @@ void Color_List_Widget::setColor(int row, QColor c)
     if ( selector )
     {
         selector->setColor(c);
+        m_colors[row] = c;
         emit colorChanged(row,c);
+        emit colorsChanged(m_colors);
     }
 }
 
 QColor Color_List_Widget::color(int row) const
 {
-    Color_Selector *selector = qobject_cast<Color_Selector*>(table->cellWidget(row,0));
-    if ( selector )
-        return selector->color();
+    if ( row >= 0 && row < count() )
+        return m_colors[row];
     return QColor();
 }
 
 int Color_List_Widget::count() const
 {
-    return table->rowCount();
+    return m_colors.size();
 }
 
 
 void Color_List_Widget::remove(int row)
 {
+    m_colors.removeAt(row);
     table->removeRow(row);
     emit removed(row);
+    emit colorsChanged(m_colors);
+}
+
+void Color_List_Widget::setColors(const QList<QColor> &c)
+{
+    while ( table->rowCount() > 0 )
+        table->removeRow(0);
+
+    for(int i = 0; i < c.size() ; i++ )
+        Color_List_Widget_Item::create_row(i,c[i],this);
+
+    m_colors = c;
+    emit colorsChanged(m_colors);
 }
 

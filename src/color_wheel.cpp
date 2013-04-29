@@ -210,6 +210,8 @@ void Color_Wheel::setColor(QColor c)
 {
     qreal oldh = huem;
     huem = c.hueF();
+    if ( huem < 0 )
+        huem = 0;
     sat = c.saturationF();
     val = c.valueF();
     if ( !qFuzzyCompare(oldh+1,huem+1) )

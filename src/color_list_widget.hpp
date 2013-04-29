@@ -37,6 +37,7 @@ class Color_List_Widget;
 class Color_List_Widget_Item : public QObject
 {
     Q_OBJECT
+
 private:
     Color_List_Widget*  parent;
     int                 row;
@@ -49,7 +50,7 @@ public:
 
     Color_List_Widget_Item(int row, QColor color, Color_List_Widget *parent);
 
-    static void create_row( QColor color, Color_List_Widget* parent);
+    static void create_row(int row, QColor color, Color_List_Widget* parent);
 
 private slots:
     void remove_clicked();
@@ -63,11 +64,14 @@ class Color_List_Widget : public QWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(QList<QColor> colors READ colors WRITE setColors NOTIFY colorsChanged )
+
     friend class Color_List_Widget_Item;
 
 private:
     QTableWidget* table;
     QList<Color_List_Widget_Item*> old; ///< Items to be deleted
+    QList<QColor> m_colors;
 
 
 public:
@@ -85,12 +89,16 @@ public:
     */
     void remove(int row);
 
+    const QList<QColor>& colors() const { return m_colors; }
+    void setColors(const QList<QColor>& c);
+
 public slots:
     void addColor(QColor c);
 
 signals:
     void colorChanged(int row,QColor c);
     void removed(int);
+    void colorsChanged(const QList<QColor>&);
 };
 
 
