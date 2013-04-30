@@ -22,13 +22,17 @@
 */
 #include "color_dialog.hpp"
 #include <QApplication>
-#include "color_selector.hpp"
+#include "color_list_widget.hpp"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    /*Color_Selector s;
-    s.show();*/
+
+
+    Color_List_Widget c;
+    c.show();
+
+
     Color_Dialog w;
     w.setColor(QColor(64,172,143,128));
     w.show();

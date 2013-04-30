@@ -24,7 +24,9 @@ SOURCES += \
     $$PWD/src/color_dialog.cpp \
     $$PWD/src/color_selector.cpp \
     $$PWD/src/color_delegate.cpp \
-    $$PWD/src/color_list_widget.cpp
+    $$PWD/src/color_list_widget.cpp \
+    $$PWD/src/bound_color_selector.cpp \
+    $$PWD/src/abstract_widget_list.cpp
 
 HEADERS += \
     $$PWD/src/color_wheel.hpp \
@@ -34,7 +36,9 @@ HEADERS += \
     $$PWD/src/color_selector.hpp \
     $$PWD/src/paint_border.hpp \
     $$PWD/src/color_delegate.hpp \
-    $$PWD/src/color_list_widget.hpp
+    $$PWD/src/color_list_widget.hpp \
+    $$PWD/src/bound_color_selector.hpp \
+    $$PWD/src/abstract_widget_list.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui

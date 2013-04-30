@@ -24,40 +24,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef COLOR_LIST_WIDGET_HPP
-#define COLOR_LIST_WIDGET_HPP
+#include "bound_color_selector.hpp"
 
-#include "abstract_widget_list.hpp"
-
-class Color_List_Widget : public Abstract_Widget_List
+Bound_Color_Selector::Bound_Color_Selector(QColor* reference, QWidget *parent) :
+    Color_Selector(parent), ref(reference)
 {
-    Q_OBJECT
+    setColor(*reference);
+    connect(this,SIGNAL(colorChanged(QColor)),SLOT(update_reference(QColor)));
+}
 
-    Q_PROPERTY(QList<QColor> colors READ colors WRITE setColors NOTIFY colorsChanged )
-
-private:
-    QList<QColor> m_colors;
-
-public:
-    explicit Color_List_Widget(QWidget *parent = 0);
-
-
-    const QList<QColor>& colors() const { return m_colors; }
-    void setColors(const QList<QColor>& cols);
-
-    void swap(int a, int b);
-
-    void append();
-
-signals:
-    void removed(int);
-    void colorsChanged(const QList<QColor>&);
-
-private slots:
-    void emit_changed();
-
-private:
-   void  append_widget(QColor* col);
-};
-
-#endif // COLOR_LIST_WIDGET_HPP
+void Bound_Color_Selector::update_reference(QColor c)
+{
+    *ref = c;
+}
