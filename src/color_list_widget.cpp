@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Color_List_Widget::Color_List_Widget(QWidget *parent)
     : Abstract_Widget_List(parent)
 {
-    connect(this,SIGNAL(removed(int)),SLOT(emit_changed()));
+    connect(this,SIGNAL(removed(int)),SLOT(handle_removed(int)));
 }
 
 void Color_List_Widget::setColors(const QList<QColor> &cols)
@@ -67,9 +67,16 @@ void Color_List_Widget::emit_changed()
     emit colorsChanged(m_colors);
 }
 
+void Color_List_Widget::handle_removed(int i)
+{
+    m_colors.removeAt(i);
+    emit colorsChanged(m_colors);
+}
+
 void Color_List_Widget::append_widget(QColor *col)
 {
     Bound_Color_Selector* cbs = new Bound_Color_Selector(col);
     connect(cbs,SIGNAL(colorChanged(QColor)),SLOT(emit_changed()));
     appendWidget(cbs);
+    setRowHeight(count()-1,22);
 }

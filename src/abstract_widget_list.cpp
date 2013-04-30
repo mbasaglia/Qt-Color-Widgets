@@ -66,6 +66,11 @@ Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
 
 }
 
+void Abstract_Widget_List::setRowHeight(int row, int height)
+{
+    table->setRowHeight(row,height);
+}
+
 void Abstract_Widget_List::clear()
 {
     widgets.clear();
