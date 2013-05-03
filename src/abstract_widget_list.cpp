@@ -66,6 +66,11 @@ Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
 
 }
 
+void Abstract_Widget_List::setRowHeight(int row, int height)
+{
+    table->setRowHeight(row,height);
+}
+
 void Abstract_Widget_List::clear()
 {
     widgets.clear();
@@ -80,6 +85,11 @@ void Abstract_Widget_List::remove(int i)
     {
         widgets.removeAt(i);
         table->removeRow(i);
+        if ( i == 0 && !widgets.isEmpty() )
+            table->cellWidget(0,1)->setEnabled(false);
+        else if ( i != 0 && i == count() )
+            table->cellWidget(count()-1,2)->setEnabled(false);
+
         emit removed(i);
     }
 }
@@ -93,6 +103,12 @@ void Abstract_Widget_List::appendWidget(QWidget *w)
     QWidget* b_up = create_button(w,&mapper_up,"go-up",tr("Move Up"));
     QWidget* b_down = create_button(w,&mapper_down,"go-down",tr("Move Down"));
     QWidget* b_remove = create_button(w,&mapper_remove,"list-remove",tr("Remove"));
+    if ( row == 0 )
+        b_up->setEnabled(false);
+    else
+        table->cellWidget(row-1,2)->setEnabled(true);
+    b_down->setEnabled(false);
+
     table->setCellWidget(row,0,w);
     table->setCellWidget(row,1,b_up);
     table->setCellWidget(row,2,b_down);

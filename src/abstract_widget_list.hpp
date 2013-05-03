@@ -58,6 +58,8 @@ public:
     /// Whether the given row index is valid
     bool isValidRow(int i) const { return i >= 0 && i < count(); }
 
+    void setRowHeight(int row, int height);
+
 
 public slots:
     /**

@@ -50,11 +50,11 @@ public:
     void append();
 
 signals:
-    void removed(int);
     void colorsChanged(const QList<QColor>&);
 
 private slots:
     void emit_changed();
+    void handle_removed(int);
 
 private:
    void  append_widget(QColor* col);
