@@ -37,6 +37,7 @@ class Color_List_Widget : public Abstract_Widget_List
 
 private:
     QList<QColor> m_colors;
+    QSignalMapper mapper;
 
 public:
     explicit Color_List_Widget(QWidget *parent = 0);
@@ -55,9 +56,10 @@ signals:
 private slots:
     void emit_changed();
     void handle_removed(int);
+    void color_changed(int row);
 
 private:
-   void  append_widget(QColor* col);
+   void  append_widget(int col);
 };
 
 #endif // COLOR_LIST_WIDGET_HPP
