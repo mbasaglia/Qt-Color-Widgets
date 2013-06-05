@@ -99,12 +99,7 @@ void Color_Dialog::update_widgets()
     spin_alpha->setValue(slide_alpha->value());
 
 
-    edit_hex->setText(QString("%1%2%3%4")
-                      .arg(col.red(),2,16,QChar('0'))
-                      .arg(col.green(),2,16,QChar('0'))
-                      .arg(col.blue(),2,16,QChar('0'))
-                      .arg(col.alpha(),2,16,QChar('0'))
-                     );
+    edit_hex->setText(col.name());
 
     preview->setColor(col);
 
@@ -143,41 +138,36 @@ void Color_Dialog::set_rgb()
 
 void Color_Dialog::on_edit_hex_editingFinished()
 {
-    QString xs = edit_hex->text().trimmed();
-    if ( xs.size() == 3 )
-    {
-        slide_red->setValue(QString(2,xs[0]).toInt(0,16));
-        slide_green->setValue(QString(2,xs[1]).toInt(0,16));
-        slide_blue->setValue(QString(2,xs[2]).toInt(0,16));
-        slide_alpha->setValue(255);
-    }
-    else
-    {
-        if ( xs.size() < 8 )
-        {
-            xs += QString(8-xs.size(),'f');
-        }
-        slide_red->setValue(xs.mid(0,2).toInt(0,16));
-        slide_green->setValue(xs.mid(2,2).toInt(0,16));
-        slide_blue->setValue(xs.mid(4,2).toInt(0,16));
-        slide_alpha->setValue(xs.mid(6,2).toInt(0,16));
-    }
-
-    set_rgb();
+    on_edit_hex_textEdited(edit_hex->text());
 
 }
 
 void Color_Dialog::on_edit_hex_textEdited(const QString &arg1)
 {
-
+    int cursor = edit_hex->cursorPosition();
     QString xs = arg1.trimmed();
-    if ( xs.size() == 8 )
+    xs.remove('#');
+    if ( xs.size() == 3 )
     {
+        slide_red->setValue(QString(2,xs[0]).toInt(0,16));
+        slide_green->setValue(QString(2,xs[1]).toInt(0,16));
+        slide_blue->setValue(QString(2,xs[2]).toInt(0,16));
+    }
+    else
+    {
+        if ( xs.size() < 6 )
+        {
+            xs += QString(6-xs.size(),'f');
+        }
         slide_red->setValue(xs.mid(0,2).toInt(0,16));
         slide_green->setValue(xs.mid(2,2).toInt(0,16));
         slide_blue->setValue(xs.mid(4,2).toInt(0,16));
-        slide_alpha->setValue(xs.mid(6,2).toInt(0,16));
+
+        if ( xs.size() == 8 )
+            slide_alpha->setValue(xs.mid(6,2).toInt(0,16));
     }
 
     set_rgb();
+
+    edit_hex->setCursorPosition(cursor);
 }
