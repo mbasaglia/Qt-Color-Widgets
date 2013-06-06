@@ -98,14 +98,14 @@ void Color_Preview::mouseMoveEvent(QMouseEvent *ev)
     {
         QMimeData *data = new QMimeData;
 
-        data->setText(col.name());
         data->setColorData(col);
+        /*data->setText(col.name());
         data->setData("application/x-oswb-color",
             QString("<paint><color name='%1'>""<sRGB r='%2' g='%3' b='%4' />"
                     "</color></paint>")
             .arg(col.name()).arg(col.redF()).arg(col.greenF()).arg(col.blueF())
             .toUtf8()
-        );
+        );*/
 
         QDrag* drag = new QDrag(this);
         drag->setMimeData(data);
