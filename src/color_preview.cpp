@@ -24,7 +24,8 @@
 #include <QStylePainter>
 #include <QStyleOptionFrame>
 #include "paint_border.hpp"
-//#include <QGuiApplication>
+#include <QMouseEvent>
+#include <QDrag>
 
 Color_Preview::Color_Preview(QWidget *parent) :
     QWidget(parent), col(Qt::red), back( Qt::darkGray, Qt::DiagCrossPattern ),
@@ -84,8 +85,36 @@ void Color_Preview::resizeEvent(QResizeEvent *)
     update();
 }
 
-void Color_Preview::mouseReleaseEvent(QMouseEvent *)
+void Color_Preview::mouseReleaseEvent(QMouseEvent * ev)
 {
-    emit clicked();
+    if ( QRect(QPoint(0,0),size()).contains(ev->pos()) )
+        emit clicked();
+}
+
+void Color_Preview::mouseMoveEvent(QMouseEvent *ev)
+{
+
+    if ( ev->buttons() &Qt::LeftButton && !QRect(QPoint(0,0),size()).contains(ev->pos()) )
+    {
+        QMimeData *data = new QMimeData;
+
+        data->setText(col.name());
+        data->setColorData(col);
+        data->setData("application/x-oswb-color",
+            QString("<paint><color name='%1'>""<sRGB r='%2' g='%3' b='%4' />"
+                    "</color></paint>")
+            .arg(col.name()).arg(col.redF()).arg(col.greenF()).arg(col.blueF())
+            .toUtf8()
+        );
+
+        QDrag* drag = new QDrag(this);
+        drag->setMimeData(data);
+
+        QPixmap preview(24,24);
+        preview.fill(col);
+        drag->setPixmap(preview);
+
+        drag->exec();
+    }
 }
 

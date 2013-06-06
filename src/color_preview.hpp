@@ -100,7 +100,8 @@ signals:
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *ev);
+    void mouseMoveEvent(QMouseEvent *ev);
 
 };
 

@@ -1,5 +1,7 @@
 #include "color_selector.hpp"
 #include "color_dialog.hpp"
+#include <QDropEvent>
+#include <QDragEnterEvent>
 
 Color_Selector::Color_Selector(QWidget *parent) :
     Color_Preview(parent), dialog(new Color_Dialog(this))
@@ -10,6 +12,7 @@ Color_Selector::Color_Selector(QWidget *parent) :
     connect(this,SIGNAL(colorChanged(QColor)),this,SLOT(update_old_color(QColor)));
     connect(dialog,SIGNAL(accepted()),this,SLOT(accept_dialog()));
     connect(dialog,SIGNAL(rejected()),this,SLOT(reject_dialog()));
+    setAcceptDrops(true);
 }
 
 void Color_Selector::setUpdateMode(Color_Selector::Update_Mode m)
@@ -63,4 +66,30 @@ void Color_Selector::update_old_color(QColor c)
 {
     if ( !dialog->isVisible() )
         old_color = c;
+}
+
+void Color_Selector::dragEnterEvent(QDragEnterEvent *event)
+{
+    if ( event->mimeData()->hasColor() ||
+         ( event->mimeData()->hasText() && QColor(event->mimeData()->text()).isValid() ) )
+        event->acceptProposedAction();
+}
+
+
+void Color_Selector::dropEvent(QDropEvent *event)
+{
+    if ( event->mimeData()->hasColor() )
+    {
+        setColor(event->mimeData()->colorData().value<QColor>());
+        event->accept();
+    }
+    else if ( event->mimeData()->hasText() )
+    {
+        QColor col(event->mimeData()->text());
+        if ( col.isValid() )
+        {
+            setColor(col);
+            event->accept();
+        }
+    }
 }

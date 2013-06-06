@@ -21,6 +21,8 @@
 
 */
 #include "color_dialog.hpp"
+#include <QDropEvent>
+#include <QDragEnterEvent>
 
 Color_Dialog::Color_Dialog(QWidget *parent) :
     QDialog(parent)
@@ -32,6 +34,8 @@ Color_Dialog::Color_Dialog(QWidget *parent) :
         rainbow.push_back(QColor::fromHsv(i,255,255));
     rainbow.push_back(Qt::red);
     slide_hue->setColors(rainbow);
+
+    setAcceptDrops(true);
 }
 
 QColor Color_Dialog::color() const
@@ -170,4 +174,30 @@ void Color_Dialog::on_edit_hex_textEdited(const QString &arg1)
     set_rgb();
 
     edit_hex->setCursorPosition(cursor);
+}
+
+void Color_Dialog::dragEnterEvent(QDragEnterEvent *event)
+{
+    if ( event->mimeData()->hasColor() ||
+         ( event->mimeData()->hasText() && QColor(event->mimeData()->text()).isValid() ) )
+        event->acceptProposedAction();
+}
+
+
+void Color_Dialog::dropEvent(QDropEvent *event)
+{
+    if ( event->mimeData()->hasColor() )
+    {
+        setColor(event->mimeData()->colorData().value<QColor>());
+        event->accept();
+    }
+    else if ( event->mimeData()->hasText() )
+    {
+        QColor col(event->mimeData()->text());
+        if ( col.isValid() )
+        {
+            setColor(col);
+            event->accept();
+        }
+    }
 }

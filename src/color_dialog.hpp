@@ -63,6 +63,10 @@ protected slots:
 private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent * event);
 };
 
 #endif // COLOR_DIALOG_HPP

@@ -69,6 +69,10 @@ private slots:
     void accept_dialog();
     void reject_dialog();
     void update_old_color(QColor c);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent * event);
     
 };
 
