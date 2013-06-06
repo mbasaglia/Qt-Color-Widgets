@@ -142,15 +142,38 @@ void Color_Dialog::set_rgb()
 
 void Color_Dialog::on_edit_hex_editingFinished()
 {
-    on_edit_hex_textEdited(edit_hex->text());
+    update_hex();
 
 }
 
 void Color_Dialog::on_edit_hex_textEdited(const QString &arg1)
 {
     int cursor = edit_hex->cursorPosition();
-    QString xs = arg1.trimmed();
+    update_hex();
+    //edit_hex->blockSignals(true);
+    edit_hex->setText(arg1);
+    //edit_hex->blockSignals(false);
+    edit_hex->setCursorPosition(cursor);
+}
+
+void Color_Dialog::update_hex()
+{
+    QString xs = edit_hex->text().trimmed();
     xs.remove('#');
+
+    if ( xs.isEmpty() )
+        return;
+
+    if ( xs.indexOf(QRegExp("^[0-9a-fA-f]+$")) == -1 )
+    {
+        QColor c(xs);
+        if ( c.isValid() )
+        {
+            setColor(c);
+            return;
+        }
+    }
+
     if ( xs.size() == 3 )
     {
         slide_red->setValue(QString(2,xs[0]).toInt(0,16));
@@ -161,7 +184,7 @@ void Color_Dialog::on_edit_hex_textEdited(const QString &arg1)
     {
         if ( xs.size() < 6 )
         {
-            xs += QString(6-xs.size(),'f');
+            xs += QString(6-xs.size(),'0');
         }
         slide_red->setValue(xs.mid(0,2).toInt(0,16));
         slide_green->setValue(xs.mid(2,2).toInt(0,16));
@@ -172,8 +195,6 @@ void Color_Dialog::on_edit_hex_textEdited(const QString &arg1)
     }
 
     set_rgb();
-
-    edit_hex->setCursorPosition(cursor);
 }
 
 void Color_Dialog::dragEnterEvent(QDragEnterEvent *event)

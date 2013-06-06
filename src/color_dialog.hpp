@@ -63,6 +63,8 @@ protected slots:
 private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);
+private:
+    void update_hex();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
