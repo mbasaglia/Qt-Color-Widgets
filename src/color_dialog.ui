@@ -229,9 +229,6 @@
            <family>Monospace</family>
           </font>
          </property>
-         <property name="inputMask">
-          <string>xxxxxxxxx</string>
-         </property>
         </widget>
        </item>
        <item row="7" column="0" colspan="3">

@@ -156,6 +156,20 @@ void Color_Dialog::update_hex()
 {
     QString xs = edit_hex->text().trimmed();
     xs.remove('#');
+
+    if ( xs.isEmpty() )
+        return;
+
+    if ( xs.indexOf(QRegExp("^[0-9a-fA-f]+$")) == -1 )
+    {
+        QColor c(xs);
+        if ( c.isValid() )
+        {
+            setColor(c);
+            return;
+        }
+    }
+
     if ( xs.size() == 3 )
     {
         slide_red->setValue(QString(2,xs[0]).toInt(0,16));
