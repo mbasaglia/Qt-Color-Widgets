@@ -2,6 +2,7 @@
 #include "color_dialog.hpp"
 #include <QDropEvent>
 #include <QDragEnterEvent>
+#include <QMimeData>
 
 Color_Selector::Color_Selector(QWidget *parent) :
     Color_Preview(parent), dialog(new Color_Dialog(this))

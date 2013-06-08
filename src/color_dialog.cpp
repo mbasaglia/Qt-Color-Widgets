@@ -23,6 +23,7 @@
 #include "color_dialog.hpp"
 #include <QDropEvent>
 #include <QDragEnterEvent>
+#include <QMimeData>
 
 Color_Dialog::Color_Dialog(QWidget *parent) :
     QDialog(parent)
