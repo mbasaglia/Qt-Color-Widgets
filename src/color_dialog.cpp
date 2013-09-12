@@ -24,6 +24,7 @@
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QDesktopWidget>
+#include <QMimeData>
 
 Color_Dialog::Color_Dialog(QWidget *parent) :
     QDialog(parent), pick_from_screen(false)
@@ -198,7 +199,6 @@ void Color_Dialog::update_hex()
     set_rgb();
 }
 
-
 void Color_Dialog::dragEnterEvent(QDragEnterEvent *event)
 {
     if ( event->mimeData()->hasColor() ||
@@ -223,38 +223,4 @@ void Color_Dialog::dropEvent(QDropEvent *event)
             event->accept();
         }
     }
-}
-
-void Color_Dialog::get_screen_color(QPoint global_pos)
-{
-
-    WId id = QApplication::desktop()->winId();
-    QImage img = QPixmap::grabWindow(id, global_pos.x(), global_pos.y(), 1, 1).toImage();
-    setColor(img.pixel(0,0));
-
-}
-
-void Color_Dialog::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (pick_from_screen)
-    {
-        get_screen_color(event->globalPos());
-        pick_from_screen = false;
-        releaseMouse();
-    }
-}
-
-void Color_Dialog::mouseMoveEvent(QMouseEvent *event)
-{
-    if (pick_from_screen)
-    {
-        get_screen_color(event->globalPos());
-    }
-}
-
-void Color_Dialog::on_button_pick_clicked()
-{
-    grabMouse(Qt::CrossCursor);
-    pick_from_screen = true;
-
 }

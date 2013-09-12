@@ -26,6 +26,7 @@
 #include "paint_border.hpp"
 #include <QMouseEvent>
 #include <QDrag>
+#include <QMimeData>
 
 Color_Preview::Color_Preview(QWidget *parent) :
     QWidget(parent), col(Qt::red), back( Qt::darkGray, Qt::DiagCrossPattern ),
