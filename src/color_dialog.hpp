@@ -63,12 +63,21 @@ protected slots:
 private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);
+
+    void on_button_pick_clicked();
+
 private:
     void update_hex();
+    void get_screen_color(QPoint global_pos);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent * event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+
+private:
+    bool pick_from_screen;
 };
 
 #endif // COLOR_DIALOG_HPP
