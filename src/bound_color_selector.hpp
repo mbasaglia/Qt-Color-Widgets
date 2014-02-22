@@ -7,7 +7,7 @@
 \section License
 This file is part of Knotter.
 
-Copyright (C) 2012-2013  Mattia Basaglia
+Copyright (C) 2012-2014  Mattia Basaglia
 
 Knotter is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

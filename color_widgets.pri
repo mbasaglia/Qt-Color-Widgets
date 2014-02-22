@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Mattia Basaglia
+# Copyright (C) 2013-2014 Mattia Basaglia
 #
 #
 # This software is free software: you can redistribute it and/or modify
