@@ -62,6 +62,7 @@ void Color_Dialog::setColor(QColor c)
 
 void Color_Dialog::update_widgets()
 {
+    bool blocked = signalsBlocked();
     blockSignals(true);
     foreach(QWidget* w, findChildren<QWidget*>())
         w->blockSignals(true);
@@ -109,7 +110,7 @@ void Color_Dialog::update_widgets()
 
     preview->setColor(col);
 
-    blockSignals(false);
+    blockSignals(blocked);
     foreach(QWidget* w, findChildren<QWidget*>())
         w->blockSignals(false);
 
