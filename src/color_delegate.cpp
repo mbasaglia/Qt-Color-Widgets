@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "color_delegate.hpp"
+#include "color_selector.hpp"
 #include "color_dialog.hpp"
 
 Color_Delegate::Color_Delegate(QWidget *parent) :

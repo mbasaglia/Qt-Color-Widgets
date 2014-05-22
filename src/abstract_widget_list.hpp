@@ -33,21 +33,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class Abstract_Widget_List : public QWidget
 {
     Q_OBJECT
-
-private:
-    QList<QWidget*> widgets;
-    QSignalMapper mapper_up;
-    QSignalMapper mapper_down;
-    QSignalMapper mapper_remove;
-    QTableWidget*table;
-
 public:
     explicit Abstract_Widget_List(QWidget *parent = 0);
+    ~Abstract_Widget_List();
     
     /**
      *  \brief Get the number of items
      */
-    int count() const { return widgets.size(); }
+    int count() const;
 
     /**
      *  \brief Swap row a and row b
@@ -103,15 +96,18 @@ protected:
      */
     void clear();
 
-private:
-    QWidget* create_button(QWidget* data, QSignalMapper*mapper,
-                           QString icon_name, QString text,
-                           QString tooltip = QString()) const;
-
 private slots:
     void remove_clicked(QWidget* w);
     void up_clicked(QWidget* w);
     void down_clicked(QWidget* w);
+
+private:
+    class Private;
+    Private * const p;
+
+    QWidget* create_button(QWidget* data, QSignalMapper*mapper,
+                           QString icon_name, QString text,
+                           QString tooltip = QString()) const;
 };
 
 #endif // ABSTRACT_WIDGET_LIST_HPP

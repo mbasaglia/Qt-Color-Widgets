@@ -28,12 +28,53 @@
 #include <QDrag>
 #include <QMimeData>
 
-Color_Preview::Color_Preview(QWidget *parent) :
-    QWidget(parent), col(Qt::red), back( Qt::darkGray, Qt::DiagCrossPattern ),
-    alpha_mode(NoAlpha)
+class Color_Preview::Private
 {
-    back.setTexture(QPixmap(QString(":/color_widgets/alphaback.png")));
-    //setPalette(QGuiApplication::palette());
+public:
+    QColor col; ///< color to be viewed
+    QBrush back;///< Background brush, visible on transaprent color
+    Alpha_Mode alpha_mode; ///< How transparent colors are handled
+
+    Private() : col(Qt::red), back(Qt::darkGray, Qt::DiagCrossPattern), alpha_mode(NoAlpha)
+    {}
+};
+
+Color_Preview::Color_Preview(QWidget *parent) :
+    QWidget(parent), p(new Private)
+{
+    p->back.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
+}
+
+Color_Preview::~Color_Preview()
+{
+    delete p;
+}
+
+void Color_Preview::setBackground(const QBrush &bk)
+{
+    p->back = bk;
+    update();
+}
+
+QBrush Color_Preview::background() const
+{
+    return p->back;
+}
+
+Color_Preview::Alpha_Mode Color_Preview::alphaMode() const
+{
+    return p->alpha_mode;
+}
+
+void Color_Preview::setAlphaMode(Alpha_Mode am)
+{
+    p->alpha_mode = am;
+    update();
+}
+
+QColor Color_Preview::color() const
+{
+    return p->col;
 }
 
 QSize Color_Preview::sizeHint() const
@@ -44,18 +85,18 @@ QSize Color_Preview::sizeHint() const
 void Color_Preview::paint(QPainter &painter, QRect rect) const
 {
 
-    QColor noalpha = col;
+    QColor noalpha = p->col;
     noalpha.setAlpha(255);
 
-    painter.fillRect(1,1,rect.width()-2,rect.height()-2, back );
+    painter.fillRect(1, 1, rect.width()-2, rect.height()-2, p->back);
 
     int w = rect.width()-2;
-    if ( alpha_mode == SplitAlpha )
+    if (p->alpha_mode == SplitAlpha)
         w /= 2;
-    else if ( alpha_mode == AllAlpha )
+    else if (p->alpha_mode == AllAlpha)
         w = 0;
-    painter.fillRect(1,1,w,rect.height()-2,noalpha);
-    painter.fillRect(w,1,rect.width()-w-1,rect.height()-2,col);
+    painter.fillRect(1, 1, w, rect.height()-2, noalpha);
+    painter.fillRect(w, 1, rect.width()-w-1, rect.height()-2, p->col);
 
     paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
     paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
@@ -64,9 +105,9 @@ void Color_Preview::paint(QPainter &painter, QRect rect) const
     paint_br_border(painter,size(),palette().color(QPalette::Button),0);
 }
 
-void Color_Preview::setColor(QColor c)
+void Color_Preview::setColor(const QColor &c)
 {
-    col = c;
+    p->col = c;
     update();
     emit colorChanged(c);
 }
@@ -99,7 +140,7 @@ void Color_Preview::mouseMoveEvent(QMouseEvent *ev)
     {
         QMimeData *data = new QMimeData;
 
-        data->setColorData(col);
+        data->setColorData(p->col);
         /*data->setText(col.name());
         data->setData("application/x-oswb-color",
             QString("<paint><color name='%1'>""<sRGB r='%2' g='%3' b='%4' />"
@@ -112,7 +153,7 @@ void Color_Preview::mouseMoveEvent(QMouseEvent *ev)
         drag->setMimeData(data);
 
         QPixmap preview(24,24);
-        preview.fill(col);
+        preview.fill(p->col);
         drag->setPixmap(preview);
 
         drag->exec();

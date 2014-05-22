@@ -41,22 +41,26 @@ public:
         Continuous ///< Update color as it's being modified in the dialog
     };
 
-private:
-    Update_Mode  update_mode;
-    class Color_Dialog* dialog;
-    QColor old_color;
-
-public:
     explicit Color_Selector(QWidget *parent = 0);
+    ~Color_Selector();
 
     void setUpdateMode(Update_Mode m);
-    Update_Mode updateMode() const { return update_mode; }
+    Update_Mode updateMode() const;
 
     Qt::WindowModality dialogModality() const;
     void setDialogModality(Qt::WindowModality m);
 
 public slots:
     void showDialog();
+
+private slots:
+    void accept_dialog();
+    void reject_dialog();
+    void update_old_color(const QColor &c);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent * event);
 
 private:
     /// Connect/Disconnect colorChanged based on Update_Mode
@@ -65,14 +69,8 @@ private:
     /// Disconnect from dialog update
     void disconnect_dialog();
 
-private slots:
-    void accept_dialog();
-    void reject_dialog();
-    void update_old_color(QColor c);
-
-protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent * event);
+    class Private;
+    Private * const p;
     
 };
 

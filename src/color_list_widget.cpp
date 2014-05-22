@@ -27,20 +27,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "color_list_widget.hpp"
 #include "color_selector.hpp"
 
-Color_List_Widget::Color_List_Widget(QWidget *parent)
-    : Abstract_Widget_List(parent)
+class Color_List_Widget::Private
 {
-    connect(this,SIGNAL(removed(int)),SLOT(handle_removed(int)));
-    connect(&mapper,SIGNAL(mapped(int)),SLOT(color_changed(int)));
+public:
+    QList<QColor> colors;
+    QSignalMapper mapper;
+};
+
+Color_List_Widget::Color_List_Widget(QWidget *parent)
+    : Abstract_Widget_List(parent), p(new Private)
+{
+    connect(this, SIGNAL(removed(int)), SLOT(handle_removed(int)));
+    connect(&p->mapper, SIGNAL(mapped(int)), SLOT(color_changed(int)));
 }
 
-void Color_List_Widget::setColors(const QList<QColor> &cols)
+Color_List_Widget::~Color_List_Widget()
+{
+    delete p;
+}
+
+QList<QColor> Color_List_Widget::colors() const
+{
+    return p->colors;
+}
+
+void Color_List_Widget::setColors(const QList<QColor> &colors)
 {
     clear();
-    m_colors = cols;
-    for( int i = 0; i < m_colors.size(); i++ )
+    p->colors = colors;
+    for(int i = 0;i < colors.size();i++ )
         append_widget(i);
-    emit colorsChanged(m_colors);
+    emit colorsChanged(colors);
 }
 
 void Color_List_Widget::swap(int a, int b)
@@ -52,26 +69,26 @@ void Color_List_Widget::swap(int a, int b)
         QColor ca = sa->color();
         sa->setColor(sb->color());
         sb->setColor(ca);
-        emit colorsChanged(m_colors);
+        emit colorsChanged(p->colors);
     }
 }
 
 void Color_List_Widget::append()
 {
-    m_colors.push_back(Qt::black);
-    append_widget(m_colors.size()-1);
-    emit colorsChanged(m_colors);
+    p->colors.push_back(Qt::black);
+    append_widget(p->colors.size()-1);
+    emit colorsChanged(p->colors);
 }
 
 void Color_List_Widget::emit_changed()
 {
-    emit colorsChanged(m_colors);
+    emit colorsChanged(p->colors);
 }
 
 void Color_List_Widget::handle_removed(int i)
 {
-    m_colors.removeAt(i);
-    emit colorsChanged(m_colors);
+    p->colors.removeAt(i);
+    emit colorsChanged(p->colors);
 }
 
 void Color_List_Widget::color_changed(int row)
@@ -79,8 +96,8 @@ void Color_List_Widget::color_changed(int row)
     Color_Selector *cs = widget_cast<Color_Selector>(row);
     if ( cs )
     {
-        m_colors[row] = cs->color();
-        emit colorsChanged(m_colors);
+        p->colors[row] = cs->color();
+        emit colorsChanged(p->colors);
     }
 }
 
@@ -88,10 +105,10 @@ void Color_List_Widget::append_widget(int col)
 {
     Color_Selector* cbs = new Color_Selector;
     cbs->setAlphaMode(Color_Preview::AllAlpha);
-    cbs->setColor(m_colors[col]);
+    cbs->setColor(p->colors[col]);
     //connect(cbs,SIGNAL(colorChanged(QColor)),SLOT(emit_changed()));
-    mapper.setMapping(cbs,col);
-    connect(cbs,SIGNAL(colorChanged(QColor)),&mapper,SLOT(map()));
+    p->mapper.setMapping(cbs,col);
+    connect(cbs,SIGNAL(colorChanged(QColor)),&p->mapper,SLOT(map()));
     appendWidget(cbs);
     setRowHeight(count()-1,22);
 }

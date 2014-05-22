@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define COLOR_DELEGATE_HPP
 
 #include <QStyledItemDelegate>
-#include "color_selector.hpp"
+
 /**
     Delegate to use a Color_Selector in a color list
 */
