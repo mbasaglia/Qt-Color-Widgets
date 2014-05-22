@@ -91,7 +91,7 @@ QString Color_Preview_Plugin::domXml() const
 
 QString Color_Preview_Plugin::includeFile() const
 {
-    return "color_preview.hpp";
+    return "Color_Preview";
 }
 
 //Q_EXPORT_PLUGIN2(color_widgets, Color_Preview_Plugin);

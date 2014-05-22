@@ -23,9 +23,11 @@
 #ifndef COLOR_DIALOG_HPP
 #define COLOR_DIALOG_HPP
 
+#include "colorpicker_global.hpp"
+
 #include <QDialog>
 
-class Color_Dialog : public QDialog
+class QCP_EXPORT Color_Dialog : public QDialog
 {
     Q_OBJECT
 

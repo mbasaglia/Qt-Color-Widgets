@@ -23,12 +23,14 @@
 #ifndef GRADIENT_SLIDER_HPP
 #define GRADIENT_SLIDER_HPP
 
+#include "colorpicker_global.hpp"
+
 #include <QSlider>
 
 /**
  * \brief A slider that mover on top of a gradient
  */
-class Gradient_Slider : public QSlider
+class QCP_EXPORT Gradient_Slider : public QSlider
 {
     Q_OBJECT
     Q_PROPERTY(QBrush background READ background WRITE setBackground)

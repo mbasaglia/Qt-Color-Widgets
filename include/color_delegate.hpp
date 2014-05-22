@@ -27,12 +27,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COLOR_DELEGATE_HPP
 #define COLOR_DELEGATE_HPP
 
+#include "colorpicker_global.hpp"
+
 #include <QStyledItemDelegate>
 
 /**
     Delegate to use a Color_Selector in a color list
 */
-class Color_Delegate : public QStyledItemDelegate
+class QCP_EXPORT Color_Delegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:

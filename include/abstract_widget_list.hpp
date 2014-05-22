@@ -27,10 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef ABSTRACT_WIDGET_LIST_HPP
 #define ABSTRACT_WIDGET_LIST_HPP
 
+#include "colorpicker_global.hpp"
+
 #include <QSignalMapper>
 #include <QTableWidget>
 
-class Abstract_Widget_List : public QWidget
+class QCP_EXPORT Abstract_Widget_List : public QWidget
 {
     Q_OBJECT
 public:

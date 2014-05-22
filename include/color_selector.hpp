@@ -28,7 +28,7 @@
 /**
  * Color preview that opens a color dialog
  */
-class Color_Selector : public Color_Preview
+class QCP_EXPORT Color_Selector : public Color_Preview
 {
     Q_OBJECT
     Q_ENUMS(Update_Mode)

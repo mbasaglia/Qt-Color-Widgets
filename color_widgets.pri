@@ -15,7 +15,7 @@
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 
-INCLUDEPATH += $$PWD/src
+INCLUDEPATH += $$PWD/src $$PWD/include
 
 SOURCES += \
     $$PWD/src/color_preview.cpp \
@@ -29,16 +29,17 @@ SOURCES += \
     $$PWD/src/abstract_widget_list.cpp
 
 HEADERS += \
-    $$PWD/src/color_wheel.hpp \
-    $$PWD/src/color_preview.hpp \
-    $$PWD/src/gradient_slider.hpp \
-    $$PWD/src/color_dialog.hpp \
-    $$PWD/src/color_selector.hpp \
+    $$PWD/include/color_wheel.hpp \
+    $$PWD/include/color_preview.hpp \
+    $$PWD/include/gradient_slider.hpp \
+    $$PWD/include/color_dialog.hpp \
+    $$PWD/include/color_selector.hpp \
     $$PWD/src/paint_border.hpp \
-    $$PWD/src/color_delegate.hpp \
-    $$PWD/src/color_list_widget.hpp \
-    $$PWD/src/bound_color_selector.hpp \
-    $$PWD/src/abstract_widget_list.hpp
+    $$PWD/include/color_delegate.hpp \
+    $$PWD/include/color_list_widget.hpp \
+    $$PWD/include/bound_color_selector.hpp \
+    $$PWD/include/abstract_widget_list.hpp \
+    $$PWD/include/colorpicker_global.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui
