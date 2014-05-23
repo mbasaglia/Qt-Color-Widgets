@@ -30,33 +30,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QHeaderView>
 #include <QPushButton>
 
-Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
-    QWidget(parent)
+class Abstract_Widget_List::Private
 {
-    connect(&mapper_up,SIGNAL(mapped(QWidget*)),SLOT(up_clicked(QWidget*)));
-    connect(&mapper_down,SIGNAL(mapped(QWidget*)),SLOT(down_clicked(QWidget*)));
-    connect(&mapper_remove,SIGNAL(mapped(QWidget*)),SLOT(remove_clicked(QWidget*)));
+public:
+    QList<QWidget*> widgets;
+    QSignalMapper mapper_up;
+    QSignalMapper mapper_down;
+    QSignalMapper mapper_remove;
+    QTableWidget *table;
+};
+
+Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
+    QWidget(parent), p(new Private)
+{
+    connect(&p->mapper_up,SIGNAL(mapped(QWidget*)),SLOT(up_clicked(QWidget*)));
+    connect(&p->mapper_down,SIGNAL(mapped(QWidget*)),SLOT(down_clicked(QWidget*)));
+    connect(&p->mapper_remove,SIGNAL(mapped(QWidget*)),SLOT(remove_clicked(QWidget*)));
 
 
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
     verticalLayout->setContentsMargins(0, 0, 0, 0);
-    table = new QTableWidget(this);
-    verticalLayout->addWidget(table);
+    p->table = new QTableWidget(this);
+    verticalLayout->addWidget(p->table);
 
 
-    table->insertColumn(0);
-    table->insertColumn(1);
-    table->insertColumn(2);
-    table->insertColumn(3);
+    p->table->insertColumn(0);
+    p->table->insertColumn(1);
+    p->table->insertColumn(2);
+    p->table->insertColumn(3);
 
-    table->setColumnWidth(0,128);
-    table->setColumnWidth(1,24);
-    table->setColumnWidth(2,24);
-    table->setColumnWidth(3,24);
+    p->table->setColumnWidth(0,128);
+    p->table->setColumnWidth(1,24);
+    p->table->setColumnWidth(2,24);
+    p->table->setColumnWidth(3,24);
 
-    table->horizontalHeader()->hide();
-    table->verticalHeader()->hide();
-    table->setShowGrid(false);
+    p->table->horizontalHeader()->hide();
+    p->table->verticalHeader()->hide();
+    p->table->setShowGrid(false);
 
     QPushButton* add_button = new QPushButton(QIcon::fromTheme("list-add"),
                                               tr("Add New"));
@@ -66,16 +76,26 @@ Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
 
 }
 
+Abstract_Widget_List::~Abstract_Widget_List()
+{
+    delete p;
+}
+
+int Abstract_Widget_List::count() const
+{
+    return p->widgets.size();
+}
+
 void Abstract_Widget_List::setRowHeight(int row, int height)
 {
-    table->setRowHeight(row,height);
+    p->table->setRowHeight(row,height);
 }
 
 void Abstract_Widget_List::clear()
 {
-    widgets.clear();
-    while(table->rowCount() > 0)
-        table->removeRow(0);
+    p->widgets.clear();
+    while(p->table->rowCount() > 0)
+        p->table->removeRow(0);
 }
 
 
@@ -83,12 +103,12 @@ void Abstract_Widget_List::remove(int i)
 {
     if ( isValidRow(i) )
     {
-        widgets.removeAt(i);
-        table->removeRow(i);
-        if ( i == 0 && !widgets.isEmpty() )
-            table->cellWidget(0,1)->setEnabled(false);
+        p->widgets.removeAt(i);
+        p->table->removeRow(i);
+        if ( i == 0 && !p->widgets.isEmpty() )
+            p->table->cellWidget(0,1)->setEnabled(false);
         else if ( i != 0 && i == count() )
-            table->cellWidget(count()-1,2)->setEnabled(false);
+            p->table->cellWidget(count()-1,2)->setEnabled(false);
 
         emit removed(i);
     }
@@ -98,29 +118,29 @@ void Abstract_Widget_List::remove(int i)
 void Abstract_Widget_List::appendWidget(QWidget *w)
 {
     int row = count();
-    table->insertRow(row);
+    p->table->insertRow(row);
 
-    QWidget* b_up = create_button(w,&mapper_up,"go-up",tr("Move Up"));
-    QWidget* b_down = create_button(w,&mapper_down,"go-down",tr("Move Down"));
-    QWidget* b_remove = create_button(w,&mapper_remove,"list-remove",tr("Remove"));
+    QWidget* b_up = create_button(w,&p->mapper_up,"go-up",tr("Move Up"));
+    QWidget* b_down = create_button(w,&p->mapper_down,"go-down",tr("Move Down"));
+    QWidget* b_remove = create_button(w,&p->mapper_remove,"list-remove",tr("Remove"));
     if ( row == 0 )
         b_up->setEnabled(false);
     else
-        table->cellWidget(row-1,2)->setEnabled(true);
+        p->table->cellWidget(row-1,2)->setEnabled(true);
     b_down->setEnabled(false);
 
-    table->setCellWidget(row,0,w);
-    table->setCellWidget(row,1,b_up);
-    table->setCellWidget(row,2,b_down);
-    table->setCellWidget(row,3,b_remove);
+    p->table->setCellWidget(row,0,w);
+    p->table->setCellWidget(row,1,b_up);
+    p->table->setCellWidget(row,2,b_down);
+    p->table->setCellWidget(row,3,b_remove);
 
-    widgets.push_back(w);
+    p->widgets.push_back(w);
 }
 
 QWidget *Abstract_Widget_List::widget(int i)
 {
     if ( isValidRow(i) )
-        return widgets[i];
+        return p->widgets[i];
     return 0;
 }
 
@@ -141,21 +161,20 @@ QWidget *Abstract_Widget_List::create_button(QWidget *data, QSignalMapper *mappe
 
 void Abstract_Widget_List::remove_clicked(QWidget *w)
 {
-    int row = widgets.indexOf(w);
+    int row = p->widgets.indexOf(w);
     remove(row);
 }
 
 void Abstract_Widget_List::up_clicked(QWidget *w)
 {
-
-    int row = widgets.indexOf(w);
+    int row = p->widgets.indexOf(w);
     if ( row > 0 )
         swap(row,row-1);
 }
 
 void Abstract_Widget_List::down_clicked(QWidget *w)
 {
-    int row = widgets.indexOf(w);
+    int row = p->widgets.indexOf(w);
     if ( row+1 < count() )
         swap(row,row+1);
 }

@@ -26,12 +26,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef BOUND_COLOR_SELECTOR_HPP
 #define BOUND_COLOR_SELECTOR_HPP
+
 #include "color_selector.hpp"
 
 /**
  *  A color selector bound to a color reference
  */
-class Bound_Color_Selector : public Color_Selector
+class QCP_EXPORT Bound_Color_Selector : public Color_Selector
 {
     Q_OBJECT
 private:

@@ -101,7 +101,7 @@ QString Gradient_Slider_Plugin::domXml() const
 
 QString Gradient_Slider_Plugin::includeFile() const
 {
-    return "gradient_slider.hpp";
+    return "Gradient_Slider";
 }
 
 

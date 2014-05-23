@@ -91,7 +91,7 @@ QString Color_Selector_Plugin::domXml() const
 
 QString Color_Selector_Plugin::includeFile() const
 {
-    return "color_selector.hpp";
+    return "Color_Selector";
 }
 
 

@@ -23,12 +23,14 @@
 #ifndef GRADIENT_SLIDER_HPP
 #define GRADIENT_SLIDER_HPP
 
+#include "colorpicker_global.hpp"
+
 #include <QSlider>
 
 /**
  * \brief A slider that mover on top of a gradient
  */
-class Gradient_Slider : public QSlider
+class QCP_EXPORT Gradient_Slider : public QSlider
 {
     Q_OBJECT
     Q_PROPERTY(QBrush background READ background WRITE setBackground)
@@ -37,20 +39,17 @@ class Gradient_Slider : public QSlider
     Q_PROPERTY(QColor firstColor READ firstColor WRITE setFirstColor STORED false)
     Q_PROPERTY(QColor lastColor READ lastColor WRITE setLastColor STORED false)
 
-private:
-    QVector<QColor> col_list;
-    QBrush back;
-
 public:
     explicit Gradient_Slider(QWidget *parent = 0);
+	~Gradient_Slider();
 
     /// Get the background, it's visible for transparent gradient stops
-    QBrush background() const { return back; }
+    QBrush background() const;
     /// Set the background, it's visible for transparent gradient stops
     void setBackground(QBrush bg);
 
     /// Get the colors that make up the gradient
-    QVector<QColor> colors() const { return col_list; }
+    QVector<QColor> colors() const;
     /// Set the colors that make up the gradient
     void setColors(QVector<QColor> bg);
 
@@ -59,8 +58,9 @@ public:
      * \note  Only the color order is preserved, all stops will be equally spaced
      */
     void setGradient(QLinearGradient bg);
+
     /// Get the gradient
-    QLinearGradient gradient() const ;
+    QLinearGradient gradient() const;
 
     /**
      * Set the first color of the gradient
@@ -90,6 +90,10 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *ev);
+
+private:
+    class Private;
+    Private * const p;
 };
 
 #endif // GRADIENT_SLIDER_HPP

@@ -29,22 +29,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "abstract_widget_list.hpp"
 
-class Color_List_Widget : public Abstract_Widget_List
+class QCP_EXPORT Color_List_Widget : public Abstract_Widget_List
 {
     Q_OBJECT
 
     Q_PROPERTY(QList<QColor> colors READ colors WRITE setColors NOTIFY colorsChanged )
 
-private:
-    QList<QColor> m_colors;
-    QSignalMapper mapper;
-
 public:
     explicit Color_List_Widget(QWidget *parent = 0);
+    ~Color_List_Widget();
 
-
-    const QList<QColor>& colors() const { return m_colors; }
-    void setColors(const QList<QColor>& cols);
+    QList<QColor> colors() const;
+    void setColors(const QList<QColor>& colors);
 
     void swap(int a, int b);
 
@@ -59,7 +55,9 @@ private slots:
     void color_changed(int row);
 
 private:
-   void  append_widget(int col);
+    class Private;
+    Private * const p;
+    void  append_widget(int col);
 };
 
 #endif // COLOR_LIST_WIDGET_HPP

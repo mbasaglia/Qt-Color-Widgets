@@ -23,9 +23,11 @@
 #ifndef COLOR_DIALOG_HPP
 #define COLOR_DIALOG_HPP
 
-#include "ui_color_dialog.h"
+#include "colorpicker_global.hpp"
 
-class Color_Dialog : public QDialog, private Ui::Color_Dialog
+#include <QDialog>
+
+class QCP_EXPORT Color_Dialog : public QDialog
 {
     Q_OBJECT
 
@@ -44,7 +46,7 @@ public slots:
     /**
      * Change color
      */
-    void setColor(QColor c);
+    void setColor(const QColor &c);
 
 signals:
     /**
@@ -68,7 +70,6 @@ private slots:
 
 private:
     void update_hex();
-    void get_screen_color(QPoint global_pos);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
@@ -77,7 +78,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 
 private:
-    bool pick_from_screen;
+    class Private;
+    Private * const p;
 };
 
 #endif // COLOR_DIALOG_HPP
