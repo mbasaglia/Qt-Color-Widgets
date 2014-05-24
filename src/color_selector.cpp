@@ -43,10 +43,12 @@ Color_Selector::Color_Selector(QWidget *parent) :
 {
     setUpdateMode(Continuous);
     p->old_color = color();
+
     connect(this,SIGNAL(clicked()),this,SLOT(showDialog()));
     connect(this,SIGNAL(colorChanged(QColor)),this,SLOT(update_old_color(QColor)));
-    connect(p->dialog,SIGNAL(accepted()),this,SLOT(accept_dialog()));
     connect(p->dialog,SIGNAL(rejected()),this,SLOT(reject_dialog()));
+    connect(p->dialog,SIGNAL(colorSelected(QColor)), this, SLOT(accept_dialog()));
+
     setAcceptDrops(true);
 }
 
@@ -86,7 +88,7 @@ void Color_Selector::showDialog()
 void Color_Selector::connect_dialog()
 {
     if (p->update_mode == Continuous)
-        connect(p->dialog, SIGNAL(colorChanged(QColor)), this, SLOT(setColor(QColor)));
+        connect(p->dialog, SIGNAL(colorChanged(QColor)), this, SLOT(setColor(QColor)), Qt::UniqueConnection);
     else
         disconnect_dialog();
 }
@@ -98,8 +100,8 @@ void Color_Selector::disconnect_dialog()
 
 void Color_Selector::accept_dialog()
 {
-    disconnect_dialog();
     setColor(p->dialog->color());
+    p->old_color = color();
 }
 
 void Color_Selector::reject_dialog()

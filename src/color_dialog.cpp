@@ -5,6 +5,7 @@
 @section License
 
     Copyright (C) 2013-2014 Mattia Basaglia
+    Copyright (C) 2014 Calle Laakkonen
 
     This software is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@
 #include <QDragEnterEvent>
 #include <QDesktopWidget>
 #include <QMimeData>
+#include <QPushButton>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QScreen>
 #endif
@@ -36,31 +38,27 @@ class Color_Dialog::Private
 {
 public:
     Ui_Color_Dialog ui;
+    Button_Mode button_mode;
     bool pick_from_screen;
+    bool alpha_enabled;
 
-    Private() : pick_from_screen(false)
+    Private() : pick_from_screen(false), alpha_enabled(true)
     {}
+
 };
 
-Color_Dialog::Color_Dialog(QWidget *parent) :
-    QDialog(parent), p(new Private)
+Color_Dialog::Color_Dialog(QWidget *parent, Qt::WindowFlags f) :
+    QDialog(parent, f), p(new Private)
 {
     p->ui.setupUi(this);
 
-    QVector<QColor> rainbow;
-    for ( int i = 0; i < 360; i+= 360/6 )
-        rainbow.push_back(QColor::fromHsv(i,255,255));
-    rainbow.push_back(Qt::red);
-    p->ui.slide_hue->setColors(rainbow);
-
     setAcceptDrops(true);
-}
 
-QColor Color_Dialog::color() const
-{
-    QColor col = p->ui.wheel->color();
-    col.setAlpha(p->ui.slide_alpha->value());
-    return col;
+    // Add "pick color" button
+    QPushButton *pickButton = p->ui.buttonBox->addButton(tr("Pick"), QDialogButtonBox::ActionRole);
+    pickButton->setIcon(QIcon::fromTheme("color-picker"));
+
+    setButtonMode(OkApplyCancel);
 }
 
 QSize Color_Dialog::sizeHint() const
@@ -68,13 +66,77 @@ QSize Color_Dialog::sizeHint() const
     return QSize(400,0);
 }
 
+QColor Color_Dialog::color() const
+{
+    QColor col = p->ui.wheel->color();
+    if(p->alpha_enabled)
+        col.setAlpha(p->ui.slide_alpha->value());
+    return col;
+}
+
 void Color_Dialog::setColor(const QColor &c)
 {
+    p->ui.preview->setComparisonColor(c);
+    setColorInternal(c);
+}
+
+void Color_Dialog::setColorInternal(const QColor &c)
+{
+    // Note. The difference between this method and setColor, is that setColor
+    // sets the official starting color of the dialog, while this is used to update
+    // the current color which might not be the final selected color.
     p->ui.wheel->setColor(c);
     p->ui.slide_alpha->setValue(c.alpha());
     update_widgets();
 }
 
+void Color_Dialog::showColor(const QColor &c)
+{
+    setColor(c);
+    show();
+}
+
+void Color_Dialog::setPreviewDisplayMode(Color_Preview::Display_Mode mode)
+{
+    p->ui.preview->setDisplayMode(mode);
+}
+
+Color_Preview::Display_Mode Color_Dialog::previewDisplayMode() const
+{
+    return p->ui.preview->displayMode();
+}
+
+void Color_Dialog::setAlphaEnabled(bool a)
+{
+    p->alpha_enabled = a;
+
+    p->ui.line_alpha->setVisible(a);
+    p->ui.label_alpha->setVisible(a);
+    p->ui.slide_alpha->setVisible(a);
+    p->ui.spin_alpha->setVisible(a);
+}
+
+bool Color_Dialog::alphaEnabled() const
+{
+    return p->alpha_enabled;
+}
+
+void Color_Dialog::setButtonMode(Button_Mode mode)
+{
+    p->button_mode = mode;
+    QDialogButtonBox::StandardButtons btns;
+    switch(mode) {
+        case OkCancel: btns = QDialogButtonBox::Ok | QDialogButtonBox::Cancel; break;
+        case OkApplyCancel: btns = QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply | QDialogButtonBox::Reset; break;
+        case Close: btns = QDialogButtonBox::Close;
+    }
+    p->ui.buttonBox->setStandardButtons(btns);
+}
+
+Color_Dialog::Button_Mode Color_Dialog::buttonMode() const
+{
+    return p->button_mode;
+}
 
 void Color_Dialog::update_widgets()
 {
@@ -101,6 +163,8 @@ void Color_Dialog::update_widgets()
     p->ui.slide_blue->setLastColor(QColor(col.red(),col.green(),255));
 
     p->ui.slide_hue->setValue(qRound(p->ui.wheel->hue()*360.0));
+    p->ui.slide_hue->setColorSaturation(p->ui.wheel->saturation());
+    p->ui.slide_hue->setColorValue(p->ui.wheel->value());
     p->ui.spin_hue->setValue(p->ui.slide_hue->value());
 
     p->ui.slide_saturation->setValue(qRound(p->ui.wheel->saturation()*255.0));
@@ -192,7 +256,7 @@ void Color_Dialog::update_hex()
         QColor c(xs);
         if ( c.isValid() )
         {
-            setColor(c);
+            setColorInternal(c);
             return;
         }
     }
@@ -220,6 +284,33 @@ void Color_Dialog::update_hex()
     set_rgb();
 }
 
+void Color_Dialog::on_buttonBox_clicked(QAbstractButton *btn)
+{
+    QDialogButtonBox::ButtonRole role = p->ui.buttonBox->buttonRole(btn);
+
+    switch(role) {
+    case QDialogButtonBox::AcceptRole:
+    case QDialogButtonBox::ApplyRole:
+        // Explicitly select the color
+        p->ui.preview->setComparisonColor(color());
+        emit colorSelected(color());
+        break;
+
+    case QDialogButtonBox::ActionRole:
+        // Currently, the only action button is the "pick color" button
+        grabMouse(Qt::CrossCursor);
+        p->pick_from_screen = true;
+        break;
+
+    case QDialogButtonBox::ResetRole:
+        // Restore old color
+        setColorInternal(p->ui.preview->comparisonColor());
+        break;
+
+    default: break;
+    }
+}
+
 void Color_Dialog::dragEnterEvent(QDragEnterEvent *event)
 {
     if ( event->mimeData()->hasColor() ||
@@ -232,7 +323,7 @@ void Color_Dialog::dropEvent(QDropEvent *event)
 {
     if ( event->mimeData()->hasColor() )
     {
-        setColor(event->mimeData()->colorData().value<QColor>());
+        setColorInternal(event->mimeData()->colorData().value<QColor>());
         event->accept();
     }
     else if ( event->mimeData()->hasText() )
@@ -240,7 +331,7 @@ void Color_Dialog::dropEvent(QDropEvent *event)
         QColor col(event->mimeData()->text());
         if ( col.isValid() )
         {
-            setColor(col);
+            setColorInternal(col);
             event->accept();
         }
     }
@@ -268,7 +359,7 @@ void Color_Dialog::mouseReleaseEvent(QMouseEvent *event)
 {
     if (p->pick_from_screen)
     {
-        setColor(get_screen_color(event->globalPos()));
+        setColorInternal(get_screen_color(event->globalPos()));
         p->pick_from_screen = false;
         releaseMouse();
     }
@@ -278,13 +369,7 @@ void Color_Dialog::mouseMoveEvent(QMouseEvent *event)
 {
     if (p->pick_from_screen)
     {
-        setColor(get_screen_color(event->globalPos()));
+        setColorInternal(get_screen_color(event->globalPos()));
     }
 }
 
-void Color_Dialog::on_button_pick_clicked()
-{
-    grabMouse(Qt::CrossCursor);
-    p->pick_from_screen = true;
-
-}

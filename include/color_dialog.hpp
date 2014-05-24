@@ -24,20 +24,58 @@
 #define COLOR_DIALOG_HPP
 
 #include "colorpicker_global.hpp"
+#include "color_preview.hpp"
 
 #include <QDialog>
+
+class QAbstractButton;
 
 class QCP_EXPORT Color_Dialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Color_Dialog(QWidget *parent = 0);
+    enum Button_Mode {
+        OkCancel,
+        OkApplyCancel,
+        Close
+    };
+
+    explicit Color_Dialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
     /**
      * Get currently selected color
      */
     QColor color() const;
+
+    /**
+     * Set the display mode for the color preview
+     */
+    void setPreviewDisplayMode(Color_Preview::Display_Mode mode);
+
+    /**
+     * Get the color preview diplay mode
+     */
+    Color_Preview::Display_Mode previewDisplayMode() const;
+
+    /**
+     * Set whether the color alpha channel can be edited.
+     * If alpha is disabled, the selected color's alpha will always be 255.
+     */
+    void setAlphaEnabled(bool a);
+
+    bool alphaEnabled() const;
+
+    /**
+     * Select which dialog buttons to show
+     *
+     * There are three predefined modes:
+     * OkCancel - this is useful when the dialog is modal and we just want to return a color
+     * OkCancelApply - this is for non-modal dialogs
+     * Close - for non-modal dialogs with direct color updates via colorChanged signal
+     */
+    void setButtonMode(Button_Mode mode);
+    Button_Mode buttonMode() const;
 
     QSize sizeHint() const;
 
@@ -48,13 +86,23 @@ public slots:
      */
     void setColor(const QColor &c);
 
+	/**
+     * Set the current color and show the dialog
+     */
+    void showColor(const QColor &oldcolor);
+
 signals:
     /**
-     * Emitted when the user selects a color or setColor is called
+     * The current color was changed
      */
     void colorChanged(QColor);
 
-protected slots:
+    /**
+     * The user selected the new color by pressing Ok/Apply
+     */
+    void colorSelected(QColor);
+
+private slots:
     /// Update all the Ui elements to match the selected color
     void update_widgets();
     /// Update from HSV sliders
@@ -62,14 +110,14 @@ protected slots:
     /// Update from RGB sliders
     void set_rgb();
 
-private slots:
     void on_edit_hex_editingFinished();
     void on_edit_hex_textEdited(const QString &arg1);
 
-    void on_button_pick_clicked();
+    void on_buttonBox_clicked(QAbstractButton*);
 
 private:
     void update_hex();
+    void setColorInternal(const QColor &color);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

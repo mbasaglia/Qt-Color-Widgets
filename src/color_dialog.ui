@@ -36,7 +36,7 @@
        <item>
         <widget class="Color_Preview" name="preview">
          <property name="display_mode" stdset="0">
-          <enum>Color_Preview::SplitAlpha</enum>
+          <enum>Color_Preview::SplitColor</enum>
          </property>
         </widget>
        </item>
@@ -44,16 +44,6 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="Gradient_Slider" name="slide_hue">
-         <property name="maximum">
-          <number>359</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="Gradient_Slider" name="slide_value">
          <property name="maximum">
@@ -147,7 +137,7 @@
         </widget>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="label_alpha">
          <property name="text">
           <string>Alpha</string>
          </property>
@@ -232,7 +222,7 @@
         </widget>
        </item>
        <item row="7" column="0" colspan="3">
-        <widget class="Line" name="line_2">
+        <widget class="Line" name="line_alpha">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -252,30 +242,26 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="Hue_Slider" name="slide_hue">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>359</number>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="button_pick">
-       <property name="text">
-        <string>Pick</string>
-       </property>
-       <property name="icon">
-        <iconset theme="color-picker"/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -284,13 +270,13 @@
   <customwidget>
    <class>Color_Preview</class>
    <extends>QWidget</extends>
-   <header>color_preview.hpp</header>
+   <header>Color_Preview</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Color_Wheel</class>
    <extends>QWidget</extends>
-   <header>color_wheel.hpp</header>
+   <header>Color_Wheel</header>
    <container>1</container>
    <slots>
     <signal>colorSelected(QColor)</signal>
@@ -300,59 +286,16 @@
   <customwidget>
    <class>Gradient_Slider</class>
    <extends>QSlider</extends>
-   <header>gradient_slider.hpp</header>
+   <header>Gradient_Slider</header>
+  </customwidget>
+  <customwidget>
+   <class>Hue_Slider</class>
+   <extends>Gradient_Slider</extends>
+   <header>Hue_Slider</header>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Color_Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>150</x>
-     <y>351</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>430</x>
-     <y>267</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Color_Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>351</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>294</x>
-     <y>323</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slide_hue</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
-   <slot>set_hsv()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>427</x>
-     <y>33</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>568</x>
-     <y>25</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>slide_saturation</sender>
    <signal>valueChanged(int)</signal>
@@ -360,8 +303,8 @@
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>67</y>
+     <x>419</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -376,8 +319,8 @@
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>101</y>
+     <x>419</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -392,8 +335,8 @@
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>148</y>
+     <x>419</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>557</x>
@@ -408,8 +351,8 @@
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>182</y>
+     <x>419</x>
+     <y>154</y>
     </hint>
     <hint type="destinationlabel">
      <x>538</x>
@@ -424,8 +367,8 @@
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>216</y>
+     <x>419</x>
+     <y>183</y>
     </hint>
     <hint type="destinationlabel">
      <x>537</x>
@@ -440,8 +383,8 @@
    <slot>update_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>263</y>
+     <x>419</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel">
      <x>531</x>
@@ -466,50 +409,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>slide_hue</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_hue</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>383</x>
-     <y>21</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>24</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_hue</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slide_hue</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>452</x>
-     <y>37</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>384</x>
-     <y>23</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>slide_saturation</sender>
    <signal>valueChanged(int)</signal>
    <receiver>spin_saturation</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>397</x>
-     <y>65</y>
+     <x>419</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>446</x>
-     <y>66</y>
+     <x>480</x>
+     <y>62</y>
     </hint>
    </hints>
   </connection>
@@ -524,8 +435,8 @@
      <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>343</x>
-     <y>62</y>
+     <x>419</x>
+     <y>58</y>
     </hint>
    </hints>
   </connection>
@@ -536,12 +447,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>392</x>
-     <y>97</y>
+     <x>419</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>452</x>
-     <y>97</y>
+     <x>480</x>
+     <y>91</y>
     </hint>
    </hints>
   </connection>
@@ -552,12 +463,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>462</x>
-     <y>95</y>
+     <x>480</x>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
-     <x>374</x>
-     <y>96</y>
+     <x>419</x>
+     <y>87</y>
     </hint>
    </hints>
   </connection>
@@ -568,12 +479,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>409</x>
-     <y>139</y>
+     <x>419</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
-     <x>451</x>
-     <y>142</y>
+     <x>480</x>
+     <y>129</y>
     </hint>
    </hints>
   </connection>
@@ -584,12 +495,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>457</x>
-     <y>137</y>
+     <x>480</x>
+     <y>129</y>
     </hint>
     <hint type="destinationlabel">
-     <x>387</x>
-     <y>139</y>
+     <x>419</x>
+     <y>125</y>
     </hint>
    </hints>
   </connection>
@@ -600,12 +511,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>404</x>
-     <y>175</y>
+     <x>419</x>
+     <y>154</y>
     </hint>
     <hint type="destinationlabel">
-     <x>457</x>
-     <y>180</y>
+     <x>480</x>
+     <y>158</y>
     </hint>
    </hints>
   </connection>
@@ -616,12 +527,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>453</x>
-     <y>169</y>
+     <x>480</x>
+     <y>158</y>
     </hint>
     <hint type="destinationlabel">
-     <x>389</x>
-     <y>171</y>
+     <x>419</x>
+     <y>154</y>
     </hint>
    </hints>
   </connection>
@@ -632,12 +543,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>389</x>
-     <y>252</y>
+     <x>419</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel">
-     <x>450</x>
-     <y>254</y>
+     <x>480</x>
+     <y>225</y>
     </hint>
    </hints>
   </connection>
@@ -648,12 +559,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>454</x>
-     <y>254</y>
+     <x>480</x>
+     <y>225</y>
     </hint>
     <hint type="destinationlabel">
-     <x>385</x>
-     <y>255</y>
+     <x>419</x>
+     <y>221</y>
     </hint>
    </hints>
   </connection>
@@ -664,12 +575,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>210</y>
+     <x>419</x>
+     <y>183</y>
     </hint>
     <hint type="destinationlabel">
-     <x>464</x>
-     <y>212</y>
+     <x>480</x>
+     <y>187</y>
     </hint>
    </hints>
   </connection>
@@ -680,12 +591,92 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>460</x>
-     <y>209</y>
+     <x>480</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
-     <x>386</x>
-     <y>208</y>
+     <x>419</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_hue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_hue</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>405</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>462</x>
+     <y>26</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_hue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slide_hue</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>448</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slide_hue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>set_hsv()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>17</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Color_Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>294</x>
+     <y>323</y>
     </hint>
    </hints>
   </connection>
