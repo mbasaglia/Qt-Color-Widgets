@@ -104,7 +104,7 @@ void Color_List_Widget::color_changed(int row)
 void Color_List_Widget::append_widget(int col)
 {
     Color_Selector* cbs = new Color_Selector;
-    cbs->setAlphaMode(Color_Preview::AllAlpha);
+    cbs->setDisplayMode(Color_Preview::AllAlpha);
     cbs->setColor(p->colors[col]);
     //connect(cbs,SIGNAL(colorChanged(QColor)),SLOT(emit_changed()));
     p->mapper.setMapping(cbs,col);
