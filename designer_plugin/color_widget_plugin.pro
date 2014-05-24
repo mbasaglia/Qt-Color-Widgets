@@ -29,6 +29,7 @@ SOURCES += \
     color_wheel_plugin.cpp \
     color_widget_plugin_collection.cpp \
     gradient_slider_plugin.cpp \
+    hue_slider_plugin.cpp \
     color_selector_plugin.cpp \
     color_list_plugin.cpp
 
@@ -37,6 +38,7 @@ HEADERS += \
     color_wheel_plugin.hpp \
     color_widget_plugin_collection.hpp \
     gradient_slider_plugin.hpp \
+    hue_slider_plugin.hpp \
     color_selector_plugin.hpp \
     color_list_plugin.hpp
 
