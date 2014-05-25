@@ -5,6 +5,7 @@
 @section License
 
     Copyright (C) 2013-2014 Mattia Basaglia
+    Copyright (C) 2014 Calle Laakkonen
 
     This software is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +21,9 @@
     along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 #include "color_preview.hpp"
+
 #include <QStylePainter>
 #include <QStyleOptionFrame>
 #include "paint_border.hpp"
@@ -32,10 +35,11 @@ class Color_Preview::Private
 {
 public:
     QColor col; ///< color to be viewed
+    QColor comparison; ///< comparison color
     QBrush back;///< Background brush, visible on transaprent color
-    Alpha_Mode alpha_mode; ///< How transparent colors are handled
+    Display_Mode display_mode; ///< How the color(s) are to be shown
 
-    Private() : col(Qt::red), back(Qt::darkGray, Qt::DiagCrossPattern), alpha_mode(NoAlpha)
+    Private() : col(Qt::red), back(Qt::darkGray, Qt::DiagCrossPattern), display_mode(NoAlpha)
     {}
 };
 
@@ -61,20 +65,25 @@ QBrush Color_Preview::background() const
     return p->back;
 }
 
-Color_Preview::Alpha_Mode Color_Preview::alphaMode() const
+Color_Preview::Display_Mode Color_Preview::displayMode() const
 {
-    return p->alpha_mode;
+    return p->display_mode;
 }
 
-void Color_Preview::setAlphaMode(Alpha_Mode am)
+void Color_Preview::setDisplayMode(Display_Mode m)
 {
-    p->alpha_mode = am;
+    p->display_mode = m;
     update();
 }
 
 QColor Color_Preview::color() const
 {
     return p->col;
+}
+
+QColor Color_Preview::comparisonColor() const
+{
+    return p->comparison;
 }
 
 QSize Color_Preview::sizeHint() const
@@ -84,19 +93,31 @@ QSize Color_Preview::sizeHint() const
 
 void Color_Preview::paint(QPainter &painter, QRect rect) const
 {
+    QColor c1, c2;
+    switch(p->display_mode) {
+    case NoAlpha:
+        c1 = c2 = p->col.rgb();
+        break;
+    case AllAlpha:
+        c1 = c2 = p->col;
+        break;
+    case SplitAlpha:
+        c1 = p->col.rgb();
+        c2 = p->col;
+        break;
+    case SplitColor:
+        c1 = p->comparison;
+        c2 = p->col;
+        break;
+    }
 
-    QColor noalpha = p->col;
-    noalpha.setAlpha(255);
+    if(c1.alpha()<255 || c2.alpha()<255)
+        painter.fillRect(1, 1, rect.width()-2, rect.height()-2, p->back);
 
-    painter.fillRect(1, 1, rect.width()-2, rect.height()-2, p->back);
-
-    int w = rect.width()-2;
-    if (p->alpha_mode == SplitAlpha)
-        w /= 2;
-    else if (p->alpha_mode == AllAlpha)
-        w = 0;
-    painter.fillRect(1, 1, w, rect.height()-2, noalpha);
-    painter.fillRect(w, 1, rect.width()-w-1, rect.height()-2, p->col);
+    int w = (rect.width() - 2) / 2;
+    int h = rect.height() - 2;
+    painter.fillRect(1, 1, w, h, c1);
+    painter.fillRect(1+w, 1, w, h, c2);
 
     paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
     paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
@@ -112,14 +133,17 @@ void Color_Preview::setColor(const QColor &c)
     emit colorChanged(c);
 }
 
+void Color_Preview::setComparisonColor(const QColor &c)
+{
+    p->comparison = c;
+    update();
+}
+
 void Color_Preview::paintEvent(QPaintEvent *)
 {
     QStylePainter painter(this);
-    //painter.setRenderHint(QPainter::Antialiasing);
 
-
-    paint(painter,geometry());
-
+    paint(painter, geometry());
 }
 
 void Color_Preview::resizeEvent(QResizeEvent *)
@@ -141,13 +165,6 @@ void Color_Preview::mouseMoveEvent(QMouseEvent *ev)
         QMimeData *data = new QMimeData;
 
         data->setColorData(p->col);
-        /*data->setText(col.name());
-        data->setData("application/x-oswb-color",
-            QString("<paint><color name='%1'>""<sRGB r='%2' g='%3' b='%4' />"
-                    "</color></paint>")
-            .arg(col.name()).arg(col.redF()).arg(col.greenF()).arg(col.blueF())
-            .toUtf8()
-        );*/
 
         QDrag* drag = new QDrag(this);
         drag->setMimeData(data);

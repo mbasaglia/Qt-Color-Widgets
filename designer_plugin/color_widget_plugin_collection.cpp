@@ -26,6 +26,7 @@
 #include "color_preview_plugin.hpp"
 #include "color_wheel_plugin.hpp"
 #include "gradient_slider_plugin.hpp"
+#include "hue_slider_plugin.hpp"
 #include "color_selector_plugin.hpp"
 #include "color_list_plugin.hpp"
 
@@ -35,6 +36,7 @@ Color_Widget_Plugin_Collection::Color_Widget_Plugin_Collection(QObject *parent) 
     widgets.push_back(new Color_Preview_Plugin(this));
     widgets.push_back(new Color_Wheel_Plugin(this));
     widgets.push_back(new Gradient_Slider_Plugin(this));
+    widgets.push_back(new Hue_Slider_Plugin(this));
     widgets.push_back(new Color_Selector_Plugin(this));
     widgets.push_back(new Color_List_Plugin(this));
 }

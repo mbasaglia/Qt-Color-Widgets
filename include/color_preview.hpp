@@ -5,6 +5,7 @@
 @section License
 
     Copyright (C) 2013-2014 Mattia Basaglia
+    Copyright (C) 2014 Calle Laakkonen
 
     This software is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,15 +35,17 @@ class QCP_EXPORT Color_Preview : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
-    Q_PROPERTY(Alpha_Mode alpha_mode READ alphaMode WRITE setAlphaMode DESIGNABLE true)
-    Q_PROPERTY(QBrush background READ getBackground WRITE setBackground DESIGNABLE true)
-    Q_ENUMS(Alpha_Mode)
+    Q_PROPERTY(QColor comparisonColor READ comparisonColor WRITE setComparisonColor DESIGNABLE true)
+    Q_PROPERTY(Display_Mode display_mode READ displayMode WRITE setDisplayMode DESIGNABLE true)
+    Q_PROPERTY(QBrush background READ background WRITE setBackground DESIGNABLE true)
+    Q_ENUMS(Display_Mode)
 public:
-    enum Alpha_Mode
+    enum Display_Mode
     {
-        NoAlpha,    ///< Show only solid color
+        NoAlpha,    ///< Show current color with no transparency
+        AllAlpha,   ///< show current color with transparency
         SplitAlpha, ///< Show both solid and transparent side by side
-        AllAlpha    ///< show only transparent
+        SplitColor  ///< Show current and comparison colors side by side
     };
 
     explicit Color_Preview(QWidget *parent = 0);
@@ -51,20 +54,20 @@ public:
     /// Get the background visible under transparent colors
     QBrush background() const;
 
-    //! \deprecated use background()
-    QBrush getBackground() const { return background(); }
-
     /// Change the background visible under transparent colors
     void setBackground(const QBrush &bk);
 
-    /// Get how transparent colors are handled
-    Alpha_Mode alphaMode() const;
+    /// Get color display mode
+    Display_Mode displayMode() const;
 
     /// Set how transparent colors are handled
-    void setAlphaMode(Alpha_Mode am);
+    void setDisplayMode(Display_Mode dm);
 
     /// Get current color
     QColor color() const;
+
+    /// Get the comparison color
+    QColor comparisonColor() const;
 
     QSize sizeHint () const;
 
@@ -73,6 +76,9 @@ public:
 public slots:
     /// Set current color
     void setColor(const QColor &c);
+
+    /// Set the comparison color
+    void setComparisonColor(const QColor &c);
 
 signals:
     /// Emitted when the user clicks on the widget

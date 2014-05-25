@@ -45,6 +45,7 @@ headers.files = \
 	include/Color_Selector \
 	include/Color_Wheel \
 	include/Gradient_Slider \
+	include/Hue_Slider \
 	include/abstract_widget_list.hpp \
 	include/color_delegate.hpp \
 	include/color_list_widget.hpp \
@@ -54,7 +55,8 @@ headers.files = \
 	include/color_dialog.hpp \
 	include/colorpicker_global.hpp \
 	include/color_selector.hpp \
-	include/gradient_slider.hpp
+	include/gradient_slider.hpp \
+	include/hue_slider.hpp
 
 INSTALLS += target headers
 

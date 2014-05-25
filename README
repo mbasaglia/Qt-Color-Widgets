@@ -9,6 +9,7 @@ The provided widgets are:
 * Color_Wheel, An analog widget used to select a color
 * Color_Preview, A simple widget that dislay a color
 * Gradient_Slider, A slider that has a gradient background
+* Hue_Slider, A variant of Gradient_Slider that has a rainbow background
 * Color_Selector, A Color_Preview that shows a Color_Dialog when clicked
 * Color_Dialog,  A dialog that uses the above widgets to provide a better user experience than QColorDialog
 * Color_List_Widget, A widget to edit a list of colors
