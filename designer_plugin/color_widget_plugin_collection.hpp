@@ -30,7 +30,9 @@
 class Color_Widget_Plugin_Collection : public QObject, public QDesignerCustomWidgetCollectionInterface
 {
     Q_OBJECT
+#ifdef FRAMEWORK_QT5
     Q_PLUGIN_METADATA(IID "mattia.basaglia.Color_Widgets_Plugin")
+#endif
     Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 
 public:
