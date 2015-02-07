@@ -215,6 +215,8 @@ void Color_Wheel::paintEvent(QPaintEvent * )
 
     if(p->rotating_square)
         painter.rotate(-p->huem*360-45);
+    else
+        painter.scale(1,-1);
 
     ray.setLength(p->inner_radius());
     ray.setAngle(135);
@@ -256,6 +258,8 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
         p->sat = qBound(0.0, center_mouse_ln.x2()/p->square_size()+0.5, 1.0);
 
         p->val = qBound(0.0, center_mouse_ln.y2()/p->square_size()+0.5, 1.0);
+        if(!p->rotating_square)
+            p->val = 1 - p->val;
 
         emit colorSelected(color());
         emit colorChanged(color());
