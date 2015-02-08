@@ -97,7 +97,7 @@ QString Hue_Slider_Plugin::domXml() const
 
 QString Hue_Slider_Plugin::includeFile() const
 {
-    return "Hue_Slider";
+    return "hue_slider.hpp";
 }
 
 

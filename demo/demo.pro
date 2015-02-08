@@ -27,9 +27,14 @@ TARGET = ColorPicker
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    demo_dialog.cpp
 
-HEADERS  +=
+HEADERS  += \
+    demo_dialog.hpp
 
 include(../color_widgets.pri)
+
+FORMS += \
+    demo_dialog.ui
 

@@ -20,24 +20,27 @@
     along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "color_dialog.hpp"
 #include <QApplication>
+
+#include "demo_dialog.hpp"
+
+#include "color_dialog.hpp"
 #include "color_list_widget.hpp"
+#include "color_wheel.hpp"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    Demo_Dialog d;
+    d.show();
 
-    Color_List_Widget c;
-    c.show();
 
-
-    Color_Dialog w;
+    /*Color_Dialog w;
     w.setColor(QColor(64,172,143,128));
     w.show();
 
-    /*QPixmap p(w.size());
+    QPixmap p(w.size());
     w.render(&p);
     p.save("screenshot.png");*/
     
