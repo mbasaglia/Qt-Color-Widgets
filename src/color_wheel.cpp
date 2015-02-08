@@ -37,6 +37,7 @@ enum Mouse_Status
 
 static const Color_Wheel::Display_Flags hard_default_flags = Color_Wheel::SHAPE_TRIANGLE|Color_Wheel::ANGLE_ROTATING|Color_Wheel::COLOR_HSV;
 static Color_Wheel::Display_Flags default_flags = hard_default_flags;
+static const double selector_radius = 6;
 
 class Color_Wheel::Private
 {
@@ -111,32 +112,56 @@ public:
         }
     }
 
+    QColor render_triangle_color(int x, int y)
+    {
+        qreal side = triangle_side();
+
+        qreal pval = x / triangle_height();
+        qreal slice_h = side * pval;
+
+        qreal ycenter = side/2;
+        qreal ymin = ycenter-slice_h/2;
+        qreal ymax = ycenter+slice_h/2;
+        qreal psat = qBound(0.0,(y-ymin)/slice_h,1.0);
+
+        /// \todo proper antialiasing
+        qreal alpha = 0;
+        if ( y >= ymin && y <= ymax )
+        {
+            alpha = 1;
+        }
+        else if ( y < ymin )
+        {
+            // cheap antialias, fade pixels which are further away from the
+            // parallel line passing through the opposing corner
+            qreal d = qAbs(x/qSqrt(3)+y-side*1.5) / (2/qSqrt(3)) - triangle_height();
+            if ( d < 1 )
+                alpha = 1 - d;
+        }
+        else // ( y >= ymax )
+        {
+            qreal d = qAbs(-x/qSqrt(3)+y+side*0.5) / (2/qSqrt(3)) - triangle_height();
+            if ( d < 1 )
+                alpha = 1 - d;
+        }
+
+        return color_from(huem,psat,pval,alpha);
+
+    }
+
     /**
      * \brief renders the selector as a triangle
      * \note It's the same as a square with the edge with value=0 collapsed to a single point
      */
     void render_triangle()
     {
-        qreal side = triangle_side();
-        qreal height = triangle_height();
-        inner_selector = QImage(height, side, QImage::Format_RGBA8888);
+        inner_selector = QImage(triangle_height(), triangle_side(), QImage::Format_RGBA8888);
         for (int y = 0; y < inner_selector.height(); y++ )
         {
             for (int x = 0; x < inner_selector.width(); x++ )
             {
-                qreal pval = x / height;
-                qreal slice_h = side * pval;
-
-                qreal ycenter = side/2;
-                qreal ymin = ycenter-slice_h/2;
-                qreal ymax = ycenter+slice_h/2;
-                qreal psat = (y-ymin)/slice_h;
-
-                /// \todo antialiasing
-                if ( y >= ymin && y <= ymax )
-                    inner_selector.setPixel(x,y,color_from(huem,psat,pval,1).rgba());
-                else
-                    inner_selector.setPixel(x,y,color_from(0,0,0,0).rgba());
+                QColor c = render_triangle_color(x,y);
+                inner_selector.setPixel(x,y,c.rgba());
             }
         }
     }
@@ -150,11 +175,32 @@ public:
             render_square();
     }
 
+    /// Offset of the selector image
     QPointF selector_image_offset()
     {
         if ( w->displayFlags(SHAPE_FLAGS) == SHAPE_TRIANGLE )
                 return QPointF(-inner_radius(),-triangle_side()/2);
         return QPointF(-square_size()/2,-square_size()/2);
+    }
+
+
+    /// Rotation of the selector image
+    qreal selector_image_angle()
+    {
+        Display_Flags flags = w->displayFlags(SHAPE_FLAGS|ANGLE_FLAGS);
+        if ( flags & SHAPE_TRIANGLE )
+        {
+            if ( flags & ANGLE_ROTATING )
+                return -huem*360-60;
+            return -150;
+        }
+        else
+        {
+            if ( flags & ANGLE_ROTATING )
+                return -huem*360-45;
+            else
+                return 180;
+        }
     }
 
     /// Updates the outer ring that displays the hue selector
@@ -238,8 +284,6 @@ void Color_Wheel::setWheelWidth(unsigned int w)
 
 void Color_Wheel::paintEvent(QPaintEvent * )
 {
-    double selector_w = 6;
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.translate(geometry().width()/2,geometry().height()/2);
@@ -267,19 +311,11 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     QPointF selector_position;
     if ( displayFlags(SHAPE_FLAGS) == SHAPE_SQUARE )
     {
-        if ( displayFlags(ANGLE_FLAGS) == ANGLE_ROTATING )
-            painter.rotate(-p->huem*360-45);
-        else
-            painter.scale(1,-1);
-
         qreal side = p->square_size();
         selector_position = QPointF(p->sat*side, p->val*side);
     }
     else if ( displayFlags(SHAPE_FLAGS) == SHAPE_TRIANGLE )
     {
-        if ( displayFlags(ANGLE_FLAGS) == ANGLE_ROTATING )
-            painter.rotate(-p->huem*360-60);
-
         qreal side = p->triangle_side();
         qreal height = p->triangle_height();
         qreal slice_h = side * p->val;
@@ -288,13 +324,13 @@ void Color_Wheel::paintEvent(QPaintEvent * )
         selector_position = QPointF(p->val*height, ymin + p->sat*slice_h);
     }
 
+    painter.rotate(p->selector_image_angle());
     painter.drawImage(p->selector_image_offset(),p->inner_selector);
 
     // lum-sat selector
-    //painter.rotate(135);
     painter.setPen(QPen(p->val > 0.5 ? Qt::black : Qt::white, 3));
     painter.setBrush(Qt::NoBrush);
-    painter.drawEllipse(selector_position+p->selector_image_offset(), selector_w, selector_w);
+    painter.drawEllipse(selector_position+p->selector_image_offset(), selector_radius, selector_radius);
 
 }
 
@@ -315,22 +351,16 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
         QLineF center_mouse_ln ( QPointF(0,0),
                                  glob_mouse_ln.p2() - glob_mouse_ln.p1() );
 
+        center_mouse_ln.setAngle(center_mouse_ln.angle()+p->selector_image_angle());
+        center_mouse_ln.setP2(center_mouse_ln.p2()-p->selector_image_offset());
+
         if ( displayFlags(SHAPE_FLAGS) == SHAPE_SQUARE )
         {
-            if ( displayFlags(ANGLE_FLAGS) == ANGLE_ROTATING )
-                center_mouse_ln.setAngle(center_mouse_ln.angle()-p->huem*360-45);
-
-            p->sat = qBound(0.0, center_mouse_ln.x2()/p->square_size()+0.5, 1.0);
-            p->val = qBound(0.0, center_mouse_ln.y2()/p->square_size()+0.5, 1.0);
-
-            if ( displayFlags(ANGLE_FLAGS) == ANGLE_FIXED )
-                p->val = 1 - p->val;
+            p->sat = qBound(0.0, center_mouse_ln.x2()/p->square_size(), 1.0);
+            p->val = qBound(0.0, center_mouse_ln.y2()/p->square_size(), 1.0);
         }
         else if ( displayFlags(SHAPE_FLAGS) == SHAPE_TRIANGLE )
         {
-            if ( displayFlags(ANGLE_FLAGS) == ANGLE_ROTATING )
-                center_mouse_ln.setAngle(center_mouse_ln.angle()-p->huem*360-60);
-            center_mouse_ln.setP2(center_mouse_ln.p2()-p->selector_image_offset());
             QPointF pt = center_mouse_ln.p2();
 
             qreal side = p->triangle_side();
@@ -358,6 +388,9 @@ void Color_Wheel::mousePressEvent(QMouseEvent *ev)
         QLineF ray = p->line_to_point(ev->pos());
         if ( ray.length() <= p->inner_radius() )
             p->mouse_status = Drag_Square;
+        /// \todo if click inside with distance from the selector indicator
+        /// > selector_radius => place it there directly
+        /// (without the need to drag)
         else if ( ray.length() <= p->outer_radius() )
             p->mouse_status = Drag_Circle;
     }
