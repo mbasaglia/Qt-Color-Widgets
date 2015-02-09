@@ -83,7 +83,7 @@ bool Color_Wheel_Plugin::isContainer() const
 QString Color_Wheel_Plugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-           " <widget class=\"Color_Wheel\" name=\"Color_Wheel\">\n"
+           " <widget class=\"Color_Wheel\" name=\"colorWheel\">\n"
            "  <property name=\"sizePolicy\">\n"
            "   <sizepolicy hsizetype=\"Minimum\" vsizetype=\"Minimum\">\n"
            "    <horstretch>0</horstretch>\n"

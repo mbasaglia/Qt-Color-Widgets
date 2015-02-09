@@ -140,7 +140,7 @@ public:
     /// Updates the inner image that displays the saturation-value selector
     void render_inner_selector()
     {
-        if ( w->displayFlags(Color_Wheel::SHAPE_FLAGS) == Color_Wheel::SHAPE_TRIANGLE )
+        if ( display_flags & Color_Wheel::SHAPE_TRIANGLE )
             render_triangle();
         else
             render_square();
@@ -149,7 +149,7 @@ public:
     /// Offset of the selector image
     QPointF selector_image_offset()
     {
-        if ( w->displayFlags(SHAPE_FLAGS) == SHAPE_TRIANGLE )
+        if ( display_flags & SHAPE_TRIANGLE )
                 return QPointF(-inner_radius(),-triangle_side()/2);
         return QPointF(-square_size()/2,-square_size()/2);
     }
@@ -158,16 +158,15 @@ public:
     /// Rotation of the selector image
     qreal selector_image_angle()
     {
-        Display_Flags flags = w->displayFlags(SHAPE_FLAGS|ANGLE_FLAGS);
-        if ( flags & SHAPE_TRIANGLE )
+        if ( display_flags & SHAPE_TRIANGLE )
         {
-            if ( flags & ANGLE_ROTATING )
+            if ( display_flags & ANGLE_ROTATING )
                 return -huem*360-60;
             return -150;
         }
         else
         {
-            if ( flags & ANGLE_ROTATING )
+            if ( display_flags & ANGLE_ROTATING )
                 return -huem*360-45;
             else
                 return 180;
@@ -209,6 +208,7 @@ public:
 Color_Wheel::Color_Wheel(QWidget *parent) :
     QWidget(parent), p(new Private(this))
 {
+    setDisplayFlags(FLAGS_DEFAULT);
 }
 
 Color_Wheel::~Color_Wheel()
@@ -283,12 +283,12 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     painter.translate(p->selector_image_offset());
 
     QPointF selector_position;
-    if ( displayFlags(SHAPE_FLAGS) == SHAPE_SQUARE )
+    if ( p->display_flags & SHAPE_SQUARE )
     {
         qreal side = p->square_size();
         selector_position = QPointF(p->sat*side, p->val*side);
     }
-    else if ( displayFlags(SHAPE_FLAGS) == SHAPE_TRIANGLE )
+    else if ( p->display_flags & SHAPE_TRIANGLE )
     {
         qreal side = p->triangle_side();
         qreal height = p->triangle_height();
@@ -335,12 +335,12 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
         center_mouse_ln.setAngle(center_mouse_ln.angle()+p->selector_image_angle());
         center_mouse_ln.setP2(center_mouse_ln.p2()-p->selector_image_offset());
 
-        if ( displayFlags(SHAPE_FLAGS) == SHAPE_SQUARE )
+        if ( p->display_flags & SHAPE_SQUARE )
         {
             p->sat = qBound(0.0, center_mouse_ln.x2()/p->square_size(), 1.0);
             p->val = qBound(0.0, center_mouse_ln.y2()/p->square_size(), 1.0);
         }
-        else if ( displayFlags(SHAPE_FLAGS) == SHAPE_TRIANGLE )
+        else if ( p->display_flags & SHAPE_TRIANGLE )
         {
             QPointF pt = center_mouse_ln.p2();
 
@@ -423,11 +423,17 @@ void Color_Wheel::setValue(qreal v)
 
 void Color_Wheel::setDisplayFlags(Display_Flags flags)
 {
+    if ( ! (flags & COLOR_FLAGS) )
+        flags |= default_flags & COLOR_FLAGS;
+    if ( ! (flags & ANGLE_FLAGS) )
+        flags |= default_flags & ANGLE_FLAGS;
+    if ( ! (flags & SHAPE_FLAGS) )
+        flags |= default_flags & SHAPE_FLAGS;
+
     if ( (flags & COLOR_FLAGS) != (p->display_flags & COLOR_FLAGS) )
     {
         QColor old_col = color();
-        p->display_flags = flags;
-        if ( displayFlags(Color_Wheel::COLOR_FLAGS) == Color_Wheel::COLOR_HSL )
+        if ( flags & Color_Wheel::COLOR_HSL )
         {
             p->sat = old_col.saturationF();
             p->val = old_col.lightnessF();
@@ -440,24 +446,15 @@ void Color_Wheel::setDisplayFlags(Display_Flags flags)
             p->color_from = &QColor::fromHsvF;
         }
     }
-    else
-        p->display_flags = flags;
+
+    p->display_flags = flags;
     p->render_inner_selector();
     update();
 }
 
 Color_Wheel::Display_Flags Color_Wheel::displayFlags(Display_Flags mask) const
 {
-    Display_Flags flags = p->display_flags;
-
-    if ( ! (flags & COLOR_FLAGS) )
-        flags |= default_flags & COLOR_FLAGS;
-    if ( ! (flags & ANGLE_FLAGS) )
-        flags |= default_flags & ANGLE_FLAGS;
-    if ( ! (flags & SHAPE_FLAGS) )
-        flags |= default_flags & SHAPE_FLAGS;
-
-    return flags & mask;
+    return p->display_flags & mask;
 }
 
 void Color_Wheel::setDefaultDisplayFlags(Display_Flags flags)
