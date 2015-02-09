@@ -27,6 +27,7 @@
 #include <QPainter>
 #include <QLineF>
 #include <qmath.h>
+#include <cmath>
 
 enum Mouse_Status
 {
@@ -38,6 +39,43 @@ enum Mouse_Status
 static const Color_Wheel::Display_Flags hard_default_flags = Color_Wheel::SHAPE_TRIANGLE|Color_Wheel::ANGLE_ROTATING|Color_Wheel::COLOR_HSV;
 static Color_Wheel::Display_Flags default_flags = hard_default_flags;
 static const double selector_radius = 6;
+
+static qreal color_chromaF(const QColor& c)
+{
+    qreal max = qMax(c.redF(), qMax(c.greenF(), c.blueF()));
+    qreal min = qMin(c.redF(), qMin(c.greenF(), c.blueF()));
+    return max - min;
+}
+static qreal color_lumaF(const QColor& c)
+{
+    return 0.30 * c.redF() + 0.59 * c.greenF() + 0.11 * c.blueF();
+}
+static QColor color_from_hcy(qreal hue, qreal chroma, qreal luma, qreal alpha = 1 )
+{
+    qreal h1 = hue*6;
+    qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
+    QColor col;
+    if ( h1 >= 0 && h1 < 1 )
+        col = QColor::fromRgbF(chroma,x,0);
+    else if ( h1 < 2 )
+        col = QColor::fromRgbF(x,chroma,0);
+    else if ( h1 < 3 )
+        col = QColor::fromRgbF(0,chroma,x);
+    else if ( h1 < 4 )
+        col = QColor::fromRgbF(0,x,chroma);
+    else if ( h1 < 5 )
+        col = QColor::fromRgbF(x,0,chroma);
+    else if ( h1 < 6 )
+        col = QColor::fromRgbF(chroma,0,x);
+
+    qreal m = luma - color_lumaF(col);
+
+    return QColor::fromRgbF(
+        qBound(0.0,col.redF()+m,1.0),
+        qBound(0.0,col.greenF()+m,1.0),
+        qBound(0.0,col.blueF()+m,1.0),
+        alpha);
+}
 
 class Color_Wheel::Private
 {
@@ -438,6 +476,12 @@ void Color_Wheel::setDisplayFlags(Display_Flags flags)
             p->sat = old_col.saturationF();
             p->val = old_col.lightnessF();
             p->color_from = &QColor::fromHslF;
+        }
+        else if ( flags & Color_Wheel::COLOR_LUMACHROMA )
+        {
+            p->sat = color_chromaF(old_col);
+            p->val = color_lumaF(old_col);
+            p->color_from = &color_from_hcy;
         }
         else
         {

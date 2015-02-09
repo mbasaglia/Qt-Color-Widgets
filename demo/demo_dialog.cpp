@@ -47,6 +47,7 @@ Demo_Dialog::Demo_Dialog(QWidget *parent) :
 
     combo_color->addItem("HSV",Color_Wheel::COLOR_HSV);
     combo_color->addItem("HSL",Color_Wheel::COLOR_HSL);
+    combo_color->addItem("Luma Chroma",Color_Wheel::COLOR_LUMACHROMA);
     combo_color->setCurrentIndex(combo_color->findData(
         QVariant(Color_Wheel::defaultDisplayFlags(Color_Wheel::COLOR_FLAGS))));
 }
