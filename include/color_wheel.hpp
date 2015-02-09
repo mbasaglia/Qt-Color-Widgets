@@ -97,6 +97,7 @@ public:
 
     /// Set the default display flags
     static void setDefaultDisplayFlags(Display_Flags flags);
+
     /// Get default display flags
     static Display_Flags defaultDisplayFlags(Display_Flags mask = FLAGS_ALL);
 

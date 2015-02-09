@@ -84,7 +84,7 @@ private:
 
 public:
 
-    qreal huem, sat, val;
+    qreal hue, sat, val;
     unsigned int wheel_width;
     Mouse_Status mouse_status;
     QPixmap hue_ring;
@@ -93,7 +93,7 @@ public:
     QColor (*color_from)(qreal,qreal,qreal,qreal);
 
     Private(Color_Wheel *widget)
-        : w(widget), huem(0), sat(0), val(0),
+        : w(widget), hue(0), sat(0), val(0),
         wheel_width(20), mouse_status(Nothing),
         display_flags(FLAGS_DEFAULT), color_from(&QColor::fromHsvF)
     { }
@@ -145,7 +145,7 @@ public:
             for(int j = 0;j < sz; ++j)
             {
                 inner_selector.setPixel( i, j,
-                        color_from(huem,double(i)/sz,double(j)/sz,1).rgb());
+                        color_from(hue,double(i)/sz,double(j)/sz,1).rgb());
             }
         }
     }
@@ -170,7 +170,7 @@ public:
                 qreal ymin = ycenter-slice_h/2;
                 qreal psat = qBound(0.0,(y-ymin)/slice_h,1.0);
 
-                inner_selector.setPixel(x,y,color_from(huem,psat,pval,1).rgba());
+                inner_selector.setPixel(x,y,color_from(hue,psat,pval,1).rgba());
             }
         }
     }
@@ -199,13 +199,13 @@ public:
         if ( display_flags & SHAPE_TRIANGLE )
         {
             if ( display_flags & ANGLE_ROTATING )
-                return -huem*360-60;
+                return -hue*360-60;
             return -150;
         }
         else
         {
             if ( display_flags & ANGLE_ROTATING )
-                return -huem*360-45;
+                return -hue*360-45;
             else
                 return 180;
         }
@@ -256,7 +256,7 @@ Color_Wheel::~Color_Wheel()
 
 QColor Color_Wheel::color() const
 {
-    return p->color_from(p->huem, p->sat, p->val, 1);
+    return p->color_from(p->hue, p->sat, p->val, 1);
 }
 
 QSize Color_Wheel::sizeHint() const
@@ -266,7 +266,7 @@ QSize Color_Wheel::sizeHint() const
 
 qreal Color_Wheel::hue() const
 {
-    return p->huem;
+    return p->hue;
 }
 
 qreal Color_Wheel::saturation() const
@@ -307,7 +307,7 @@ void Color_Wheel::paintEvent(QPaintEvent * )
     painter.setPen(QPen(Qt::black,3));
     painter.setBrush(Qt::NoBrush);
     QLineF ray(0, 0, p->outer_radius(), 0);
-    ray.setAngle(p->huem*360);
+    ray.setAngle(p->hue*360);
     QPointF h1 = ray.p2();
     ray.setLength(p->inner_radius());
     QPointF h2 = ray.p2();
@@ -357,7 +357,7 @@ void Color_Wheel::mouseMoveEvent(QMouseEvent *ev)
 {
     if (p->mouse_status == Drag_Circle )
     {
-        p->huem = p->line_to_point(ev->pos()).angle()/360.0;
+        p->hue = p->line_to_point(ev->pos()).angle()/360.0;
         p->render_inner_selector();
 
         emit colorSelected(color());
@@ -429,11 +429,11 @@ void Color_Wheel::resizeEvent(QResizeEvent *)
 
 void Color_Wheel::setColor(QColor c)
 {
-    qreal oldh = p->huem;
-    p->huem = qMax(0.0, c.hueF());
+    qreal oldh = p->hue;
+    p->hue = qMax(0.0, c.hueF());
     p->sat = c.saturationF();
     p->val = c.valueF();
-    if (!qFuzzyCompare(oldh+1, p->huem+1))
+    if (!qFuzzyCompare(oldh+1, p->hue+1))
         p->render_inner_selector();
     update();
     emit colorChanged(c);
@@ -441,7 +441,7 @@ void Color_Wheel::setColor(QColor c)
 
 void Color_Wheel::setHue(qreal h)
 {
-    p->huem = qBound(0.0, h, 1.0);
+    p->hue = qBound(0.0, h, 1.0);
     p->render_inner_selector();
     update();
 }
@@ -473,18 +473,21 @@ void Color_Wheel::setDisplayFlags(Display_Flags flags)
         QColor old_col = color();
         if ( flags & Color_Wheel::COLOR_HSL )
         {
+            p->hue = old_col.hueF();
             p->sat = old_col.saturationF();
             p->val = old_col.lightnessF();
             p->color_from = &QColor::fromHslF;
         }
         else if ( flags & Color_Wheel::COLOR_LUMACHROMA )
         {
+            p->hue = old_col.hueF();
             p->sat = color_chromaF(old_col);
             p->val = color_lumaF(old_col);
             p->color_from = &color_from_hcy;
         }
         else
         {
+            p->hue = old_col.hueF();
             p->sat = old_col.hsvSaturationF();
             p->val = old_col.valueF();
             p->color_from = &QColor::fromHsvF;
