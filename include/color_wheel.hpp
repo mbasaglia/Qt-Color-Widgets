@@ -60,7 +60,7 @@ public:
         COLOR_DEFAULT  = 0x000, ///< Use the default colorspace
         COLOR_HSV      = 0x100, ///< Use the HSV color space
         COLOR_HSL      = 0x200, ///< Use the HSL color space
-        COLOR_LUMACHROMA=0x400, ///< Use the HCY' color space (Y_601')
+        COLOR_LCH      = 0x400, ///< Use Luma Chroma Hue (Y_601')
         COLOR_FLAGS    = 0xf00, ///< Mask for the color space flags
 
         FLAGS_DEFAULT  = 0x000, ///< Use all defaults
