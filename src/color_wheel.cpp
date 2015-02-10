@@ -85,6 +85,47 @@ static QColor rainbow_hsv(qreal hue)
     return QColor::fromHsvF(hue,1,1);
 }
 
+static qreal color_lightnessF(const QColor& c)
+{
+    return ( qMax(c.redF(),qMax(c.greenF(),c.blueF())) +
+             qMin(c.redF(),qMin(c.greenF(),c.blueF())) ) / 2;
+}
+static qreal color_HSL_saturationF(const QColor& col)
+{
+    qreal c = color_chromaF(col);
+    qreal l = color_lightnessF(col);
+    if ( qFuzzyCompare(l+1,1) || qFuzzyCompare(l+1,2) )
+        return 0;
+    return c / (1-qAbs(2*l-1));
+}
+static QColor color_from_hsl(qreal hue, qreal sat, qreal lig, qreal alpha = 1 )
+{
+    qreal chroma = (1 - qAbs(2*lig-1))*sat;
+    qreal h1 = hue*6;
+    qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
+    QColor col;
+    if ( h1 >= 0 && h1 < 1 )
+        col = QColor::fromRgbF(chroma,x,0);
+    else if ( h1 < 2 )
+        col = QColor::fromRgbF(x,chroma,0);
+    else if ( h1 < 3 )
+        col = QColor::fromRgbF(0,chroma,x);
+    else if ( h1 < 4 )
+        col = QColor::fromRgbF(0,x,chroma);
+    else if ( h1 < 5 )
+        col = QColor::fromRgbF(x,0,chroma);
+    else if ( h1 < 6 )
+        col = QColor::fromRgbF(chroma,0,x);
+
+    qreal m = lig-chroma/2;
+
+    return QColor::fromRgbF(
+        qBound(0.0,col.redF()+m,1.0),
+        qBound(0.0,col.greenF()+m,1.0),
+        qBound(0.0,col.blueF()+m,1.0),
+        alpha);
+}
+
 class Color_Wheel::Private
 {
 private:
@@ -251,6 +292,28 @@ public:
         painter.setBrush(Qt::transparent);//palette().background());
         painter.drawEllipse(QPointF(0,0),inner_radius(),inner_radius());
     }
+
+    void set_color(const QColor& c)
+    {
+        if ( display_flags & Color_Wheel::COLOR_HSV )
+        {
+            hue = qMax(0.0, c.hsvHueF());
+            sat = c.hsvSaturationF();
+            val = c.valueF();
+        }
+        else if ( display_flags & Color_Wheel::COLOR_HSL )
+        {
+            hue = qMax(0.0, c.hueF());
+            sat = color_HSL_saturationF(c);
+            val = color_lightnessF(c);
+        }
+        else if ( display_flags & Color_Wheel::COLOR_LCH )
+        {
+            hue = qMax(0.0, c.hsvHueF());
+            sat = color_chromaF(c);
+            val = color_lumaF(c);
+        }
+    }
 };
 
 Color_Wheel::Color_Wheel(QWidget *parent) :
@@ -276,17 +339,19 @@ QSize Color_Wheel::sizeHint() const
 
 qreal Color_Wheel::hue() const
 {
+    if ( (p->display_flags & COLOR_LCH) && p->sat > 0.01 )
+        return color().hueF();
     return p->hue;
 }
 
 qreal Color_Wheel::saturation() const
 {
-    return p->sat;
+    return color().hsvSaturationF();
 }
 
 qreal Color_Wheel::value() const
 {
-    return p->val;
+    return color().valueF();
 }
 
 unsigned int Color_Wheel::wheelWidth() const
@@ -440,9 +505,7 @@ void Color_Wheel::resizeEvent(QResizeEvent *)
 void Color_Wheel::setColor(QColor c)
 {
     qreal oldh = p->hue;
-    p->hue = qMax(0.0, c.hueF());
-    p->sat = c.saturationF();
-    p->val = c.valueF();
+    p->set_color(c);
     if (!qFuzzyCompare(oldh+1, p->hue+1))
         p->render_inner_selector();
     update();
@@ -484,9 +547,9 @@ void Color_Wheel::setDisplayFlags(Display_Flags flags)
         if ( flags & Color_Wheel::COLOR_HSL )
         {
             p->hue = old_col.hueF();
-            p->sat = old_col.saturationF();
-            p->val = old_col.lightnessF();
-            p->color_from = &QColor::fromHslF;
+            p->sat = color_HSL_saturationF(old_col);
+            p->val = color_lightnessF(old_col);
+            p->color_from = &color_from_hsl;
             p->rainbow_from_hue = &rainbow_hsv;
         }
         else if ( flags & Color_Wheel::COLOR_LCH )
@@ -499,7 +562,7 @@ void Color_Wheel::setDisplayFlags(Display_Flags flags)
         }
         else
         {
-            p->hue = old_col.hueF();
+            p->hue = old_col.hsvHueF();
             p->sat = old_col.hsvSaturationF();
             p->val = old_col.valueF();
             p->color_from = &QColor::fromHsvF;
@@ -511,6 +574,7 @@ void Color_Wheel::setDisplayFlags(Display_Flags flags)
     p->display_flags = flags;
     p->render_inner_selector();
     update();
+    emit displayFlagsChanged(flags);
 }
 
 Color_Wheel::Display_Flags Color_Wheel::displayFlags(Display_Flags mask) const

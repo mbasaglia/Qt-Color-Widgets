@@ -59,11 +59,18 @@ Color_Dialog::Color_Dialog(QWidget *parent, Qt::WindowFlags f) :
     pickButton->setIcon(QIcon::fromTheme("color-picker"));
 
     setButtonMode(OkApplyCancel);
+
+    connect(p->ui.wheel,SIGNAL(displayFlagsChanged(Color_Wheel::Display_Flags)),SIGNAL(wheelFlagsChanged(Color_Wheel::Display_Flags)));
 }
 
 QSize Color_Dialog::sizeHint() const
 {
     return QSize(400,0);
+}
+
+Color_Wheel::Display_Flags Color_Dialog::wheelFlags() const
+{
+    return p->ui.wheel->displayFlags();
 }
 
 QColor Color_Dialog::color() const
@@ -94,6 +101,11 @@ void Color_Dialog::showColor(const QColor &c)
 {
     setColor(c);
     show();
+}
+
+void Color_Dialog::setWheelFlags(Color_Wheel::Display_Flags flags)
+{
+    p->ui.wheel->setDisplayFlags(flags);
 }
 
 void Color_Dialog::setPreviewDisplayMode(Color_Preview::Display_Mode mode)
@@ -168,6 +180,8 @@ void Color_Dialog::update_widgets()
     p->ui.spin_hue->setValue(p->ui.slide_hue->value());
 
     p->ui.slide_saturation->setValue(qRound(p->ui.wheel->saturation()*255.0));
+    double slv = p->ui.slide_saturation->value();
+    double spv = p->ui.spin_saturation->value();
     p->ui.spin_saturation->setValue(p->ui.slide_saturation->value());
     p->ui.slide_saturation->setFirstColor(QColor::fromHsvF(p->ui.wheel->hue(),0,p->ui.wheel->value()));
     p->ui.slide_saturation->setLastColor(QColor::fromHsvF(p->ui.wheel->hue(),1,p->ui.wheel->value()));

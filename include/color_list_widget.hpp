@@ -28,12 +28,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define COLOR_LIST_WIDGET_HPP
 
 #include "abstract_widget_list.hpp"
+#include "color_wheel.hpp"
 
 class QCP_EXPORT Color_List_Widget : public Abstract_Widget_List
 {
     Q_OBJECT
 
     Q_PROPERTY(QList<QColor> colors READ colors WRITE setColors NOTIFY colorsChanged )
+    Q_PROPERTY(Color_Wheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
 
 public:
     explicit Color_List_Widget(QWidget *parent = 0);
@@ -46,8 +48,14 @@ public:
 
     void append();
 
+    Color_Wheel::Display_Flags wheelFlags() const;
+
 signals:
     void colorsChanged(const QList<QColor>&);
+    void wheelFlagsChanged(Color_Wheel::Display_Flags flags);
+
+public slots:
+    void setWheelFlags(Color_Wheel::Display_Flags flags);
 
 private slots:
     void emit_changed();

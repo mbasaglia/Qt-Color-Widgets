@@ -30,8 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class Color_List_Widget::Private
 {
 public:
-    QList<QColor> colors;
-    QSignalMapper mapper;
+    QList<QColor>               colors;
+    QSignalMapper               mapper;
+    Color_Wheel::Display_Flags  wheel_flags;
 };
 
 Color_List_Widget::Color_List_Widget(QWidget *parent)
@@ -39,6 +40,7 @@ Color_List_Widget::Color_List_Widget(QWidget *parent)
 {
     connect(this, SIGNAL(removed(int)), SLOT(handle_removed(int)));
     connect(&p->mapper, SIGNAL(mapped(int)), SLOT(color_changed(int)));
+    p->wheel_flags = Color_Wheel::defaultDisplayFlags();
 }
 
 Color_List_Widget::~Color_List_Widget()
@@ -109,6 +111,22 @@ void Color_List_Widget::append_widget(int col)
     //connect(cbs,SIGNAL(colorChanged(QColor)),SLOT(emit_changed()));
     p->mapper.setMapping(cbs,col);
     connect(cbs,SIGNAL(colorChanged(QColor)),&p->mapper,SLOT(map()));
+    connect(this,SIGNAL(wheelFlagsChanged(Color_Wheel::Display_Flags)),
+            cbs,SLOT(setWheelFlags(Color_Wheel::Display_Flags)));
     appendWidget(cbs);
     setRowHeight(count()-1,22);
+}
+
+Color_Wheel::Display_Flags Color_List_Widget::wheelFlags() const
+{
+    return p->wheel_flags;
+}
+
+void Color_List_Widget::setWheelFlags(Color_Wheel::Display_Flags flags)
+{
+    if ( p->wheel_flags != flags )
+    {
+        p->wheel_flags = flags;
+        emit wheelFlagsChanged(flags);
+    }
 }

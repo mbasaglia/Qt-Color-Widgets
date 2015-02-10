@@ -25,6 +25,7 @@
 
 #include "colorpicker_global.hpp"
 #include "color_preview.hpp"
+#include "color_wheel.hpp"
 
 #include <QDialog>
 
@@ -33,6 +34,9 @@ class QAbstractButton;
 class QCP_EXPORT Color_Dialog : public QDialog
 {
     Q_OBJECT
+    Q_ENUMS(Button_Mode)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
+    Q_PROPERTY(Color_Wheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
 
 public:
     enum Button_Mode {
@@ -79,6 +83,8 @@ public:
 
     QSize sizeHint() const;
 
+    Color_Wheel::Display_Flags wheelFlags() const;
+
 public slots:
 
     /**
@@ -91,6 +97,8 @@ public slots:
      */
     void showColor(const QColor &oldcolor);
 
+    void setWheelFlags(Color_Wheel::Display_Flags flags);
+
 signals:
     /**
      * The current color was changed
@@ -101,6 +109,8 @@ signals:
      * The user selected the new color by pressing Ok/Apply
      */
     void colorSelected(QColor);
+
+    void wheelFlagsChanged(Color_Wheel::Display_Flags flags);
 
 private slots:
     /// Update all the Ui elements to match the selected color

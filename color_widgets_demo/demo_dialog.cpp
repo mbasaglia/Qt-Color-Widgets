@@ -70,6 +70,7 @@ void Demo_Dialog::on_combo_shape_activated(int index)
         Color_Wheel::Display_Enum(combo_shape->itemData(index).toInt()),
         Color_Wheel::SHAPE_FLAGS);
     Color_Wheel::setDefaultDisplayFlags(color_wheel->displayFlags());
+    color_list->setWheelFlags(color_wheel->displayFlags());
 }
 
 void Demo_Dialog::on_combo_angle_activated(int index)
@@ -78,6 +79,7 @@ void Demo_Dialog::on_combo_angle_activated(int index)
         Color_Wheel::Display_Enum(combo_angle->itemData(index).toInt()),
         Color_Wheel::ANGLE_FLAGS);
     Color_Wheel::setDefaultDisplayFlags(color_wheel->displayFlags());
+    color_list->setWheelFlags(color_wheel->displayFlags());
 }
 
 void Demo_Dialog::on_combo_color_activated(int index)
@@ -86,4 +88,5 @@ void Demo_Dialog::on_combo_color_activated(int index)
         Color_Wheel::Display_Enum(combo_color->itemData(index).toInt()),
         Color_Wheel::COLOR_FLAGS);
     Color_Wheel::setDefaultDisplayFlags(color_wheel->displayFlags());
+    color_list->setWheelFlags(color_wheel->displayFlags());
 }

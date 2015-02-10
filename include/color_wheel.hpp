@@ -42,7 +42,7 @@ class QCP_EXPORT Color_Wheel : public QWidget
     Q_PROPERTY(qreal saturation READ saturation WRITE setSaturation DESIGNABLE false )
     Q_PROPERTY(qreal value READ value WRITE setValue DESIGNABLE false )
     Q_PROPERTY(unsigned wheelWidth READ wheelWidth WRITE setWheelWidth DESIGNABLE true )
-    Q_PROPERTY(Display_Flags displayFlags READ displayFlags WRITE setDisplayFlags DESIGNABLE true )
+    Q_PROPERTY(Display_Flags displayFlags READ displayFlags WRITE setDisplayFlags NOTIFY displayFlagsChanged DESIGNABLE true )
 
 public:
     enum Display_Enum
@@ -132,7 +132,7 @@ public slots:
      * @brief Set the display flags
      * @param flags which will replace the current ones
      */
-    void setDisplayFlags(Display_Flags flags);
+    void setDisplayFlags(Color_Wheel::Display_Flags flags);
 
 signals:
     /**
@@ -144,6 +144,8 @@ signals:
      * Emitted when the user selects a color
      */
     void colorSelected(QColor);
+
+    void displayFlagsChanged(Color_Wheel::Display_Flags flags);
 
 protected:
     void paintEvent(QPaintEvent *);

@@ -24,6 +24,7 @@
 #define COLOR_SELECTOR_HPP
 
 #include "color_preview.hpp"
+#include "color_wheel.hpp"
 
 /**
  * Color preview that opens a color dialog
@@ -34,6 +35,7 @@ class QCP_EXPORT Color_Selector : public Color_Preview
     Q_ENUMS(Update_Mode)
     Q_PROPERTY(Update_Mode updateMode READ updateMode WRITE setUpdateMode )
     Q_PROPERTY(Qt::WindowModality dialogModality READ dialogModality WRITE setDialogModality )
+    Q_PROPERTY(Color_Wheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
 
 public:
     enum Update_Mode {
@@ -50,8 +52,14 @@ public:
     Qt::WindowModality dialogModality() const;
     void setDialogModality(Qt::WindowModality m);
 
+    Color_Wheel::Display_Flags wheelFlags() const;
+
+signals:
+    void wheelFlagsChanged(Color_Wheel::Display_Flags flags);
+
 public slots:
     void showDialog();
+    void setWheelFlags(Color_Wheel::Display_Flags flags);
 
 private slots:
     void accept_dialog();

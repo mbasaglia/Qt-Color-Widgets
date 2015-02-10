@@ -48,6 +48,8 @@ Color_Selector::Color_Selector(QWidget *parent) :
     connect(this,SIGNAL(colorChanged(QColor)),this,SLOT(update_old_color(QColor)));
     connect(p->dialog,SIGNAL(rejected()),this,SLOT(reject_dialog()));
     connect(p->dialog,SIGNAL(colorSelected(QColor)), this, SLOT(accept_dialog()));
+    connect(p->dialog,SIGNAL(wheelFlagsChanged(Color_Wheel::Display_Flags)),
+                SIGNAL(wheelFlagsChanged(Color_Wheel::Display_Flags)));
 
     setAcceptDrops(true);
 }
@@ -77,12 +79,22 @@ void Color_Selector::setDialogModality(Qt::WindowModality m)
     p->dialog->setWindowModality(m);
 }
 
+Color_Wheel::Display_Flags Color_Selector::wheelFlags() const
+{
+    return p->dialog->wheelFlags();
+}
+
 void Color_Selector::showDialog()
 {
     p->old_color = color();
     p->dialog->setColor(color());
     connect_dialog();
     p->dialog->show();
+}
+
+void Color_Selector::setWheelFlags(Color_Wheel::Display_Flags flags)
+{
+    p->dialog->setWheelFlags(flags);
 }
 
 void Color_Selector::connect_dialog()
