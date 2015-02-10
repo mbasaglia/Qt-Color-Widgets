@@ -23,7 +23,7 @@ RCC_DIR = ../out/generated
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ColorPicker
+TARGET = color_widgets_demo
 TEMPLATE = app
 
 

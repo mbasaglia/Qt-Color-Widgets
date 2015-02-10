@@ -18,10 +18,10 @@ The provided widgets are:
 Demonstration
 -------------
 
-A simple demo of the widget is provided in ./demo
+A simple demo of the widget is provided in ./color_widgets_demo
 
 You can see a screenshot of the dialog at
-https://github.com/mbasaglia/Qt-Color-Picker/blob/master/demo/screenshot.png
+https://github.com/mbasaglia/Qt-Color-Picker/blob/master/color_widgets_demo/screenshot.png
 
 Using it in a project
 ---------------------
@@ -33,13 +33,13 @@ All the required files are in ./src
 Installing as a Qt Designer/Creator Plugin
 ------------------------------------------
 
-The sources for the designer plugin are in ./designer_plugin
+The sources for the designer plugin are in ./color_widgets_designer_plugin
 
 Compile the library and install in
 (Qt SDK)/Tools/QtCreator/bin/designer/
 (Qt SDK)/(Qt Version)/(Toolchain)/plugins/designer
 
-cd designer_plugin && qmake && make && make install
+cd color_widgets_designer_plugin && qmake && make && make install
 
 
 Latest Version
