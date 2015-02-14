@@ -180,8 +180,6 @@ void Color_Dialog::update_widgets()
     p->ui.spin_hue->setValue(p->ui.slide_hue->value());
 
     p->ui.slide_saturation->setValue(qRound(p->ui.wheel->saturation()*255.0));
-    double slv = p->ui.slide_saturation->value();
-    double spv = p->ui.spin_saturation->value();
     p->ui.spin_saturation->setValue(p->ui.slide_saturation->value());
     p->ui.slide_saturation->setFirstColor(QColor::fromHsvF(p->ui.wheel->hue(),0,p->ui.wheel->value()));
     p->ui.slide_saturation->setLastColor(QColor::fromHsvF(p->ui.wheel->hue(),1,p->ui.wheel->value()));
