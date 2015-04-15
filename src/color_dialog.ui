@@ -270,13 +270,13 @@
   <customwidget>
    <class>Color_Preview</class>
    <extends>QWidget</extends>
-   <header>Color_Preview</header>
+   <header>color_preview.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Color_Wheel</class>
    <extends>QWidget</extends>
-   <header>Color_Wheel</header>
+   <header>color_wheel.hpp</header>
    <container>1</container>
    <slots>
     <signal>colorSelected(QColor)</signal>
@@ -286,12 +286,12 @@
   <customwidget>
    <class>Gradient_Slider</class>
    <extends>QSlider</extends>
-   <header>Gradient_Slider</header>
+   <header>gradient_slider.hpp</header>
   </customwidget>
   <customwidget>
    <class>Hue_Slider</class>
    <extends>Gradient_Slider</extends>
-   <header>Hue_Slider</header>
+   <header>hue_slider.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
