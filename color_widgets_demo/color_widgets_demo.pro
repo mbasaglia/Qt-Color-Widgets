@@ -15,6 +15,7 @@
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 QT       += core gui
+DEFINES += QTCOLORPICKER_STATICALLY_LINKED
 
 OBJECTS_DIR = ../out/obj
 MOC_DIR = ../out/generated

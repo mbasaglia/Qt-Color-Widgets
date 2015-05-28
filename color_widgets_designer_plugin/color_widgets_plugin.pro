@@ -15,6 +15,7 @@
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 CONFIG += plugin
+DEFINES += QTCOLORPICKER_LIBRARY
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += designer
     DEFINES += FRAMEWORK_QT5
