@@ -33,8 +33,11 @@ win32 {
     LIB_TARGET = $${TARGET}.dll
 }
 
-target.path = /usr/local/lib
-headers.path = /usr/local/include/QtColorPicker
+isEmpty(PREFIX) {
+    PREFIX = /usr/local
+}
+target.path = $$PREFIX/lib
+headers.path = $$PREFIX/include/QtColorPicker
 headers.files = \
 	include/Abstract_Widget_List \
 	include/Bound_Color_Selector \
