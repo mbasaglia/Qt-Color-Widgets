@@ -24,7 +24,7 @@
 #ifndef COLOR_PREVIEW_HPP
 #define COLOR_PREVIEW_HPP
 
-#include "colorpicker_global.hpp"
+#include "colorwidgets_global.hpp"
 
 #include <QWidget>
 

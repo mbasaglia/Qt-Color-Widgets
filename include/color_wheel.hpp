@@ -23,7 +23,7 @@
 #ifndef COLOR_WHEEL_HPP
 #define COLOR_WHEEL_HPP
 
-#include "colorpicker_global.hpp"
+#include "colorwidgets_global.hpp"
 
 #include <QWidget>
 

@@ -23,7 +23,7 @@
 #ifndef COLOR_DIALOG_HPP
 #define COLOR_DIALOG_HPP
 
-#include "colorpicker_global.hpp"
+#include "colorwidgets_global.hpp"
 #include "color_preview.hpp"
 #include "color_wheel.hpp"
 

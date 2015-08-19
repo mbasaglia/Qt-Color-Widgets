@@ -24,7 +24,7 @@
 #ifndef GRADIENT_SLIDER_HPP
 #define GRADIENT_SLIDER_HPP
 
-#include "colorpicker_global.hpp"
+#include "colorwidgets_global.hpp"
 
 #include <QSlider>
 #include <QGradient>

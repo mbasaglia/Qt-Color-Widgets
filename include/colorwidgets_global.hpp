@@ -1,5 +1,5 @@
-#ifndef QT_COLOR_PICKER_GLOBAL_H
-#define QT_COLOR_PICKER_GLOBAL_H
+#ifndef QT_COLOR_WIDGETS_GLOBAL_H
+#define QT_COLOR_WIDGETS_GLOBAL_H
 
 #include <QtCore/QtGlobal>
 
@@ -11,4 +11,4 @@
 #    define QCP_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif
+#endif // QT_COLOR_WIDGETS_GLOBAL_H

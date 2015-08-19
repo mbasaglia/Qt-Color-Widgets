@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-set(LIBRARY_TARGET ColorPicker-qt5)
+set(LIBRARY_TARGET ColorWidgets-qt5)
 project(${LIBRARY_TARGET} CXX)
 
 # Qt

@@ -1,15 +1,15 @@
 TEMPLATE=lib
 CONFIG += dll
 QT += core gui
-DEFINES += QTCOLORPICKER_LIBRARY
+DEFINES += QTCOLORWIDGETS_LIBRARY
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 	message("Qt5 mode!")
 	QT += widgets
-	TARGET=ColorPicker-qt5
+	TARGET=ColorWidgets-qt5
 } else {
 	message("Qt4 mode!")
-	TARGET=ColorPicker-qt4
+	TARGET=ColorWidgets-qt4
 }
 
 VERSION=1.0.0
@@ -37,7 +37,7 @@ isEmpty(PREFIX) {
     PREFIX = /usr/local
 }
 target.path = $$PREFIX/lib
-headers.path = $$PREFIX/include/QtColorPicker
+headers.path = $$PREFIX/include/QtColorWidgets
 headers.files = \
 	include/AbstractWidgetList \
 	include/BoundColorSelector \
@@ -56,7 +56,7 @@ headers.files = \
 	include/color_wheel.hpp \
 	include/bound_color_selector.hpp \
 	include/color_dialog.hpp \
-	include/colorpicker_global.hpp \
+	include/colorwidgets_global.hpp \
 	include/color_selector.hpp \
 	include/gradient_slider.hpp \
 	include/hue_slider.hpp

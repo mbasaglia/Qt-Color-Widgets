@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COLOR_DELEGATE_HPP
 #define COLOR_DELEGATE_HPP
 
-#include "colorpicker_global.hpp"
+#include "colorwidgets_global.hpp"
 
 #include <QStyledItemDelegate>
 
