@@ -1,18 +1,18 @@
-Color Dialog and Widgets
-========================
+Color Widgets
+=============
 
 Here is a color dialog that is more user-friendly than the default QColorDialog
-and color-related widgets
+and several color-related widgets
 
 The provided widgets are:
 
-* Color_Wheel, An analog widget used to select a color
-* Color_Preview, A simple widget that dislay a color
-* Gradient_Slider, A slider that has a gradient background
-* Hue_Slider, A variant of Gradient_Slider that has a rainbow background
-* Color_Selector, A Color_Preview that shows a Color_Dialog when clicked
-* Color_Dialog,  A dialog that uses the above widgets to provide a better user experience than QColorDialog
-* Color_List_Widget, A widget to edit a list of colors
+* ColorWheel, An analog widget used to select a color
+* ColorPreview, A simple widget that dislay a color
+* GradientSlider, A slider that has a gradient background
+* HueSlider, A variant of Gradient_Slider that has a rainbow background
+* ColorSelector, A Color_Preview that shows a ColorDialog when clicked
+* ColorDialog,  A dialog that uses the above widgets to provide a better user experience than QColorDialog
+* ColorListWidget, A widget to edit a list of colors
     
     
 Demonstration
@@ -54,4 +54,4 @@ License
 -------
 
 LGPLv3+, See COPYING
-Copyright (C) 2013 Mattia Basaglia <mattia.basaglia@gmail.com>
+Copyright (C) 2012-2015 Mattia Basaglia <mattia.basaglia@gmail.com>
