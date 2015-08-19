@@ -47,12 +47,12 @@ bool ColorSelector_Plugin::isInitialized() const
 
 QWidget *ColorSelector_Plugin::createWidget(QWidget *parent)
 {
-    return new ColorSelector(parent);
+    return new color_widgets::ColorSelector(parent);
 }
 
 QString ColorSelector_Plugin::name() const
 {
-    return "ColorSelector";
+    return "color_widgets::ColorSelector";
 }
 
 QString ColorSelector_Plugin::group() const
@@ -84,7 +84,7 @@ QString ColorSelector_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"ColorSelector\" name=\"ColorSelector\">\n"
+           " <widget class=\"color_widgets::ColorSelector\" name=\"ColorSelector\">\n"
            " </widget>\n"
             "</ui>\n";
 }

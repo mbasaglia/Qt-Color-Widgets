@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ColorDialog</class>
+ <class>color_widgets::ColorDialog</class>
  <widget class="QDialog" name="ColorDialog">
   <property name="geometry">
    <rect>
@@ -24,7 +24,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="ColorWheel" name="wheel">
+        <widget class="color_widgets::ColorWheel" name="wheel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -34,9 +34,9 @@
         </widget>
        </item>
        <item>
-        <widget class="ColorPreview" name="preview">
+        <widget class="color_widgets::ColorPreview" name="preview">
          <property name="display_mode" stdset="0">
-          <enum>ColorPreview::SplitColor</enum>
+          <enum>color_widgets::ColorPreview::SplitColor</enum>
          </property>
         </widget>
        </item>
@@ -45,7 +45,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout">
        <item row="2" column="1">
-        <widget class="GradientSlider" name="slide_value">
+        <widget class="color_widgets::GradientSlider" name="slide_value">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -69,7 +69,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="GradientSlider" name="slide_saturation">
+        <widget class="color_widgets::GradientSlider" name="slide_saturation">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -93,7 +93,7 @@
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="GradientSlider" name="slide_alpha">
+        <widget class="color_widgets::GradientSlider" name="slide_alpha">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -103,7 +103,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="GradientSlider" name="slide_red">
+        <widget class="color_widgets::GradientSlider" name="slide_red">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -113,7 +113,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="GradientSlider" name="slide_green">
+        <widget class="color_widgets::GradientSlider" name="slide_green">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -151,7 +151,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="GradientSlider" name="slide_blue">
+        <widget class="color_widgets::GradientSlider" name="slide_blue">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -243,7 +243,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="HueSlider" name="slide_hue">
+        <widget class="color_widgets::HueSlider" name="slide_hue">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -268,13 +268,13 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ColorPreview</class>
+   <class>color_widgets::ColorPreview</class>
    <extends>QWidget</extends>
    <header>color_preview.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ColorWheel</class>
+   <class>color_widgets::ColorWheel</class>
    <extends>QWidget</extends>
    <header>color_wheel.hpp</header>
    <container>1</container>
@@ -284,12 +284,12 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>GradientSlider</class>
+   <class>color_widgets::GradientSlider</class>
    <extends>QSlider</extends>
    <header>gradient_slider.hpp</header>
   </customwidget>
   <customwidget>
-   <class>HueSlider</class>
+   <class>color_widgets::HueSlider</class>
    <extends>GradientSlider</extends>
    <header>hue_slider.hpp</header>
   </customwidget>

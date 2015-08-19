@@ -25,6 +25,8 @@
 
 #include "gradient_slider.hpp"
 
+namespace color_widgets {
+
 /**
  * \brief A slider for selecting a hue value
  */
@@ -49,6 +51,8 @@ private:
     class Private;
     Private * const p;
 };
+
+} // namespace color_widgets
 
 #endif // HUE_SLIDER_HPP
 

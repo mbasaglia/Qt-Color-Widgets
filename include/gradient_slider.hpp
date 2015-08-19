@@ -29,6 +29,8 @@
 #include <QSlider>
 #include <QGradient>
 
+namespace color_widgets {
+
 /**
  * \brief A slider that mover on top of a gradient
  */
@@ -102,5 +104,7 @@ private:
     class Private;
     Private * const p;
 };
+
+} // namespace color_widgets
 
 #endif // GRADIENT_SLIDER_HPP

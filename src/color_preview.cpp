@@ -31,6 +31,8 @@
 #include <QDrag>
 #include <QMimeData>
 
+namespace color_widgets {
+
 class ColorPreview::Private
 {
 public:
@@ -119,11 +121,11 @@ void ColorPreview::paint(QPainter &painter, QRect rect) const
     painter.fillRect(1, 1, w, h, c1);
     painter.fillRect(1+w, 1, w, h, c2);
 
-    paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
-    paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
+    detail::paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
+    detail::paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
 
-    paint_br_border(painter,size(),palette().color(QPalette::Midlight),1);
-    paint_br_border(painter,size(),palette().color(QPalette::Button),0);
+    detail::paint_br_border(painter,size(),palette().color(QPalette::Midlight),1);
+    detail::paint_br_border(painter,size(),palette().color(QPalette::Button),0);
 }
 
 void ColorPreview::setColor(const QColor &c)
@@ -177,3 +179,4 @@ void ColorPreview::mouseMoveEvent(QMouseEvent *ev)
     }
 }
 
+} // namespace color_widgets

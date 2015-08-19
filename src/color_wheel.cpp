@@ -29,6 +29,8 @@
 #include <qmath.h>
 #include <cmath>
 
+namespace color_widgets {
+
 enum Mouse_Status
 {
     Nothing,
@@ -603,3 +605,4 @@ void ColorWheel::setDisplayFlag(Display_Flags flag, Display_Flags mask)
     setDisplayFlags((p->display_flags&~mask)|flag);
 }
 
+} //  namespace color_widgets

@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "color_selector.hpp"
 
+namespace color_widgets {
 /**
  *  A color selector bound to a color reference
  */
@@ -43,5 +44,5 @@ public:
 private slots:
     void update_reference(QColor);
 };
-
+} // namespace color_widgets
 #endif // BOUND_COLOR_SELECTOR_HPP

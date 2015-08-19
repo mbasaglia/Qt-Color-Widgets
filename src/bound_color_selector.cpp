@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bound_color_selector.hpp"
 
+namespace color_widgets {
+
 BoundColorSelector::BoundColorSelector(QColor* reference, QWidget *parent) :
     ColorSelector(parent), ref(reference)
 {
@@ -37,3 +39,5 @@ void BoundColorSelector::update_reference(QColor c)
 {
     *ref = c;
 }
+
+} // namespace color_widgets

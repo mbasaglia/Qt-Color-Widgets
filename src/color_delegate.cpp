@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "color_selector.hpp"
 #include "color_dialog.hpp"
 
+namespace color_widgets {
+
 ColorDelegate::ColorDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
 {
@@ -107,3 +109,5 @@ QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIn
 
     return QStyledItemDelegate::sizeHint(option, index);
 }
+
+} // namespace color_widgets

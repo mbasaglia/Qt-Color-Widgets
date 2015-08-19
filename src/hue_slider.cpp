@@ -23,6 +23,8 @@
 
 #include "hue_slider.hpp"
 
+namespace color_widgets {
+
 class HueSlider::Private
 {
 private:
@@ -85,3 +87,4 @@ void HueSlider::setColorValue(qreal v)
     p->updateGradient();
 }
 
+} // namespace color_widgets

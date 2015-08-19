@@ -28,9 +28,11 @@
 
 #include <QWidget>
 
+namespace color_widgets {
+
 /**
-    Simple widget that shows a preview of a color
-*/
+ * Simple widget that shows a preview of a color
+ */
 class QCP_EXPORT ColorPreview : public QWidget
 {
     Q_OBJECT
@@ -97,5 +99,7 @@ private:
     class Private;
     Private * const p;
 };
+
+} // namespace color_widgets
 
 #endif // COLOR_PREVIEW_HPP

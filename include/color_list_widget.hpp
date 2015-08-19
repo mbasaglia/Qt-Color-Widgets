@@ -30,6 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "abstract_widget_list.hpp"
 #include "color_wheel.hpp"
 
+namespace color_widgets {
+
 class QCP_EXPORT ColorListWidget : public AbstractWidgetList
 {
     Q_OBJECT
@@ -67,5 +69,7 @@ private:
     Private * const p;
     void  append_widget(int col);
 };
+
+} // namespace color_widgets
 
 #endif // COLOR_LIST_WIDGET_HPP

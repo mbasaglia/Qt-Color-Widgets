@@ -33,6 +33,7 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QScreen>
 #endif
+namespace color_widgets {
 
 class ColorDialog::Private
 {
@@ -349,8 +350,7 @@ void ColorDialog::dropEvent(QDropEvent *event)
     }
 }
 
-namespace {
-QColor get_screen_color(const QPoint &global_pos)
+static QColor get_screen_color(const QPoint &global_pos)
 {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
     WId id = QApplication::desktop()->winId();
@@ -364,7 +364,6 @@ QColor get_screen_color(const QPoint &global_pos)
 #endif
 
     return img.pixel(0,0);
-}
 }
 
 void ColorDialog::mouseReleaseEvent(QMouseEvent *event)
@@ -385,3 +384,4 @@ void ColorDialog::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+} // namespace color_widgets

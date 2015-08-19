@@ -31,6 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QStyledItemDelegate>
 
+namespace color_widgets {
+
 /**
     Delegate to use a ColorSelector in a color list
 */
@@ -57,5 +59,7 @@ private slots:
     void color_changed();
     void close_editor();
 };
+
+} // namespace color_widgets
 
 #endif // COLOR_DELEGATE_HPP

@@ -27,6 +27,8 @@
 
 #include <QWidget>
 
+namespace color_widgets {
+
 /**
  * \brief Display an analog widget that allows the selection of a HSV color
  *
@@ -160,5 +162,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ColorWheel::Display_Flags)
+
+} // namespace color_widgets
 
 #endif // COLOR_WHEEL_HPP

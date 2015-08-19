@@ -29,6 +29,8 @@
 #include <QStyleOptionSlider>
 #include <QLinearGradient>
 
+namespace color_widgets {
+
 class GradientSlider::Private
 {
 public:
@@ -160,11 +162,11 @@ void GradientSlider::paintEvent(QPaintEvent *)
     painter.setBrush(p->gradient);
     painter.drawRect(1,1,geometry().width()-2,geometry().height()-2);
 
-    paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
+    detail::paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
     /*paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
 
     paint_br_border(painter,size(),palette().color(QPalette::Light),1);*/
-    paint_br_border(painter,size(),palette().color(QPalette::Midlight),0);
+    detail::paint_br_border(painter,size(),palette().color(QPalette::Midlight),0);
 
     QStyleOptionSlider opt_slider;
     initStyleOption(&opt_slider);
@@ -190,3 +192,4 @@ void GradientSlider::paintEvent(QPaintEvent *)
     style()->drawControl(QStyle::CE_ShapedFrame, &opt_frame, &painter, this);*/
 }
 
+} // namespace color_widgets

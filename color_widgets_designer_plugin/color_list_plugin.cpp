@@ -45,12 +45,12 @@ bool ColorListWidget_Plugin::isInitialized() const
 
 QWidget *ColorListWidget_Plugin::createWidget(QWidget *parent)
 {
-    return new ColorListWidget(parent);
+    return new color_widgets::ColorListWidget(parent);
 }
 
 QString ColorListWidget_Plugin::name() const
 {
-    return "ColorListWidget";
+    return "color_widgets::ColorListWidget";
 }
 
 QString ColorListWidget_Plugin::group() const
@@ -82,7 +82,7 @@ QString ColorListWidget_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"ColorListWidget\" name=\"ColorListWidget\">\n"
+           " <widget class=\"color_widgets::ColorListWidget\" name=\"ColorListWidget\">\n"
            " </widget>\n"
             "</ui>\n";
 }

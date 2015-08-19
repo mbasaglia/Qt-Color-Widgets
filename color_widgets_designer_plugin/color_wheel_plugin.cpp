@@ -42,12 +42,12 @@ bool ColorWheel_Plugin::isInitialized() const
 
 QWidget *ColorWheel_Plugin::createWidget(QWidget *parent)
 {
-    return new ColorWheel(parent);
+    return new color_widgets::ColorWheel(parent);
 }
 
 QString ColorWheel_Plugin::name() const
 {
-    return "ColorWheel";
+    return "color_widgets::ColorWheel";
 }
 
 QString ColorWheel_Plugin::group() const
@@ -57,7 +57,7 @@ QString ColorWheel_Plugin::group() const
 
 QIcon ColorWheel_Plugin::icon() const
 {
-    ColorWheel w;
+    color_widgets::ColorWheel w;
     w.resize(64,64);
     w.setWheelWidth(8);
     QPixmap pix(64,64);
@@ -83,7 +83,7 @@ bool ColorWheel_Plugin::isContainer() const
 QString ColorWheel_Plugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-           " <widget class=\"ColorWheel\" name=\"colorWheel\">\n"
+           " <widget class=\"color_widgets::ColorWheel\" name=\"colorWheel\">\n"
            "  <property name=\"sizePolicy\">\n"
            "   <sizepolicy hsizetype=\"Minimum\" vsizetype=\"Minimum\">\n"
            "    <horstretch>0</horstretch>\n"

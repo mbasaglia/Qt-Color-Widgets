@@ -47,12 +47,12 @@ bool GradientSlider_Plugin::isInitialized() const
 
 QWidget *GradientSlider_Plugin::createWidget(QWidget *parent)
 {
-    return new GradientSlider(parent);
+    return new color_widgets::GradientSlider(parent);
 }
 
 QString GradientSlider_Plugin::name() const
 {
-    return "GradientSlider";
+    return "color_widgets::GradientSlider";
 }
 
 QString GradientSlider_Plugin::group() const
@@ -62,7 +62,7 @@ QString GradientSlider_Plugin::group() const
 
 QIcon GradientSlider_Plugin::icon() const
 {
-    GradientSlider w;
+    color_widgets::GradientSlider w;
     w.resize(64,16);
     QVector<QColor> cols;
     cols.push_back(Qt::green);
@@ -94,7 +94,7 @@ QString GradientSlider_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"GradientSlider\" name=\"GradientSlider\">\n"
+           " <widget class=\"color_widgets::GradientSlider\" name=\"GradientSlider\">\n"
            " </widget>\n"
             "</ui>\n";
 }

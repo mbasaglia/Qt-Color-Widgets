@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     d.show();
 
 
-    /*ColorDialog w;
+    /*color_widgets::ColorDialog w;
     w.setColor(QColor(64,172,143,128));
     w.show();
 

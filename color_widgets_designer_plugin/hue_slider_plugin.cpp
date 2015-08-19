@@ -48,12 +48,12 @@ bool HueSlider_Plugin::isInitialized() const
 
 QWidget *HueSlider_Plugin::createWidget(QWidget *parent)
 {
-    return new HueSlider(parent);
+    return new color_widgets::HueSlider(parent);
 }
 
 QString HueSlider_Plugin::name() const
 {
-    return "HueSlider";
+    return "color_widgets::HueSlider";
 }
 
 QString HueSlider_Plugin::group() const
@@ -63,7 +63,7 @@ QString HueSlider_Plugin::group() const
 
 QIcon HueSlider_Plugin::icon() const
 {
-    HueSlider w;
+    color_widgets::HueSlider w;
     w.resize(64,16);
     QPixmap pix(64,64);
     pix.fill(Qt::transparent);
@@ -90,7 +90,7 @@ QString HueSlider_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"HueSlider\" name=\"HueSlider\">\n"
+           " <widget class=\"color_widgets::HueSlider\" name=\"HueSlider\">\n"
            " </widget>\n"
             "</ui>\n";
 }

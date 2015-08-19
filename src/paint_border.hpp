@@ -26,6 +26,9 @@
 #include <QWidget>
 #include <QPainter>
 
+namespace color_widgets {
+namespace detail {
+
 inline void paint_tl_border(QPainter &painter, QSize sz, QColor c, int inpx)
 {
     //c.setAlpha(0.5);
@@ -43,5 +46,7 @@ inline void paint_br_border(QPainter &painter, QSize sz, QColor c, int inpx)
     painter.drawLine(inpx, sz.height()-1-inpx,
                      sz.width()-1-inpx, sz.height()-1-inpx );
 }
+
+}} // color_widgets::detail
 
 #endif // PAINT_BORDER_HPP

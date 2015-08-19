@@ -26,6 +26,8 @@
 #include "color_preview.hpp"
 #include "color_wheel.hpp"
 
+namespace color_widgets {
+
 /**
  * Color preview that opens a color dialog
  */
@@ -81,5 +83,7 @@ private:
     Private * const p;
     
 };
+
+} // namespace color_widgets
 
 #endif // COLOR_SELECTOR_HPP

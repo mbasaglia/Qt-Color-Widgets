@@ -27,6 +27,8 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 
+namespace color_widgets {
+
 class ColorSelector::Private
 {
 public:
@@ -152,3 +154,5 @@ void ColorSelector::dropEvent(QDropEvent *event)
         }
     }
 }
+
+} // namespace color_widgets

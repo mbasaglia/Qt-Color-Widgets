@@ -35,21 +35,21 @@ Demo_Dialog::Demo_Dialog(QWidget *parent) :
     l << democolor;
     color_list->setColors(l);
 
-    combo_shape->addItem("Triangle",ColorWheel::SHAPE_TRIANGLE);
-    combo_shape->addItem("Square",ColorWheel::SHAPE_SQUARE);
+    combo_shape->addItem("Triangle",color_widgets::ColorWheel::SHAPE_TRIANGLE);
+    combo_shape->addItem("Square",color_widgets::ColorWheel::SHAPE_SQUARE);
     combo_shape->setCurrentIndex(combo_shape->findData(
-        QVariant(ColorWheel::defaultDisplayFlags(ColorWheel::SHAPE_FLAGS))));
+        QVariant(color_widgets::ColorWheel::defaultDisplayFlags(color_widgets::ColorWheel::SHAPE_FLAGS))));
 
-    combo_angle->addItem("Fixed",ColorWheel::ANGLE_FIXED);
-    combo_angle->addItem("Rotating",ColorWheel::ANGLE_ROTATING);
+    combo_angle->addItem("Fixed",color_widgets::ColorWheel::ANGLE_FIXED);
+    combo_angle->addItem("Rotating",color_widgets::ColorWheel::ANGLE_ROTATING);
     combo_angle->setCurrentIndex(combo_angle->findData(
-        QVariant(ColorWheel::defaultDisplayFlags(ColorWheel::ANGLE_FLAGS))));
+        QVariant(color_widgets::ColorWheel::defaultDisplayFlags(color_widgets::ColorWheel::ANGLE_FLAGS))));
 
-    combo_color->addItem("HSV",ColorWheel::COLOR_HSV);
-    combo_color->addItem("HSL",ColorWheel::COLOR_HSL);
-    combo_color->addItem("LCH",ColorWheel::COLOR_LCH);
+    combo_color->addItem("HSV",color_widgets::ColorWheel::COLOR_HSV);
+    combo_color->addItem("HSL",color_widgets::ColorWheel::COLOR_HSL);
+    combo_color->addItem("LCH",color_widgets::ColorWheel::COLOR_LCH);
     combo_color->setCurrentIndex(combo_color->findData(
-        QVariant(ColorWheel::defaultDisplayFlags(ColorWheel::COLOR_FLAGS))));
+        QVariant(color_widgets::ColorWheel::defaultDisplayFlags(color_widgets::ColorWheel::COLOR_FLAGS))));
 }
 
 void Demo_Dialog::changeEvent(QEvent *e)
@@ -67,26 +67,26 @@ void Demo_Dialog::changeEvent(QEvent *e)
 void Demo_Dialog::on_combo_shape_activated(int index)
 {
     color_wheel->setDisplayFlag(
-        ColorWheel::Display_Enum(combo_shape->itemData(index).toInt()),
-        ColorWheel::SHAPE_FLAGS);
-    ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
+        color_widgets::ColorWheel::Display_Enum(combo_shape->itemData(index).toInt()),
+        color_widgets::ColorWheel::SHAPE_FLAGS);
+    color_widgets::ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
     color_list->setWheelFlags(color_wheel->displayFlags());
 }
 
 void Demo_Dialog::on_combo_angle_activated(int index)
 {
     color_wheel->setDisplayFlag(
-        ColorWheel::Display_Enum(combo_angle->itemData(index).toInt()),
-        ColorWheel::ANGLE_FLAGS);
-    ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
+        color_widgets::ColorWheel::Display_Enum(combo_angle->itemData(index).toInt()),
+        color_widgets::ColorWheel::ANGLE_FLAGS);
+    color_widgets::ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
     color_list->setWheelFlags(color_wheel->displayFlags());
 }
 
 void Demo_Dialog::on_combo_color_activated(int index)
 {
     color_wheel->setDisplayFlag(
-        ColorWheel::Display_Enum(combo_color->itemData(index).toInt()),
-        ColorWheel::COLOR_FLAGS);
-    ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
+        color_widgets::ColorWheel::Display_Enum(combo_color->itemData(index).toInt()),
+        color_widgets::ColorWheel::COLOR_FLAGS);
+    color_widgets::ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
     color_list->setWheelFlags(color_wheel->displayFlags());
 }

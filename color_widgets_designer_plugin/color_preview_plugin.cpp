@@ -47,7 +47,7 @@ bool ColorPreview_Plugin::isInitialized() const
 
 QWidget *ColorPreview_Plugin::createWidget(QWidget *parent)
 {
-    return new ColorPreview(parent);
+    return new color_widgets::ColorPreview(parent);
 }
 
 QString ColorPreview_Plugin::name() const

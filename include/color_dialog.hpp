@@ -31,6 +31,8 @@
 
 class QAbstractButton;
 
+namespace color_widgets {
+
 class QCP_EXPORT ColorDialog : public QDialog
 {
     Q_OBJECT
@@ -139,5 +141,7 @@ private:
     class Private;
     Private * const p;
 };
+
+} // namespace color_widgets
 
 #endif // COLOR_DIALOG_HPP

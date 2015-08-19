@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "color_list_widget.hpp"
 #include "color_selector.hpp"
 
+namespace color_widgets {
+
 class ColorListWidget::Private
 {
 public:
@@ -130,3 +132,5 @@ void ColorListWidget::setWheelFlags(ColorWheel::Display_Flags flags)
         emit wheelFlagsChanged(flags);
     }
 }
+
+} // namespace color_widgets
