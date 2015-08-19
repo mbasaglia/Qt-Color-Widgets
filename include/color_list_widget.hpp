@@ -30,16 +30,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "abstract_widget_list.hpp"
 #include "color_wheel.hpp"
 
-class QCP_EXPORT Color_List_Widget : public Abstract_Widget_List
+class QCP_EXPORT ColorListWidget : public AbstractWidgetList
 {
     Q_OBJECT
 
     Q_PROPERTY(QList<QColor> colors READ colors WRITE setColors NOTIFY colorsChanged )
-    Q_PROPERTY(Color_Wheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
+    Q_PROPERTY(ColorWheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
 
 public:
-    explicit Color_List_Widget(QWidget *parent = 0);
-    ~Color_List_Widget();
+    explicit ColorListWidget(QWidget *parent = 0);
+    ~ColorListWidget();
 
     QList<QColor> colors() const;
     void setColors(const QList<QColor>& colors);
@@ -48,14 +48,14 @@ public:
 
     void append();
 
-    Color_Wheel::Display_Flags wheelFlags() const;
+    ColorWheel::Display_Flags wheelFlags() const;
 
 signals:
     void colorsChanged(const QList<QColor>&);
-    void wheelFlagsChanged(Color_Wheel::Display_Flags flags);
+    void wheelFlagsChanged(ColorWheel::Display_Flags flags);
 
 public slots:
-    void setWheelFlags(Color_Wheel::Display_Flags flags);
+    void setWheelFlags(ColorWheel::Display_Flags flags);
 
 private slots:
     void emit_changed();

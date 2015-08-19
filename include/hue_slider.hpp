@@ -28,16 +28,16 @@
 /**
  * \brief A slider for selecting a hue value
  */
-class QCP_EXPORT Hue_Slider : public Gradient_Slider
+class QCP_EXPORT HueSlider : public GradientSlider
 {
     Q_OBJECT
     Q_PROPERTY(qreal colorSaturation READ colorSaturation WRITE setColorSaturation)
     Q_PROPERTY(qreal colorValue READ colorValue WRITE setColorValue)
 
 public:
-    explicit Hue_Slider(QWidget *parent = 0);
-    explicit Hue_Slider(Qt::Orientation orientation, QWidget *parent = 0);
-    ~Hue_Slider();
+    explicit HueSlider(QWidget *parent = 0);
+    explicit HueSlider(Qt::Orientation orientation, QWidget *parent = 0);
+    ~HueSlider();
 
     qreal colorSaturation() const;
     void setColorSaturation(qreal value);

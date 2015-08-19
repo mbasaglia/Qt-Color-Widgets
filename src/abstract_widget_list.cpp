@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QHeaderView>
 #include <QPushButton>
 
-class Abstract_Widget_List::Private
+class AbstractWidgetList::Private
 {
 public:
     QList<QWidget*> widgets;
@@ -40,7 +40,7 @@ public:
     QTableWidget *table;
 };
 
-Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
+AbstractWidgetList::AbstractWidgetList(QWidget *parent) :
     QWidget(parent), p(new Private)
 {
     connect(&p->mapper_up,SIGNAL(mapped(QWidget*)),SLOT(up_clicked(QWidget*)));
@@ -76,22 +76,22 @@ Abstract_Widget_List::Abstract_Widget_List(QWidget *parent) :
 
 }
 
-Abstract_Widget_List::~Abstract_Widget_List()
+AbstractWidgetList::~AbstractWidgetList()
 {
     delete p;
 }
 
-int Abstract_Widget_List::count() const
+int AbstractWidgetList::count() const
 {
     return p->widgets.size();
 }
 
-void Abstract_Widget_List::setRowHeight(int row, int height)
+void AbstractWidgetList::setRowHeight(int row, int height)
 {
     p->table->setRowHeight(row,height);
 }
 
-void Abstract_Widget_List::clear()
+void AbstractWidgetList::clear()
 {
     p->widgets.clear();
     while(p->table->rowCount() > 0)
@@ -99,7 +99,7 @@ void Abstract_Widget_List::clear()
 }
 
 
-void Abstract_Widget_List::remove(int i)
+void AbstractWidgetList::remove(int i)
 {
     if ( isValidRow(i) )
     {
@@ -115,7 +115,7 @@ void Abstract_Widget_List::remove(int i)
 }
 
 
-void Abstract_Widget_List::appendWidget(QWidget *w)
+void AbstractWidgetList::appendWidget(QWidget *w)
 {
     int row = count();
     p->table->insertRow(row);
@@ -137,7 +137,7 @@ void Abstract_Widget_List::appendWidget(QWidget *w)
     p->widgets.push_back(w);
 }
 
-QWidget *Abstract_Widget_List::widget(int i)
+QWidget *AbstractWidgetList::widget(int i)
 {
     if ( isValidRow(i) )
         return p->widgets[i];
@@ -145,7 +145,7 @@ QWidget *Abstract_Widget_List::widget(int i)
 }
 
 
-QWidget *Abstract_Widget_List::create_button(QWidget *data, QSignalMapper *mapper,
+QWidget *AbstractWidgetList::create_button(QWidget *data, QSignalMapper *mapper,
                                              QString icon_name,
                                              QString text, QString tooltip) const
 {
@@ -159,20 +159,20 @@ QWidget *Abstract_Widget_List::create_button(QWidget *data, QSignalMapper *mappe
     return btn;
 }
 
-void Abstract_Widget_List::remove_clicked(QWidget *w)
+void AbstractWidgetList::remove_clicked(QWidget *w)
 {
     int row = p->widgets.indexOf(w);
     remove(row);
 }
 
-void Abstract_Widget_List::up_clicked(QWidget *w)
+void AbstractWidgetList::up_clicked(QWidget *w)
 {
     int row = p->widgets.indexOf(w);
     if ( row > 0 )
         swap(row,row-1);
 }
 
-void Abstract_Widget_List::down_clicked(QWidget *w)
+void AbstractWidgetList::down_clicked(QWidget *w)
 {
     int row = p->widgets.indexOf(w);
     if ( row+1 < count() )

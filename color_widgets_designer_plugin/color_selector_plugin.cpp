@@ -26,13 +26,13 @@
 #include "color_selector.hpp"
 #include <QtPlugin>
 
-Color_Selector_Plugin::Color_Selector_Plugin(QObject *parent)
+ColorSelector_Plugin::ColorSelector_Plugin(QObject *parent)
     : QObject(parent), initialized(false)
 {
 }
 
 
-void Color_Selector_Plugin::initialize(QDesignerFormEditorInterface *)
+void ColorSelector_Plugin::initialize(QDesignerFormEditorInterface *)
 {
     if (initialized)
         return;
@@ -40,56 +40,56 @@ void Color_Selector_Plugin::initialize(QDesignerFormEditorInterface *)
     initialized = true;
 }
 
-bool Color_Selector_Plugin::isInitialized() const
+bool ColorSelector_Plugin::isInitialized() const
 {
     return initialized;
 }
 
-QWidget *Color_Selector_Plugin::createWidget(QWidget *parent)
+QWidget *ColorSelector_Plugin::createWidget(QWidget *parent)
 {
-    return new Color_Selector(parent);
+    return new ColorSelector(parent);
 }
 
-QString Color_Selector_Plugin::name() const
+QString ColorSelector_Plugin::name() const
 {
-    return "Color_Selector";
+    return "ColorSelector";
 }
 
-QString Color_Selector_Plugin::group() const
+QString ColorSelector_Plugin::group() const
 {
     return "Color Widgets";
 }
 
-QIcon Color_Selector_Plugin::icon() const
+QIcon ColorSelector_Plugin::icon() const
 {
     return QIcon();
 }
 
-QString Color_Selector_Plugin::toolTip() const
+QString ColorSelector_Plugin::toolTip() const
 {
     return "Display a color and opens a color dialog on click";
 }
 
-QString Color_Selector_Plugin::whatsThis() const
+QString ColorSelector_Plugin::whatsThis() const
 {
     return toolTip();
 }
 
-bool Color_Selector_Plugin::isContainer() const
+bool ColorSelector_Plugin::isContainer() const
 {
     return false;
 }
 
-QString Color_Selector_Plugin::domXml() const
+QString ColorSelector_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"Color_Selector\" name=\"Color_Selector\">\n"
+           " <widget class=\"ColorSelector\" name=\"ColorSelector\">\n"
            " </widget>\n"
             "</ui>\n";
 }
 
-QString Color_Selector_Plugin::includeFile() const
+QString ColorSelector_Plugin::includeFile() const
 {
     return "color_selector.hpp";
 }

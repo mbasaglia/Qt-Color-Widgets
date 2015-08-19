@@ -30,23 +30,23 @@
 #include "color_selector_plugin.hpp"
 #include "color_list_plugin.hpp"
 
-Color_Widget_Plugin_Collection::Color_Widget_Plugin_Collection(QObject *parent) :
+ColorWidgets_PluginCollection::ColorWidgets_PluginCollection(QObject *parent) :
     QObject(parent)
 {
-    widgets.push_back(new Color_Preview_Plugin(this));
-    widgets.push_back(new Color_Wheel_Plugin(this));
-    widgets.push_back(new Gradient_Slider_Plugin(this));
-    widgets.push_back(new Hue_Slider_Plugin(this));
-    widgets.push_back(new Color_Selector_Plugin(this));
-    widgets.push_back(new Color_List_Plugin(this));
+    widgets.push_back(new ColorPreview_Plugin(this));
+    widgets.push_back(new ColorWheel_Plugin(this));
+    widgets.push_back(new GradientSlider_Plugin(this));
+    widgets.push_back(new HueSlider_Plugin(this));
+    widgets.push_back(new ColorSelector_Plugin(this));
+    widgets.push_back(new ColorListWidget_Plugin(this));
 }
 
-QList<QDesignerCustomWidgetInterface *> Color_Widget_Plugin_Collection::customWidgets() const
+QList<QDesignerCustomWidgetInterface *> ColorWidgets_PluginCollection::customWidgets() const
 {
     return widgets;
 }
 
 #ifndef FRAMEWORK_QT5
 #include <QtCore/qplugin.h>
-Q_EXPORT_PLUGIN2(color_widgets, Color_Widget_Plugin_Collection)
+Q_EXPORT_PLUGIN2(color_widgets, ColorWidgets_PluginCollection)
 #endif

@@ -3,13 +3,13 @@
 
 #include <QDesignerCustomWidgetInterface>
 
-class Hue_Slider_Plugin : public QObject, public QDesignerCustomWidgetInterface
+class HueSlider_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 
 public:
-    Hue_Slider_Plugin(QObject *parent = 0);
+    HueSlider_Plugin(QObject *parent = 0);
 
     void initialize(QDesignerFormEditorInterface *core);
     bool isInitialized() const;

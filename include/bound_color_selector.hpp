@@ -32,13 +32,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /**
  *  A color selector bound to a color reference
  */
-class QCP_EXPORT Bound_Color_Selector : public Color_Selector
+class QCP_EXPORT BoundColorSelector : public ColorSelector
 {
     Q_OBJECT
 private:
     QColor* ref;
 public:
-    explicit Bound_Color_Selector(QColor* reference, QWidget *parent = 0);
+    explicit BoundColorSelector(QColor* reference, QWidget *parent = 0);
 
 private slots:
     void update_reference(QColor);

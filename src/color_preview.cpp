@@ -31,7 +31,7 @@
 #include <QDrag>
 #include <QMimeData>
 
-class Color_Preview::Private
+class ColorPreview::Private
 {
 public:
     QColor col; ///< color to be viewed
@@ -43,55 +43,55 @@ public:
     {}
 };
 
-Color_Preview::Color_Preview(QWidget *parent) :
+ColorPreview::ColorPreview(QWidget *parent) :
     QWidget(parent), p(new Private)
 {
     p->back.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
 }
 
-Color_Preview::~Color_Preview()
+ColorPreview::~ColorPreview()
 {
     delete p;
 }
 
-void Color_Preview::setBackground(const QBrush &bk)
+void ColorPreview::setBackground(const QBrush &bk)
 {
     p->back = bk;
     update();
 }
 
-QBrush Color_Preview::background() const
+QBrush ColorPreview::background() const
 {
     return p->back;
 }
 
-Color_Preview::Display_Mode Color_Preview::displayMode() const
+ColorPreview::Display_Mode ColorPreview::displayMode() const
 {
     return p->display_mode;
 }
 
-void Color_Preview::setDisplayMode(Display_Mode m)
+void ColorPreview::setDisplayMode(Display_Mode m)
 {
     p->display_mode = m;
     update();
 }
 
-QColor Color_Preview::color() const
+QColor ColorPreview::color() const
 {
     return p->col;
 }
 
-QColor Color_Preview::comparisonColor() const
+QColor ColorPreview::comparisonColor() const
 {
     return p->comparison;
 }
 
-QSize Color_Preview::sizeHint() const
+QSize ColorPreview::sizeHint() const
 {
     return QSize(24,24);
 }
 
-void Color_Preview::paint(QPainter &painter, QRect rect) const
+void ColorPreview::paint(QPainter &painter, QRect rect) const
 {
     QColor c1, c2;
     switch(p->display_mode) {
@@ -126,38 +126,38 @@ void Color_Preview::paint(QPainter &painter, QRect rect) const
     paint_br_border(painter,size(),palette().color(QPalette::Button),0);
 }
 
-void Color_Preview::setColor(const QColor &c)
+void ColorPreview::setColor(const QColor &c)
 {
     p->col = c;
     update();
     emit colorChanged(c);
 }
 
-void Color_Preview::setComparisonColor(const QColor &c)
+void ColorPreview::setComparisonColor(const QColor &c)
 {
     p->comparison = c;
     update();
 }
 
-void Color_Preview::paintEvent(QPaintEvent *)
+void ColorPreview::paintEvent(QPaintEvent *)
 {
     QStylePainter painter(this);
 
     paint(painter, geometry());
 }
 
-void Color_Preview::resizeEvent(QResizeEvent *)
+void ColorPreview::resizeEvent(QResizeEvent *)
 {
     update();
 }
 
-void Color_Preview::mouseReleaseEvent(QMouseEvent * ev)
+void ColorPreview::mouseReleaseEvent(QMouseEvent * ev)
 {
     if ( QRect(QPoint(0,0),size()).contains(ev->pos()) )
         emit clicked();
 }
 
-void Color_Preview::mouseMoveEvent(QMouseEvent *ev)
+void ColorPreview::mouseMoveEvent(QMouseEvent *ev)
 {
 
     if ( ev->buttons() &Qt::LeftButton && !QRect(QPoint(0,0),size()).contains(ev->pos()) )

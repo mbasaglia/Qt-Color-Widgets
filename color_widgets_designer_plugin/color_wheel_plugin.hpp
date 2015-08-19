@@ -28,13 +28,13 @@
 #include <QObject>
 #include <QDesignerCustomWidgetInterface>
 
-class Color_Wheel_Plugin : public QObject, public QDesignerCustomWidgetInterface
+class ColorWheel_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 
 public:
-    Color_Wheel_Plugin(QObject *parent = 0);
+    ColorWheel_Plugin(QObject *parent = 0);
 
     void initialize(QDesignerFormEditorInterface *core);
     bool isInitialized() const;

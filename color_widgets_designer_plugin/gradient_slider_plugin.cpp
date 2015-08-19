@@ -26,13 +26,13 @@
 #include "gradient_slider.hpp"
 #include <QtPlugin>
 
-Gradient_Slider_Plugin::Gradient_Slider_Plugin(QObject *parent)
+GradientSlider_Plugin::GradientSlider_Plugin(QObject *parent)
     : QObject(parent), initialized(false)
 {
 }
 
 
-void Gradient_Slider_Plugin::initialize(QDesignerFormEditorInterface *)
+void GradientSlider_Plugin::initialize(QDesignerFormEditorInterface *)
 {
     if (initialized)
         return;
@@ -40,29 +40,29 @@ void Gradient_Slider_Plugin::initialize(QDesignerFormEditorInterface *)
     initialized = true;
 }
 
-bool Gradient_Slider_Plugin::isInitialized() const
+bool GradientSlider_Plugin::isInitialized() const
 {
     return initialized;
 }
 
-QWidget *Gradient_Slider_Plugin::createWidget(QWidget *parent)
+QWidget *GradientSlider_Plugin::createWidget(QWidget *parent)
 {
-    return new Gradient_Slider(parent);
+    return new GradientSlider(parent);
 }
 
-QString Gradient_Slider_Plugin::name() const
+QString GradientSlider_Plugin::name() const
 {
-    return "Gradient_Slider";
+    return "GradientSlider";
 }
 
-QString Gradient_Slider_Plugin::group() const
+QString GradientSlider_Plugin::group() const
 {
     return "Color Widgets";
 }
 
-QIcon Gradient_Slider_Plugin::icon() const
+QIcon GradientSlider_Plugin::icon() const
 {
-    Gradient_Slider w;
+    GradientSlider w;
     w.resize(64,16);
     QVector<QColor> cols;
     cols.push_back(Qt::green);
@@ -75,31 +75,31 @@ QIcon Gradient_Slider_Plugin::icon() const
     return QIcon(pix);
 }
 
-QString Gradient_Slider_Plugin::toolTip() const
+QString GradientSlider_Plugin::toolTip() const
 {
     return "Slider over a gradient";
 }
 
-QString Gradient_Slider_Plugin::whatsThis() const
+QString GradientSlider_Plugin::whatsThis() const
 {
     return toolTip();
 }
 
-bool Gradient_Slider_Plugin::isContainer() const
+bool GradientSlider_Plugin::isContainer() const
 {
     return false;
 }
 
-QString Gradient_Slider_Plugin::domXml() const
+QString GradientSlider_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"Gradient_Slider\" name=\"Gradient_Slider\">\n"
+           " <widget class=\"GradientSlider\" name=\"GradientSlider\">\n"
            " </widget>\n"
             "</ui>\n";
 }
 
-QString Gradient_Slider_Plugin::includeFile() const
+QString GradientSlider_Plugin::includeFile() const
 {
     return "gradient_slider.hpp";
 }

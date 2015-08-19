@@ -28,19 +28,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "color_selector.hpp"
 #include "color_dialog.hpp"
 
-Color_Delegate::Color_Delegate(QWidget *parent) :
+ColorDelegate::ColorDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
 {
 }
 
-void Color_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+void ColorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
     if (index.data().canConvert<QColor>())
     {
         QColor col = qvariant_cast<QColor>(index.data());
 
-        Color_Preview cp;
+        ColorPreview cp;
         cp.setColor(col);
         cp.paint(*painter,option.rect);
 
@@ -49,13 +49,13 @@ void Color_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         QStyledItemDelegate::paint(painter, option, index);
 }
 
-QWidget *Color_Delegate::createEditor(QWidget *parent,
+QWidget *ColorDelegate::createEditor(QWidget *parent,
                                       const QStyleOptionViewItem &option,
                                       const QModelIndex &index) const
 {
     if (index.data().canConvert<QColor>())
     {
-        Color_Dialog *editor = new Color_Dialog(parent);
+        ColorDialog *editor = new ColorDialog(parent);
         editor->setMinimumSize(editor->sizeHint());
         connect(editor, SIGNAL(colorChanged(QColor)), this, SLOT(color_changed()));
         connect(editor, SIGNAL(accepted()), this, SLOT(close_editor()));
@@ -65,42 +65,42 @@ QWidget *Color_Delegate::createEditor(QWidget *parent,
         return QStyledItemDelegate::createEditor(parent, option, index);
 }
 
-void Color_Delegate::color_changed()
+void ColorDelegate::color_changed()
 {
-    Color_Dialog *editor = qobject_cast<Color_Dialog*>(sender());
+    ColorDialog *editor = qobject_cast<ColorDialog*>(sender());
     emit commitData(editor);
 }
-void Color_Delegate::close_editor()
+void ColorDelegate::close_editor()
 {
-    Color_Dialog *editor = qobject_cast<Color_Dialog*>(sender());
+    ColorDialog *editor = qobject_cast<ColorDialog*>(sender());
     emit closeEditor(editor);
 }
 
-void Color_Delegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void ColorDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 
     if (index.data().canConvert<QColor>())
     {
-        Color_Dialog *selector = qobject_cast<Color_Dialog*>(editor);
+        ColorDialog *selector = qobject_cast<ColorDialog*>(editor);
         selector->setColor(qvariant_cast<QColor>(index.data()));
     }
     else
         QStyledItemDelegate::setEditorData(editor, index);
 }
 
-void Color_Delegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+void ColorDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                   const QModelIndex &index) const
 {
     if (index.data().canConvert<QColor>())
     {
-        Color_Dialog *selector = qobject_cast<Color_Dialog *>(editor);
+        ColorDialog *selector = qobject_cast<ColorDialog *>(editor);
         model->setData(index, QVariant::fromValue(selector->color()));
     }
     else
         QStyledItemDelegate::setModelData(editor, model, index);
 }
 
-QSize Color_Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.data().canConvert<QColor>())
         return QSize(24,16);

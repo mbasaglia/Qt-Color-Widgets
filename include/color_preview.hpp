@@ -31,7 +31,7 @@
 /**
     Simple widget that shows a preview of a color
 */
-class QCP_EXPORT Color_Preview : public QWidget
+class QCP_EXPORT ColorPreview : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
@@ -48,8 +48,8 @@ public:
         SplitColor  ///< Show current and comparison colors side by side
     };
 
-    explicit Color_Preview(QWidget *parent = 0);
-    ~Color_Preview();
+    explicit ColorPreview(QWidget *parent = 0);
+    ~ColorPreview();
 
     /// Get the background visible under transparent colors
     QBrush background() const;

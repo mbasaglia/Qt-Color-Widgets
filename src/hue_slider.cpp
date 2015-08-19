@@ -23,16 +23,16 @@
 
 #include "hue_slider.hpp"
 
-class Hue_Slider::Private
+class HueSlider::Private
 {
 private:
-    Hue_Slider *w;
+    HueSlider *w;
 
 public:
     qreal saturation;
     qreal value;
 
-    Private(Hue_Slider *widget) : w(widget), saturation(1), value(1)
+    Private(HueSlider *widget) : w(widget), saturation(1), value(1)
     {
         updateGradient();
     }
@@ -48,38 +48,38 @@ public:
     }
 };
 
-Hue_Slider::Hue_Slider(QWidget *parent) :
-    Gradient_Slider(parent), p(new Private(this))
+HueSlider::HueSlider(QWidget *parent) :
+    GradientSlider(parent), p(new Private(this))
 {
 }
 
-Hue_Slider::Hue_Slider(Qt::Orientation orientation, QWidget *parent) :
-    Gradient_Slider(orientation, parent), p(new Private(this))
+HueSlider::HueSlider(Qt::Orientation orientation, QWidget *parent) :
+    GradientSlider(orientation, parent), p(new Private(this))
 {
 }
 
-Hue_Slider::~Hue_Slider()
+HueSlider::~HueSlider()
 {
 	delete p;
 }
 
-qreal Hue_Slider::colorSaturation() const
+qreal HueSlider::colorSaturation() const
 {
     return p->saturation;
 }
 
-void Hue_Slider::setColorSaturation(qreal s)
+void HueSlider::setColorSaturation(qreal s)
 {
     p->saturation = qBound(0.0, s, 1.0);
     p->updateGradient();
 }
 
-qreal Hue_Slider::colorValue() const
+qreal HueSlider::colorValue() const
 {
     return p->value;
 }
 
-void Hue_Slider::setColorValue(qreal v)
+void HueSlider::setColorValue(qreal v)
 {
     p->value = qBound(0.0, v, 1.0);
     p->updateGradient();

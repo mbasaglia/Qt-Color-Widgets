@@ -27,13 +27,13 @@
 #include "hue_slider.hpp"
 #include <QtPlugin>
 
-Hue_Slider_Plugin::Hue_Slider_Plugin(QObject *parent)
+HueSlider_Plugin::HueSlider_Plugin(QObject *parent)
     : QObject(parent), initialized(false)
 {
 }
 
 
-void Hue_Slider_Plugin::initialize(QDesignerFormEditorInterface *)
+void HueSlider_Plugin::initialize(QDesignerFormEditorInterface *)
 {
     if (initialized)
         return;
@@ -41,29 +41,29 @@ void Hue_Slider_Plugin::initialize(QDesignerFormEditorInterface *)
     initialized = true;
 }
 
-bool Hue_Slider_Plugin::isInitialized() const
+bool HueSlider_Plugin::isInitialized() const
 {
     return initialized;
 }
 
-QWidget *Hue_Slider_Plugin::createWidget(QWidget *parent)
+QWidget *HueSlider_Plugin::createWidget(QWidget *parent)
 {
-    return new Hue_Slider(parent);
+    return new HueSlider(parent);
 }
 
-QString Hue_Slider_Plugin::name() const
+QString HueSlider_Plugin::name() const
 {
-    return "Hue_Slider";
+    return "HueSlider";
 }
 
-QString Hue_Slider_Plugin::group() const
+QString HueSlider_Plugin::group() const
 {
     return "Color Widgets";
 }
 
-QIcon Hue_Slider_Plugin::icon() const
+QIcon HueSlider_Plugin::icon() const
 {
-    Hue_Slider w;
+    HueSlider w;
     w.resize(64,16);
     QPixmap pix(64,64);
     pix.fill(Qt::transparent);
@@ -71,31 +71,31 @@ QIcon Hue_Slider_Plugin::icon() const
     return QIcon(pix);
 }
 
-QString Hue_Slider_Plugin::toolTip() const
+QString HueSlider_Plugin::toolTip() const
 {
     return "Slider over a hue gradient";
 }
 
-QString Hue_Slider_Plugin::whatsThis() const
+QString HueSlider_Plugin::whatsThis() const
 {
     return toolTip();
 }
 
-bool Hue_Slider_Plugin::isContainer() const
+bool HueSlider_Plugin::isContainer() const
 {
     return false;
 }
 
-QString Hue_Slider_Plugin::domXml() const
+QString HueSlider_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"Hue_Slider\" name=\"Hue_Slider\">\n"
+           " <widget class=\"HueSlider\" name=\"HueSlider\">\n"
            " </widget>\n"
             "</ui>\n";
 }
 
-QString Hue_Slider_Plugin::includeFile() const
+QString HueSlider_Plugin::includeFile() const
 {
     return "hue_slider.hpp";
 }

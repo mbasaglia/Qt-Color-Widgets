@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Color_Dialog</class>
- <widget class="QDialog" name="Color_Dialog">
+ <class>ColorDialog</class>
+ <widget class="QDialog" name="ColorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>491</width>
-    <height>313</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="Color_Wheel" name="wheel">
+        <widget class="ColorWheel" name="wheel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -34,9 +34,9 @@
         </widget>
        </item>
        <item>
-        <widget class="Color_Preview" name="preview">
+        <widget class="ColorPreview" name="preview">
          <property name="display_mode" stdset="0">
-          <enum>Color_Preview::SplitColor</enum>
+          <enum>ColorPreview::SplitColor</enum>
          </property>
         </widget>
        </item>
@@ -45,7 +45,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout">
        <item row="2" column="1">
-        <widget class="Gradient_Slider" name="slide_value">
+        <widget class="GradientSlider" name="slide_value">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -69,7 +69,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="Gradient_Slider" name="slide_saturation">
+        <widget class="GradientSlider" name="slide_saturation">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -93,7 +93,7 @@
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="Gradient_Slider" name="slide_alpha">
+        <widget class="GradientSlider" name="slide_alpha">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -103,7 +103,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="Gradient_Slider" name="slide_red">
+        <widget class="GradientSlider" name="slide_red">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -113,7 +113,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="Gradient_Slider" name="slide_green">
+        <widget class="GradientSlider" name="slide_green">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -151,7 +151,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="Gradient_Slider" name="slide_blue">
+        <widget class="GradientSlider" name="slide_blue">
          <property name="maximum">
           <number>255</number>
          </property>
@@ -243,7 +243,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="Hue_Slider" name="slide_hue">
+        <widget class="HueSlider" name="slide_hue">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -268,13 +268,13 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>Color_Preview</class>
+   <class>ColorPreview</class>
    <extends>QWidget</extends>
    <header>color_preview.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Color_Wheel</class>
+   <class>ColorWheel</class>
    <extends>QWidget</extends>
    <header>color_wheel.hpp</header>
    <container>1</container>
@@ -284,13 +284,13 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>Gradient_Slider</class>
+   <class>GradientSlider</class>
    <extends>QSlider</extends>
    <header>gradient_slider.hpp</header>
   </customwidget>
   <customwidget>
-   <class>Hue_Slider</class>
-   <extends>Gradient_Slider</extends>
+   <class>HueSlider</class>
+   <extends>GradientSlider</extends>
    <header>hue_slider.hpp</header>
   </customwidget>
  </customwidgets>
@@ -299,7 +299,7 @@
   <connection>
    <sender>slide_saturation</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -315,7 +315,7 @@
   <connection>
    <sender>slide_value</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -331,7 +331,7 @@
   <connection>
    <sender>slide_red</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -347,7 +347,7 @@
   <connection>
    <sender>slide_green</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -363,7 +363,7 @@
   <connection>
    <sender>slide_blue</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>set_rgb()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -379,7 +379,7 @@
   <connection>
    <sender>slide_alpha</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>update_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -395,7 +395,7 @@
   <connection>
    <sender>wheel</sender>
    <signal>colorSelected(QColor)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>update_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -635,7 +635,7 @@
   <connection>
    <sender>slide_hue</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>set_hsv()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -651,7 +651,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -667,7 +667,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Color_Dialog</receiver>
+   <receiver>ColorDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -39,16 +39,16 @@ isEmpty(PREFIX) {
 target.path = $$PREFIX/lib
 headers.path = $$PREFIX/include/QtColorPicker
 headers.files = \
-	include/Abstract_Widget_List \
-	include/Bound_Color_Selector \
-	include/Color_Delegate \
-	include/Color_Dialog \
-	include/Color_List_Widget \
-	include/Color_Preview \
-	include/Color_Selector \
-	include/Color_Wheel \
-	include/Gradient_Slider \
-	include/Hue_Slider \
+	include/AbstractWidgetList \
+	include/BoundColorSelector \
+	include/ColorDelegate \
+	include/ColorDialog \
+	include/ColorListWidget \
+	include/ColorPreview \
+	include/ColorSelector \
+	include/ColorWheel \
+	include/GradientSlider \
+	include/HueSlider \
 	include/abstract_widget_list.hpp \
 	include/color_delegate.hpp \
 	include/color_list_widget.hpp \

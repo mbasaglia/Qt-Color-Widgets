@@ -27,19 +27,19 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 
-class Color_Selector::Private
+class ColorSelector::Private
 {
 public:
     Update_Mode update_mode;
-    Color_Dialog *dialog;
+    ColorDialog *dialog;
     QColor old_color;
 
-    Private(QWidget *widget) : dialog(new Color_Dialog(widget))
+    Private(QWidget *widget) : dialog(new ColorDialog(widget))
     {}
 };
 
-Color_Selector::Color_Selector(QWidget *parent) :
-    Color_Preview(parent), p(new Private(this))
+ColorSelector::ColorSelector(QWidget *parent) :
+    ColorPreview(parent), p(new Private(this))
 {
     setUpdateMode(Continuous);
     p->old_color = color();
@@ -48,43 +48,43 @@ Color_Selector::Color_Selector(QWidget *parent) :
     connect(this,SIGNAL(colorChanged(QColor)),this,SLOT(update_old_color(QColor)));
     connect(p->dialog,SIGNAL(rejected()),this,SLOT(reject_dialog()));
     connect(p->dialog,SIGNAL(colorSelected(QColor)), this, SLOT(accept_dialog()));
-    connect(p->dialog,SIGNAL(wheelFlagsChanged(Color_Wheel::Display_Flags)),
-                SIGNAL(wheelFlagsChanged(Color_Wheel::Display_Flags)));
+    connect(p->dialog,SIGNAL(wheelFlagsChanged(ColorWheel::Display_Flags)),
+                SIGNAL(wheelFlagsChanged(ColorWheel::Display_Flags)));
 
     setAcceptDrops(true);
 }
 
-Color_Selector::~Color_Selector()
+ColorSelector::~ColorSelector()
 {
     delete p;
 }
 
-Color_Selector::Update_Mode Color_Selector::updateMode() const
+ColorSelector::Update_Mode ColorSelector::updateMode() const
 {
     return p->update_mode;
 }
 
-void Color_Selector::setUpdateMode(Update_Mode m)
+void ColorSelector::setUpdateMode(Update_Mode m)
 {
     p->update_mode = m;
 }
 
-Qt::WindowModality Color_Selector::dialogModality() const
+Qt::WindowModality ColorSelector::dialogModality() const
 {
     return p->dialog->windowModality();
 }
 
-void Color_Selector::setDialogModality(Qt::WindowModality m)
+void ColorSelector::setDialogModality(Qt::WindowModality m)
 {
     p->dialog->setWindowModality(m);
 }
 
-Color_Wheel::Display_Flags Color_Selector::wheelFlags() const
+ColorWheel::Display_Flags ColorSelector::wheelFlags() const
 {
     return p->dialog->wheelFlags();
 }
 
-void Color_Selector::showDialog()
+void ColorSelector::showDialog()
 {
     p->old_color = color();
     p->dialog->setColor(color());
@@ -92,12 +92,12 @@ void Color_Selector::showDialog()
     p->dialog->show();
 }
 
-void Color_Selector::setWheelFlags(Color_Wheel::Display_Flags flags)
+void ColorSelector::setWheelFlags(ColorWheel::Display_Flags flags)
 {
     p->dialog->setWheelFlags(flags);
 }
 
-void Color_Selector::connect_dialog()
+void ColorSelector::connect_dialog()
 {
     if (p->update_mode == Continuous)
         connect(p->dialog, SIGNAL(colorChanged(QColor)), this, SLOT(setColor(QColor)), Qt::UniqueConnection);
@@ -105,29 +105,29 @@ void Color_Selector::connect_dialog()
         disconnect_dialog();
 }
 
-void Color_Selector::disconnect_dialog()
+void ColorSelector::disconnect_dialog()
 {
     disconnect(p->dialog, SIGNAL(colorChanged(QColor)), this, SLOT(setColor(QColor)));
 }
 
-void Color_Selector::accept_dialog()
+void ColorSelector::accept_dialog()
 {
     setColor(p->dialog->color());
     p->old_color = color();
 }
 
-void Color_Selector::reject_dialog()
+void ColorSelector::reject_dialog()
 {
     setColor(p->old_color);
 }
 
-void Color_Selector::update_old_color(const QColor &c)
+void ColorSelector::update_old_color(const QColor &c)
 {
     if (!p->dialog->isVisible())
         p->old_color = c;
 }
 
-void Color_Selector::dragEnterEvent(QDragEnterEvent *event)
+void ColorSelector::dragEnterEvent(QDragEnterEvent *event)
 {
     if ( event->mimeData()->hasColor() ||
          ( event->mimeData()->hasText() && QColor(event->mimeData()->text()).isValid() ) )
@@ -135,7 +135,7 @@ void Color_Selector::dragEnterEvent(QDragEnterEvent *event)
 }
 
 
-void Color_Selector::dropEvent(QDropEvent *event)
+void ColorSelector::dropEvent(QDropEvent *event)
 {
     if ( event->mimeData()->hasColor() )
     {

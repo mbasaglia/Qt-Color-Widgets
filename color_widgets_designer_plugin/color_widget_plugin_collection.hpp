@@ -27,7 +27,7 @@
 
 #include <QDesignerCustomWidgetCollectionInterface>
 
-class Color_Widget_Plugin_Collection : public QObject, public QDesignerCustomWidgetCollectionInterface
+class ColorWidgets_PluginCollection : public QObject, public QDesignerCustomWidgetCollectionInterface
 {
     Q_OBJECT
 #ifdef FRAMEWORK_QT5
@@ -36,7 +36,7 @@ class Color_Widget_Plugin_Collection : public QObject, public QDesignerCustomWid
     Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 
 public:
-    explicit Color_Widget_Plugin_Collection(QObject *parent = 0);
+    explicit ColorWidgets_PluginCollection(QObject *parent = 0);
 
     QList<QDesignerCustomWidgetInterface*> customWidgets() const;
 

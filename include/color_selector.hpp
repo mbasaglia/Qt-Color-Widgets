@@ -29,13 +29,13 @@
 /**
  * Color preview that opens a color dialog
  */
-class QCP_EXPORT Color_Selector : public Color_Preview
+class QCP_EXPORT ColorSelector : public ColorPreview
 {
     Q_OBJECT
     Q_ENUMS(Update_Mode)
     Q_PROPERTY(Update_Mode updateMode READ updateMode WRITE setUpdateMode )
     Q_PROPERTY(Qt::WindowModality dialogModality READ dialogModality WRITE setDialogModality )
-    Q_PROPERTY(Color_Wheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
+    Q_PROPERTY(ColorWheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
 
 public:
     enum Update_Mode {
@@ -43,8 +43,8 @@ public:
         Continuous ///< Update color as it's being modified in the dialog
     };
 
-    explicit Color_Selector(QWidget *parent = 0);
-    ~Color_Selector();
+    explicit ColorSelector(QWidget *parent = 0);
+    ~ColorSelector();
 
     void setUpdateMode(Update_Mode m);
     Update_Mode updateMode() const;
@@ -52,14 +52,14 @@ public:
     Qt::WindowModality dialogModality() const;
     void setDialogModality(Qt::WindowModality m);
 
-    Color_Wheel::Display_Flags wheelFlags() const;
+    ColorWheel::Display_Flags wheelFlags() const;
 
 signals:
-    void wheelFlagsChanged(Color_Wheel::Display_Flags flags);
+    void wheelFlagsChanged(ColorWheel::Display_Flags flags);
 
 public slots:
     void showDialog();
-    void setWheelFlags(Color_Wheel::Display_Flags flags);
+    void setWheelFlags(ColorWheel::Display_Flags flags);
 
 private slots:
     void accept_dialog();

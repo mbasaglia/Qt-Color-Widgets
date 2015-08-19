@@ -26,13 +26,13 @@
 #include "color_preview.hpp"
 #include <QtPlugin>
 
-Color_Preview_Plugin::Color_Preview_Plugin(QObject *parent)
+ColorPreview_Plugin::ColorPreview_Plugin(QObject *parent)
     : QObject(parent), initialized(false)
 {
 }
 
 
-void Color_Preview_Plugin::initialize(QDesignerFormEditorInterface *)
+void ColorPreview_Plugin::initialize(QDesignerFormEditorInterface *)
 {
     if (initialized)
         return;
@@ -40,61 +40,61 @@ void Color_Preview_Plugin::initialize(QDesignerFormEditorInterface *)
     initialized = true;
 }
 
-bool Color_Preview_Plugin::isInitialized() const
+bool ColorPreview_Plugin::isInitialized() const
 {
     return initialized;
 }
 
-QWidget *Color_Preview_Plugin::createWidget(QWidget *parent)
+QWidget *ColorPreview_Plugin::createWidget(QWidget *parent)
 {
-    return new Color_Preview(parent);
+    return new ColorPreview(parent);
 }
 
-QString Color_Preview_Plugin::name() const
+QString ColorPreview_Plugin::name() const
 {
-    return "Color_Preview";
+    return "ColorPreview";
 }
 
-QString Color_Preview_Plugin::group() const
+QString ColorPreview_Plugin::group() const
 {
     return "Color Widgets";
 }
 
-QIcon Color_Preview_Plugin::icon() const
+QIcon ColorPreview_Plugin::icon() const
 {
     return QIcon();
 }
 
-QString Color_Preview_Plugin::toolTip() const
+QString ColorPreview_Plugin::toolTip() const
 {
     return "Display a color";
 }
 
-QString Color_Preview_Plugin::whatsThis() const
+QString ColorPreview_Plugin::whatsThis() const
 {
     return toolTip();
 }
 
-bool Color_Preview_Plugin::isContainer() const
+bool ColorPreview_Plugin::isContainer() const
 {
     return false;
 }
 
-QString Color_Preview_Plugin::domXml() const
+QString ColorPreview_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"Color_Preview\" name=\"Color_Preview\">\n"
+           " <widget class=\"ColorPreview\" name=\"ColorPreview\">\n"
            " </widget>\n"
             "</ui>\n";
 }
 
-QString Color_Preview_Plugin::includeFile() const
+QString ColorPreview_Plugin::includeFile() const
 {
     return "color_preview.hpp";
 }
 
-//Q_EXPORT_PLUGIN2(color_widgets, Color_Preview_Plugin);
+//Q_EXPORT_PLUGIN2(color_widgets, ColorPreview_Plugin);
 
 
 

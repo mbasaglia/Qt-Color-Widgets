@@ -27,13 +27,13 @@
 
 #include <QDesignerCustomWidgetInterface>
 
-class Color_Preview_Plugin : public QObject, public QDesignerCustomWidgetInterface
+class ColorPreview_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 
 public:
-    Color_Preview_Plugin(QObject *parent = 0);
+    ColorPreview_Plugin(QObject *parent = 0);
 
     void initialize(QDesignerFormEditorInterface *core);
     bool isInitialized() const;

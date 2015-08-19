@@ -32,13 +32,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStyledItemDelegate>
 
 /**
-    Delegate to use a Color_Selector in a color list
+    Delegate to use a ColorSelector in a color list
 */
-class QCP_EXPORT Color_Delegate : public QStyledItemDelegate
+class QCP_EXPORT ColorDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit Color_Delegate(QWidget *parent = 0);
+    explicit ColorDelegate(QWidget *parent = 0);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
                     const QModelIndex &index) const;

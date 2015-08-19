@@ -32,12 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSignalMapper>
 #include <QTableWidget>
 
-class QCP_EXPORT Abstract_Widget_List : public QWidget
+class QCP_EXPORT AbstractWidgetList : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Abstract_Widget_List(QWidget *parent = 0);
-    ~Abstract_Widget_List();
+    explicit AbstractWidgetList(QWidget *parent = 0);
+    ~AbstractWidgetList();
     
     /**
      *  \brief Get the number of items

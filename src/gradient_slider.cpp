@@ -29,7 +29,7 @@
 #include <QStyleOptionSlider>
 #include <QLinearGradient>
 
-class Gradient_Slider::Private
+class GradientSlider::Private
 {
 public:
     QLinearGradient gradient;
@@ -44,55 +44,55 @@ public:
 
 };
 
-Gradient_Slider::Gradient_Slider(QWidget *parent) :
+GradientSlider::GradientSlider(QWidget *parent) :
     QSlider(Qt::Horizontal, parent), p(new Private)
 {
 }
 
-Gradient_Slider::Gradient_Slider(Qt::Orientation orientation, QWidget *parent) :
+GradientSlider::GradientSlider(Qt::Orientation orientation, QWidget *parent) :
     QSlider(orientation, parent), p(new Private)
 {
 }
 
-Gradient_Slider::~Gradient_Slider()
+GradientSlider::~GradientSlider()
 {
 	delete p;
 }
 
-QBrush Gradient_Slider::background() const
+QBrush GradientSlider::background() const
 {
     return p->back;
 }
 
-void Gradient_Slider::setBackground(const QBrush &bg)
+void GradientSlider::setBackground(const QBrush &bg)
 {
     p->back = bg;
     update();
 }
 
-QGradientStops Gradient_Slider::colors() const
+QGradientStops GradientSlider::colors() const
 {
     return p->gradient.stops();
 }
 
-void Gradient_Slider::setColors(const QGradientStops &colors)
+void GradientSlider::setColors(const QGradientStops &colors)
 {
     p->gradient.setStops(colors);
     update();
 }
 
-QLinearGradient Gradient_Slider::gradient() const
+QLinearGradient GradientSlider::gradient() const
 {
     return p->gradient;
 }
 
-void Gradient_Slider::setGradient(const QLinearGradient &gradient)
+void GradientSlider::setGradient(const QLinearGradient &gradient)
 {
     p->gradient = gradient;
     update();
 }
 
-void Gradient_Slider::setColors(const QVector<QColor> &colors)
+void GradientSlider::setColors(const QVector<QColor> &colors)
 {
     QGradientStops stops;
     stops.reserve(colors.size());
@@ -109,7 +109,7 @@ void Gradient_Slider::setColors(const QVector<QColor> &colors)
     setColors(stops);
 }
 
-void Gradient_Slider::setFirstColor(const QColor &c)
+void GradientSlider::setFirstColor(const QColor &c)
 {
     QGradientStops stops = p->gradient.stops();
     if(stops.isEmpty())
@@ -121,7 +121,7 @@ void Gradient_Slider::setFirstColor(const QColor &c)
     update();
 }
 
-void Gradient_Slider::setLastColor(const QColor &c)
+void GradientSlider::setLastColor(const QColor &c)
 {
     QGradientStops stops = p->gradient.stops();
     if(stops.size()<2)
@@ -132,20 +132,20 @@ void Gradient_Slider::setLastColor(const QColor &c)
     update();
 }
 
-QColor Gradient_Slider::firstColor() const
+QColor GradientSlider::firstColor() const
 {
     QGradientStops s = colors();
     return s.empty() ? QColor() : s.front().second;
 }
 
-QColor Gradient_Slider::lastColor() const
+QColor GradientSlider::lastColor() const
 {
     QGradientStops s = colors();
     return s.empty() ? QColor() : s.back().second;
 }
 
 
-void Gradient_Slider::paintEvent(QPaintEvent *)
+void GradientSlider::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 

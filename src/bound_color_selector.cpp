@@ -26,14 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bound_color_selector.hpp"
 
-Bound_Color_Selector::Bound_Color_Selector(QColor* reference, QWidget *parent) :
-    Color_Selector(parent), ref(reference)
+BoundColorSelector::BoundColorSelector(QColor* reference, QWidget *parent) :
+    ColorSelector(parent), ref(reference)
 {
     setColor(*reference);
     connect(this,SIGNAL(colorChanged(QColor)),SLOT(update_reference(QColor)));
 }
 
-void Bound_Color_Selector::update_reference(QColor c)
+void BoundColorSelector::update_reference(QColor c)
 {
     *ref = c;
 }

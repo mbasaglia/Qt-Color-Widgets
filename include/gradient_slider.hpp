@@ -32,7 +32,7 @@
 /**
  * \brief A slider that mover on top of a gradient
  */
-class QCP_EXPORT Gradient_Slider : public QSlider
+class QCP_EXPORT GradientSlider : public QSlider
 {
     Q_OBJECT
     Q_PROPERTY(QBrush background READ background WRITE setBackground)
@@ -42,9 +42,9 @@ class QCP_EXPORT Gradient_Slider : public QSlider
     Q_PROPERTY(QLinearGradient gradient READ gradient WRITE setGradient)
 
 public:
-    explicit Gradient_Slider(QWidget *parent = 0);
-    explicit Gradient_Slider(Qt::Orientation orientation, QWidget *parent = 0);
-    ~Gradient_Slider();
+    explicit GradientSlider(QWidget *parent = 0);
+    explicit GradientSlider(Qt::Orientation orientation, QWidget *parent = 0);
+    ~GradientSlider();
 
     /// Get the background, it's visible for transparent gradient stops
     QBrush background() const;

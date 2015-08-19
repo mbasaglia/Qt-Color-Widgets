@@ -29,13 +29,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDesignerCustomWidgetInterface>
 
-class Color_List_Plugin : public QObject, public QDesignerCustomWidgetInterface
+class ColorListWidget_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 
 public:
-    explicit Color_List_Plugin(QObject *parent = 0);
+    explicit ColorListWidget_Plugin(QObject *parent = 0);
     
     void initialize(QDesignerFormEditorInterface *core);
     bool isInitialized() const;

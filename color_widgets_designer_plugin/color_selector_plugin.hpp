@@ -27,13 +27,13 @@
 
 #include <QDesignerCustomWidgetInterface>
 
-class Color_Selector_Plugin : public QObject, public QDesignerCustomWidgetInterface
+class ColorSelector_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 
 public:
-    Color_Selector_Plugin(QObject *parent = 0);
+    ColorSelector_Plugin(QObject *parent = 0);
 
     void initialize(QDesignerFormEditorInterface *core);
     bool isInitialized() const;

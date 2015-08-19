@@ -27,67 +27,67 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "color_list_plugin.hpp"
 #include "color_list_widget.hpp"
 
-Color_List_Plugin::Color_List_Plugin(QObject *parent) :
+ColorListWidget_Plugin::ColorListWidget_Plugin(QObject *parent) :
     QObject(parent)
 {
 }
 
 
-void Color_List_Plugin::initialize(QDesignerFormEditorInterface *)
+void ColorListWidget_Plugin::initialize(QDesignerFormEditorInterface *)
 {
     initialized = true;
 }
 
-bool Color_List_Plugin::isInitialized() const
+bool ColorListWidget_Plugin::isInitialized() const
 {
     return initialized;
 }
 
-QWidget *Color_List_Plugin::createWidget(QWidget *parent)
+QWidget *ColorListWidget_Plugin::createWidget(QWidget *parent)
 {
-    return new Color_List_Widget(parent);
+    return new ColorListWidget(parent);
 }
 
-QString Color_List_Plugin::name() const
+QString ColorListWidget_Plugin::name() const
 {
-    return "Color_List_Widget";
+    return "ColorListWidget";
 }
 
-QString Color_List_Plugin::group() const
+QString ColorListWidget_Plugin::group() const
 {
     return "Color Widgets";
 }
 
-QIcon Color_List_Plugin::icon() const
+QIcon ColorListWidget_Plugin::icon() const
 {
     return QIcon::fromTheme("format-stroke-color");
 }
 
-QString Color_List_Plugin::toolTip() const
+QString ColorListWidget_Plugin::toolTip() const
 {
     return "An editable list of colors";
 }
 
-QString Color_List_Plugin::whatsThis() const
+QString ColorListWidget_Plugin::whatsThis() const
 {
     return toolTip();
 }
 
-bool Color_List_Plugin::isContainer() const
+bool ColorListWidget_Plugin::isContainer() const
 {
     return false;
 }
 
-QString Color_List_Plugin::domXml() const
+QString ColorListWidget_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"Color_List_Widget\" name=\"Color_List_Widget\">\n"
+           " <widget class=\"ColorListWidget\" name=\"ColorListWidget\">\n"
            " </widget>\n"
             "</ui>\n";
 }
 
-QString Color_List_Plugin::includeFile() const
+QString ColorListWidget_Plugin::includeFile() const
 {
     return "color_list_widget.hpp";
 }

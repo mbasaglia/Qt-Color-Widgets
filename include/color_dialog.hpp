@@ -31,12 +31,12 @@
 
 class QAbstractButton;
 
-class QCP_EXPORT Color_Dialog : public QDialog
+class QCP_EXPORT ColorDialog : public QDialog
 {
     Q_OBJECT
     Q_ENUMS(Button_Mode)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
-    Q_PROPERTY(Color_Wheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
+    Q_PROPERTY(ColorWheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
 
 public:
     enum Button_Mode {
@@ -45,7 +45,7 @@ public:
         Close
     };
 
-    explicit Color_Dialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit ColorDialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
     /**
      * Get currently selected color
@@ -55,12 +55,12 @@ public:
     /**
      * Set the display mode for the color preview
      */
-    void setPreviewDisplayMode(Color_Preview::Display_Mode mode);
+    void setPreviewDisplayMode(ColorPreview::Display_Mode mode);
 
     /**
      * Get the color preview diplay mode
      */
-    Color_Preview::Display_Mode previewDisplayMode() const;
+    ColorPreview::Display_Mode previewDisplayMode() const;
 
     /**
      * Set whether the color alpha channel can be edited.
@@ -83,7 +83,7 @@ public:
 
     QSize sizeHint() const;
 
-    Color_Wheel::Display_Flags wheelFlags() const;
+    ColorWheel::Display_Flags wheelFlags() const;
 
 public slots:
 
@@ -97,7 +97,7 @@ public slots:
      */
     void showColor(const QColor &oldcolor);
 
-    void setWheelFlags(Color_Wheel::Display_Flags flags);
+    void setWheelFlags(ColorWheel::Display_Flags flags);
 
 signals:
     /**
@@ -110,7 +110,7 @@ signals:
      */
     void colorSelected(QColor);
 
-    void wheelFlagsChanged(Color_Wheel::Display_Flags flags);
+    void wheelFlagsChanged(ColorWheel::Display_Flags flags);
 
 private slots:
     /// Update all the Ui elements to match the selected color
