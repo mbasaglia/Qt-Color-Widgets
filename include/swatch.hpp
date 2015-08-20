@@ -83,6 +83,8 @@ signals:
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
+    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 protected slots:

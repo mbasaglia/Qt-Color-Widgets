@@ -25,6 +25,7 @@
 #include <cmath>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QKeyEvent>
 
 namespace color_widgets {
 
@@ -66,6 +67,7 @@ Swatch::Swatch(QWidget* parent)
     p->selected = -1;
     connect(&p->palette, SIGNAL(colorsChanged(QVector<QColor>)),SLOT(paletteModified()));
     connect(&p->palette, SIGNAL(columnsChanged(int)),SLOT(update()));
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 Swatch::~Swatch()
@@ -99,10 +101,11 @@ int Swatch::indexAt(const QPoint& pt)
     if ( rowcols.isEmpty() )
         return -1;
 
-    QSize color_size(width() / rowcols.width(), height() / rowcols.height());
+    QSizeF color_size(float(width()) / rowcols.width(),
+                      float(height()) / rowcols.height());
     QPoint point(
-        qBound(0, pt.x() / color_size.width(), rowcols.width() - 1),
-        qBound(0, pt.y() / color_size.height(), rowcols.height() - 1)
+        qBound<int>(0, pt.x() / color_size.width(), rowcols.width() - 1),
+        qBound<int>(0, pt.y() / color_size.height(), rowcols.height() - 1)
     );
 
     int index = point.y() * rowcols.width() + point.x();
@@ -146,8 +149,10 @@ void Swatch::paintEvent(QPaintEvent* event)
     if ( rowcols.isEmpty() )
         return;
 
-    QSizeF color_size(width()/rowcols.width(), height()/rowcols.height());
+    QSizeF color_size(float(width())/rowcols.width(), float(height())/rowcols.height());
     QPainter painter(this);
+    painter.setBrush(Qt::transparent);
+
     int count = p->palette.count();
     for ( int y = 0, i = 0; i < count; y++ )
     {
@@ -158,17 +163,84 @@ void Swatch::paintEvent(QPaintEvent* event)
         }
     }
 
+    if ( hasFocus() )
+    {
+        QColor outline = QWidget::palette().color(QPalette::Highlight);
+        painter.setPen(QPen(outline, 0));
+        painter.drawRect(rect().adjusted(0,0,-1,-1));
+    }
+
     if ( p->selected != -1 )
     {
         int x = p->selected % rowcols.width();
         int y = p->selected / rowcols.width();
         QRectF rect(QPointF(x*color_size.width(), y*color_size.height()), color_size);
-        painter.setBrush(Qt::transparent);
         painter.setPen(QPen(Qt::darkGray, 2));
         painter.drawRect(rect);
         painter.setPen(QPen(Qt::gray, 2, Qt::DotLine));
         painter.drawRect(rect);
     }
+}
+
+void Swatch::keyPressEvent(QKeyEvent* event)
+{
+    if ( p->palette.count() == 0 )
+        QWidget::keyPressEvent(event);
+
+    int selected = p->selected;
+    int count = p->palette.count();
+    int columns = p->palette.columns();
+    switch ( event->key() )
+    {
+        default:
+            QWidget::keyPressEvent(event);
+            return;
+
+        case Qt::Key_Left:
+            if ( selected == -1 )
+                selected = count - 1;
+            else if ( selected > 0 )
+                selected--;
+            break;
+
+        case Qt::Key_Right:
+            if ( selected == -1 )
+                selected = 0;
+            else if ( selected < count - 1 )
+                selected++;
+            break;
+
+        case Qt::Key_Up:
+            if ( selected == -1 )
+                selected = count - 1;
+            else if ( selected >= columns )
+                selected -= columns;
+            break;
+
+        case Qt::Key_Down:
+            if ( selected == -1 )
+                selected = 0;
+            else if ( selected < count - columns )
+                selected += columns;
+            break;
+
+        case Qt::Key_Home:
+            if ( event->modifiers() & Qt::ControlModifier )
+                selected = 0;
+            else
+                selected -= selected % columns;
+            break;
+
+        case Qt::Key_End:
+            if ( event->modifiers() & Qt::ControlModifier )
+                selected = count - 1;
+            else
+                selected += columns - (selected % columns) - 1;
+            break;
+
+    }
+    setSelected(selected);
+
 }
 
 void Swatch::mouseReleaseEvent(QMouseEvent *event)
