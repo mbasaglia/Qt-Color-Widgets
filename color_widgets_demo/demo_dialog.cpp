@@ -50,6 +50,17 @@ Demo_Dialog::Demo_Dialog(QWidget *parent) :
     combo_color->addItem("LCH",color_widgets::ColorWheel::COLOR_LCH);
     combo_color->setCurrentIndex(combo_color->findData(
         QVariant(color_widgets::ColorWheel::defaultDisplayFlags(color_widgets::ColorWheel::COLOR_FLAGS))));
+
+
+    swatch->palette().setColumns(12);
+    for ( int i = 0; i < 6; i++ )
+    {
+        for ( int j = 0; j < swatch->palette().columns(); j++ )
+        {
+            float f = float(j)/swatch->palette().columns();
+            swatch->palette().appendColor(QColor::fromHsvF(i/8.0,1-f,0.5+f/2));
+        }
+    }
 }
 
 void Demo_Dialog::changeEvent(QEvent *e)
