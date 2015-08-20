@@ -52,7 +52,23 @@ public:
     const ColorPalette& palette() const;
     ColorPalette& palette();
     int selected() const;
+    /**
+     * \brief Color at the currently selected index
+     */
     QColor selectedColor() const;
+
+    /**
+     * \brief Color index at the given position within the widget
+     * \param p Point in local coordinates
+     * \returns -1 if the position doesn't represent any color
+     */
+    int indexAt(const QPoint& p);
+
+    /**
+     * \brief Color at the given position within the widget
+     * \param p Point in local coordinates
+     */
+    QColor colorAt(const QPoint& p);
 
 public slots:
     void setPalette(const ColorPalette& palette);
@@ -66,6 +82,8 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     class Private;
