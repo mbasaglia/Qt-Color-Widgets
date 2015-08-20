@@ -108,6 +108,12 @@ QString Swatch_Plugin::domXml() const
            "    <height>256</height>\n"
            "   </rect>\n"
            "  </property>\n"
+           "  <property name=\"sizePolicy\">\n"
+           "   <sizepolicy hsizetype=\"Expanding\" vsizetype=\"Expanding\">\n"
+           "    <horstretch>0</horstretch>\n"
+           "    <verstretch>0</verstretch>\n"
+           "   </sizepolicy>\n"
+           "  </property>\n"
            " </widget>\n"
            "</ui>\n";
 }
