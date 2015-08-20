@@ -81,12 +81,12 @@ public:
     /**
      * \brief Color at the given index
      */
-    QColor colorAt(int index) const;
+    Q_INVOKABLE QColor colorAt(int index) const;
 
     /**
      * \brief Color name at the given index
      */
-    QString nameAt(int index) const;
+    Q_INVOKABLE QString nameAt(int index) const;
 
     QVector<QColor> colors() const;
     QVector<QString> names() const;
@@ -98,10 +98,15 @@ public:
     QString name() const;
 
     /**
-     * \brief Load a ColorPalette from a Gimp palette (gpl) file
+     * \brief Load contents from a Gimp palette (gpl) file
+     * \returns \b true On Success
+     * \note If this function returns \b false, the palette will become empty
+     */
+    Q_INVOKABLE bool load(const QString& name);
+    /**
+     * \brief Creates a ColorPalette from a Gimp palette (gpl) file
      */
     static ColorPalette fromFile(const QString& name);
-
 
     QString fileName() const;
 

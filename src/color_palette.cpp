@@ -148,20 +148,23 @@ QString ColorPalette::name() const
     return p->name;
 }
 
-ColorPalette ColorPalette::fromFile(const QString& name)
+bool ColorPalette::load(const QString& name)
 {
-    ColorPalette p;
-    p.setFileName( name );
+    p->fileName = name;
+    p->colors.clear();
+    p->names.clear();
+    p->columns = -1;
+    p->name = unnamed();
 
     QFile file(name);
 
     if ( !file.open(QFile::ReadOnly|QFile::Text) )
-        return p;
+        return false;
 
     QTextStream stream( &file );
 
     if ( stream.readLine() != "GIMP Palette" )
-        return p;
+        return false;
 
     QString line;
 
@@ -180,8 +183,8 @@ ColorPalette ColorPalette::fromFile(const QString& name)
                 line.right(line.size() - colon - 1).trimmed();
     }
     /// \todo Store extra properties in the palette object
-    p.setName(properties["name"]);
-    p.setColumns(properties["columns"].toInt());
+    setName(properties["name"]);
+    setColumns(properties["columns"].toInt());
 
     // Skip comments
     while( !stream.atEnd() )
@@ -200,9 +203,16 @@ ColorPalette ColorPalette::fromFile(const QString& name)
         int r = 0, g = 0, b = 0;
         stream >> r >> g >> b;
         line = stream.readLine().trimmed();
-        p.appendColor(QColor(r, g, b), line);
+        appendColor(QColor(r, g, b), line);
     }
 
+    return true;
+}
+
+ColorPalette ColorPalette::fromFile(const QString& name)
+{
+    ColorPalette p;
+    p.load(name);
     return p;
 }
 
