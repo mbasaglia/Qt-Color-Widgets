@@ -22,6 +22,7 @@
 */
 
 #include "color_palette.hpp"
+#include <cmath>
 #include <QFile>
 #include <QTextStream>
 #include <QHash>
@@ -135,7 +136,7 @@ int ColorPalette::count() const
 
 int ColorPalette::rows() const
 {
-    return p->columns <= 0 ? -1 : p->colors.size() / p->columns;
+    return p->columns <= 0 ? -1 : std::ceil( p->colors.size() / float(p->columns) );
 }
 
 int ColorPalette::columns()
