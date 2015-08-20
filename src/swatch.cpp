@@ -98,11 +98,10 @@ int Swatch::indexAt(const QPoint& pt)
     if ( rowcols.isEmpty() )
         return -1;
 
-    QRect geo = rect();
-    QSize color_size(geo.width()/rowcols.width(), geo.height()/rowcols.height());
+    QSize color_size(width() / rowcols.width(), height() / rowcols.height());
     QPoint point(
-        qBound(geo.left(), pt.x(), geo.right()) / color_size.width(),
-        qBound(geo.top(), pt.y(), geo.bottom()) / color_size.height()
+        qBound(0, pt.x() / color_size.width(), rowcols.width() - 1),
+        qBound(0, pt.y() / color_size.height(), rowcols.height() - 1)
     );
 
     int index = point.y() * rowcols.width() + point.x();
