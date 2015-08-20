@@ -31,8 +31,8 @@ namespace color_widgets {
 class Swatch::Private
 {
 public:
-    ColorPalette palette;
-    int selected;
+    ColorPalette palette; ///< Palette with colors and related metadata
+    int selected; ///< Current selection index (-1 for no selection)
 
     /**
      * \brief Number of rows/columns in the palette
@@ -58,13 +58,14 @@ public:
 /**
  * \todo
  *      * Drag/drop
- *      * connect p->palette to update() and change selected
  *      * event on doubleclick (to allow changing the color)
  */
 Swatch::Swatch(QWidget* parent)
     : QWidget(parent), p(new Private)
 {
     p->selected = -1;
+    connect(&p->palette, SIGNAL(colorsChanged(QVector<QColor>)),SLOT(paletteModified()));
+    connect(&p->palette, SIGNAL(columnsChanged(int)),SLOT(update()));
 }
 
 Swatch::~Swatch()
@@ -173,6 +174,13 @@ void Swatch::paintEvent(QPaintEvent* event)
 void Swatch::mouseReleaseEvent(QMouseEvent *event)
 {
     setSelected(indexAt(event->pos()));
+}
+
+void Swatch::paletteModified()
+{
+    if ( p->selected >= p->palette.count() )
+        clearSelection();
+    update();
 }
 
 } // namespace color_widgets

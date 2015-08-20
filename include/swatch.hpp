@@ -85,6 +85,12 @@ protected:
 
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
+protected slots:
+    /**
+     * \brief Connected to the internal palette object to keep eveything consistent
+     */
+    void paletteModified();
+
 private:
     class Private;
     Private* p;
