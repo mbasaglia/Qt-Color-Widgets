@@ -13,6 +13,7 @@ The provided widgets are:
 * ColorSelector, A ColorPreview that shows a ColorDialog when clicked
 * ColorDialog,  A dialog that uses the above widgets to provide a better user experience than QColorDialog
 * ColorListWidget, A widget to edit a list of colors
+* Swatch, A widget to display a color palette
 
 they are all in the color_widgets namespace.
     
