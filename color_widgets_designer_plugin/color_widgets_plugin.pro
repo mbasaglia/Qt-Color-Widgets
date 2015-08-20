@@ -38,7 +38,8 @@ SOURCES += \
     gradient_slider_plugin.cpp \
     hue_slider_plugin.cpp \
     color_selector_plugin.cpp \
-    color_list_plugin.cpp
+    color_list_plugin.cpp \
+    swatch_plugin.cpp
 
 HEADERS += \
     color_preview_plugin.hpp \
@@ -47,7 +48,8 @@ HEADERS += \
     gradient_slider_plugin.hpp \
     hue_slider_plugin.hpp \
     color_selector_plugin.hpp \
-    color_list_plugin.hpp
+    color_list_plugin.hpp \
+    swatch_plugin.hpp
 
 include(../color_widgets.pri)
 

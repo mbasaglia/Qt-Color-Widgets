@@ -52,7 +52,7 @@ QWidget *ColorPreview_Plugin::createWidget(QWidget *parent)
 
 QString ColorPreview_Plugin::name() const
 {
-    return "ColorPreview";
+    return "color_widgets::ColorPreview";
 }
 
 QString ColorPreview_Plugin::group() const
@@ -84,7 +84,7 @@ QString ColorPreview_Plugin::domXml() const
 {
 
     return "<ui language=\"c++\">\n"
-           " <widget class=\"ColorPreview\" name=\"ColorPreview\">\n"
+           " <widget class=\"color_widgets::ColorPreview\" name=\"colorPreview\">\n"
            " </widget>\n"
             "</ui>\n";
 }

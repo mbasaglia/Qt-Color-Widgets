@@ -59,7 +59,9 @@ headers.files = \
 	include/colorwidgets_global.hpp \
 	include/color_selector.hpp \
 	include/gradient_slider.hpp \
-	include/hue_slider.hpp
+	include/hue_slider.hpp \
+    include/color_palette.hpp \
+    include/swatch.hpp
 
 INSTALLS += target headers
 
