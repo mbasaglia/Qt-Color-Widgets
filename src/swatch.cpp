@@ -42,6 +42,8 @@ public:
     int          selected;   ///< Current selection index (-1 for no selection)
     QSize        color_size; ///< Preferred size for the color squares
     ColorSizePolicy size_policy;
+    int          forced_rows;
+    int          forced_columns;
 
     QPoint  drag_pos;       ///< Point used to keep track of dragging
     int     drag_index;     ///< Index used by drags
@@ -55,6 +57,8 @@ public:
         : selected(-1),
           color_size(16,16),
           size_policy(Hint),
+          forced_rows(0),
+          forced_columns(0),
           drag_index(-1),
           drop_index(-1),
           drop_overwrite(false),
@@ -70,9 +74,14 @@ public:
         if ( count == 0 )
             return QSize();
 
+        if ( forced_rows )
+            return QSize(std::ceil( float(count) / forced_rows ), forced_rows);
+
         int columns = palette.columns();
 
-        if ( columns == -1 )
+        if ( forced_columns )
+            columns = forced_columns;
+        else if ( columns == 0 )
             columns = qMin(palette.count(), owner->width() / color_size.width());
 
         int rows = std::ceil( float(count) / columns );
@@ -284,8 +293,6 @@ void Swatch::clearSelection()
     setSelected(-1);
 }
 
-/// \todo Properties to set a fixed number of rows or columns, overriding the
-/// palette settings
 void Swatch::paintEvent(QPaintEvent* event)
 {
     QSize rowcols = p->rowcols();
@@ -365,7 +372,7 @@ void Swatch::keyPressEvent(QKeyEvent* event)
 
     int selected = p->selected;
     int count = p->palette.count();
-    int columns = p->palette.columns();
+    int columns = p->rowcols().width();
     switch ( event->key() )
     {
         default:
@@ -582,6 +589,40 @@ void Swatch::setColorSizePolicy(ColorSizePolicy colorSizePolicy)
         setFixedSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
         paletteModified();
         emit colorSizePolicyChanged(p->size_policy = colorSizePolicy);
+    }
+}
+
+int Swatch::forcedColumns() const
+{
+    return p->forced_columns;
+}
+
+int Swatch::forcedRows() const
+{
+    return p->forced_rows;
+}
+
+void Swatch::setForcedColumns(int forcedColumns)
+{
+    if ( forcedColumns <= 0 )
+        forcedColumns = 0;
+
+    if ( forcedColumns != p->forced_columns )
+    {
+        emit forcedColumnsChanged(p->forced_columns = forcedColumns);
+        emit forcedRowsChanged(p->forced_rows = 0);
+    }
+}
+
+void Swatch::setForcedRows(int forcedRows)
+{
+    if ( forcedRows <= 0 )
+        forcedRows = 0;
+
+    if ( forcedRows != p->forced_rows )
+    {
+        emit forcedColumnsChanged(p->forced_columns = 0);
+        emit forcedRowsChanged(p->forced_rows = forcedRows);
     }
 }
 

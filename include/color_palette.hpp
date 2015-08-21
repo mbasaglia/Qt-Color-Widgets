@@ -50,13 +50,9 @@ class QCP_EXPORT ColorPalette : public QObject
      */
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     /**
-     * \brief Number of colors to display in a row, if -1 unspecified
+     * \brief Number of colors to display in a row, if 0 unspecified
      */
     Q_PROPERTY(int columns READ columns WRITE setColumns NOTIFY columnsChanged)
-    /**
-     * \brief Number of rows (based on \c count and \c columns), if -1 unspecified
-     */
-    Q_PROPERTY(int rows READ rows NOTIFY rowsChanged)
     /**
      * \brief Number of colors
      */
@@ -67,8 +63,8 @@ class QCP_EXPORT ColorPalette : public QObject
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
 
 public:
-    ColorPalette(const QVector<QColor>& colors, const QString& name = QString(), int columns = -1);
-    ColorPalette(const QVector<QPair<QColor,QString> >& colors, const QString& name = QString(), int columns = -1);
+    ColorPalette(const QVector<QColor>& colors, const QString& name = QString(), int columns = 0);
+    ColorPalette(const QVector<QPair<QColor,QString> >& colors, const QString& name = QString(), int columns = 0);
     explicit ColorPalette(const QString& name = QString());
     ColorPalette(const ColorPalette& other);
     ColorPalette& operator=(const ColorPalette& other);
@@ -92,7 +88,6 @@ public:
     QVector<QString> names() const;
 
     int count() const;
-    int rows() const;
     int columns();
 
     QString name() const;
@@ -155,7 +150,6 @@ signals:
     void colorsChanged(const QVector<QColor>&);
     void namesChanged(const QVector<QString>&);
     void columnsChanged(int);
-    void rowsChanged(int);
     void nameChanged(const QString&);
     void fileNameChanged(const QString&);
 

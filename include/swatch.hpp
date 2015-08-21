@@ -51,6 +51,29 @@ class Swatch : public QWidget
 
     Q_PROPERTY(ColorSizePolicy colorSizePolicy READ colorSizePolicy WRITE setColorSizePolicy NOTIFY colorSizePolicyChanged)
 
+    /**
+     * \brief Forces the Swatch to display that many rows of colors
+     *
+     * If there are too few elements, the widget will display less than this
+     * many rows.
+     *
+     * A value of0 means that the number of rows is automatic.
+     *
+     * \note Conflicts with forcedColumns
+     */
+    Q_PROPERTY(int forcedRows READ forcedRows WRITE setForcedRows NOTIFY forcedRowsChanged)
+
+    /**
+     * \brief Forces the Swatch to display that many columns of colors
+     *
+     * If there are too few elements, the widget will display less than this
+     * many columns.
+     *
+     * A value of 0 means that the number of columns is automatic.
+     *
+     * \note Conflicts with forcedRows
+     */
+    Q_PROPERTY(int forcedColumns READ forcedColumns WRITE setForcedColumns NOTIFY forcedColumnsChanged)
 
 public:
     enum ColorSizePolicy
@@ -91,12 +114,17 @@ public:
     QSize colorSize() const;
     ColorSizePolicy colorSizePolicy() const;
 
+    int forcedRows() const;
+    int forcedColumns() const;
+
 public slots:
     void setPalette(const ColorPalette& palette);
     void setSelected(int selected);
     void clearSelection();
     void setColorSize(const QSize& colorSize);
     void setColorSizePolicy(ColorSizePolicy colorSizePolicy);
+    void setForcedRows(int forcedRows);
+    void setForcedColumns(int forcedColumns);
 
 signals:
     void paletteChanged(const ColorPalette& palette);
@@ -106,6 +134,8 @@ signals:
     void colorSizePolicyChanged(ColorSizePolicy colorSizePolicy);
     void doubleClicked(int index);
     void rightClicked(int index);
+    void forcedRowsChanged(int forcedRows);
+    void forcedColumnsChanged(int forcedColumns);
 
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;

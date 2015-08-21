@@ -58,7 +58,7 @@ ColorPalette::ColorPalette(const QString& name)
     : p ( new Private )
 {
     setName(name);
-    p->columns = -1;
+    p->columns = 0;
 }
 
 ColorPalette::ColorPalette(const QVector<QPair<QColor,QString> >& colors,
@@ -79,7 +79,6 @@ ColorPalette& ColorPalette::operator=(const ColorPalette& other)
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
     emit columnsChanged(p->columns);
-    emit rowsChanged(rows());
     emit nameChanged(p->name);
     emit fileNameChanged(p->fileName);
     return *this;
@@ -102,7 +101,6 @@ ColorPalette& ColorPalette::operator=(ColorPalette&& other)
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
     emit columnsChanged(p->columns);
-    emit rowsChanged(rows());
     emit nameChanged(p->name);
     emit fileNameChanged(p->fileName);
     return *this;
@@ -134,11 +132,6 @@ int ColorPalette::count() const
     return p->colors.size();
 }
 
-int ColorPalette::rows() const
-{
-    return p->columns <= 0 ? -1 : std::ceil( p->colors.size() / float(p->columns) );
-}
-
 int ColorPalette::columns()
 {
     return p->columns;
@@ -154,7 +147,7 @@ bool ColorPalette::load(const QString& name)
     p->fileName = name;
     p->colors.clear();
     p->names.clear();
-    p->columns = -1;
+    p->columns = 0;
     p->name = unnamed();
 
     QFile file(name);
@@ -243,7 +236,7 @@ bool ColorPalette::save() const
 
     stream << "GIMP Palette\n";
     stream << "Name: " << p->name << '\n';
-    if ( p->columns != -1 )
+    if ( p->columns )
         stream << "Columns: " << p->columns << '\n';
     /// \todo Options to add comments
     stream << "#\n";
@@ -269,37 +262,23 @@ QString ColorPalette::fileName() const
 void ColorPalette::setColumns(int columns)
 {
     if ( columns <= 0 )
-        columns = -1;
+        columns = 0;
 
     if ( columns != p->columns )
-    {
-        int oldrows = rows();
-
-        p->columns = columns;
-
-        emit columnsChanged( p->columns );
-        if ( rows() != oldrows )
-            emit rowsChanged(rows());
-    }
+        emit columnsChanged( p->columns = columns );
 }
 
 void ColorPalette::setColors(const QVector<QColor>& colors)
 {
-    int oldrows = rows();
-
     p->colors = colors;
     p->names = QVector<QString>(p->colors.size());
 
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
-    if ( rows() != oldrows )
-        emit rowsChanged(rows());
 }
 
 void ColorPalette::setColors(const QVector<QPair<QColor,QString> >& colors)
 {
-    int oldrows = rows();
-
     p->colors.clear();
     p->colors.reserve(colors.size());
     p->names.clear();
@@ -313,8 +292,6 @@ void ColorPalette::setColors(const QVector<QPair<QColor,QString> >& colors)
 
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
-    if ( rows() != oldrows )
-        emit rowsChanged(rows());
 }
 
 void ColorPalette::setColorAt(int index, const QColor& color, const QString& name)
@@ -345,15 +322,11 @@ void ColorPalette::setNameAt(int index, const QString& name)
 
 void ColorPalette::appendColor(const QColor& color, const QString& name)
 {
-    int oldrows = rows();
-
     p->colors.push_back(color);
     p->names.push_back(unnamed(name));
 
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
-    if ( rows() != oldrows )
-        emit rowsChanged(rows());
 }
 
 void ColorPalette::insertColor(int index, const QColor& color, const QString& name)
@@ -361,15 +334,11 @@ void ColorPalette::insertColor(int index, const QColor& color, const QString& na
     if ( index < 0 || index > p->colors.size() )
         return;
 
-    int oldrows = rows();
-
     p->colors.insert(index, color);
     p->names.insert(index, unnamed(name));
 
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
-    if ( rows() != oldrows )
-        emit rowsChanged(rows());
 }
 
 void ColorPalette::eraseColor(int index)
@@ -377,15 +346,11 @@ void ColorPalette::eraseColor(int index)
     if ( !p->valid_index(index) )
         return;
 
-    int oldrows = rows();
-
     p->colors.remove(index);
     p->names.remove(index);
 
     emit colorsChanged(p->colors);
     emit namesChanged(p->names);
-    if ( rows() != oldrows )
-        emit rowsChanged(rows());
 }
 
 void ColorPalette::setName(const QString& name)
