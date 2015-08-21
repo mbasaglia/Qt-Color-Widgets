@@ -38,14 +38,15 @@ namespace color_widgets {
 class Swatch::Private
 {
 public:
-    ColorPalette palette; ///< Palette with colors and related metadata
-    int selected; ///< Current selection index (-1 for no selection)
-    QSize color_size;
+    ColorPalette palette;    ///< Palette with colors and related metadata
+    int          selected;   ///< Current selection index (-1 for no selection)
+    QSize        color_size; ///< Preferred size for the color squares
 
-    QPoint drag_pos; ///< Point used to keep track of dragging
-    int drag_index; ///< Index used by drags
-    int drop_index; ///< Index for a requested drop
-    QColor drop_color; ///< Dropped color
+    QPoint  drag_pos;       ///< Point used to keep track of dragging
+    int     drag_index;     ///< Index used by drags
+    int     drop_index;     ///< Index for a requested drop
+    QColor  drop_color;     ///< Dropped color
+    bool    drop_overwrite; ///< Whether the drop will overwrite an existing color
 
     Swatch* owner;
 
@@ -54,6 +55,7 @@ public:
           color_size(16,16),
           drag_index(-1),
           drop_index(-1),
+          drop_overwrite(false),
           owner(owner)
     {}
 
@@ -97,6 +99,19 @@ public:
             drop_color = QColor(event->mimeData()->text());
         }
 
+        drop_overwrite = false;
+        QRectF drop_rect = indexRect(drop_index);
+        if ( drop_index < palette.count() && drop_rect.isValid() )
+        {
+            // Dragged to the last quarter of the size of the square, add after
+            if ( event->posF().x() >= drop_rect.left() + drop_rect.width() * 3.0 / 4 )
+                drop_index++;
+            // Dragged to the middle of the square, overwrite existing color
+            else if ( event->posF().x() > drop_rect.left() + drop_rect.width() / 4 &&
+                    ( event->dropAction() != Qt::MoveAction || event->source() != owner ) )
+                drop_overwrite = true;
+        }
+
         owner->update();
     }
 
@@ -107,8 +122,59 @@ public:
     {
         drop_index = -1;
         drop_color = QColor();
+        drop_overwrite = false;
 
         owner->update();
+    }
+
+    /**
+     * \brief Actual size of a color square
+     */
+    QSizeF actualColorSize()
+    {
+        QSize rowcols = this->rowcols();
+        if ( !rowcols.isValid() )
+            return QSizeF();
+        return actualColorSize(rowcols);
+    }
+
+    /**
+     * \brief Actual size of a color square
+     * \pre rowcols.isValid() and obtained via rowcols()
+     */
+    QSizeF actualColorSize(const QSize& rowcols)
+    {
+        return QSizeF (float(owner->width()) / rowcols.width(),
+                       float(owner->height()) / rowcols.height());
+    }
+
+
+    /**
+     * \brief Rectangle corresponding to the color at the given index
+     * \pre rowcols.isValid() and obtained via rowcols()
+     * \pre color_size obtained via rowlcols(rowcols)
+     */
+    QRectF indexRect(int index, const QSize& rowcols, const QSizeF& color_size)
+    {
+        if ( index == -1 )
+            return QRectF();
+
+        return QRectF(
+            index % rowcols.width() * color_size.width(),
+            index / rowcols.width() * color_size.height(),
+            color_size.width(),
+            color_size.height()
+        );
+    }
+    /**
+     * \brief Rectangle corresponding to the color at the given index
+     */
+    QRectF indexRect(int index)
+    {
+        QSize rc = rowcols();
+        if ( index == -1 || !rc.isValid() )
+            return QRectF();
+        return indexRect(index, rc, actualColorSize(rc));
     }
 };
 
@@ -170,8 +236,8 @@ int Swatch::indexAt(const QPoint& pt)
     if ( rowcols.isEmpty() )
         return -1;
 
-    QSizeF color_size(float(width()) / rowcols.width(),
-                      float(height()) / rowcols.height());
+    QSizeF color_size = p->actualColorSize(rowcols);
+
     QPoint point(
         qBound<int>(0, pt.x() / color_size.width(), rowcols.width() - 1),
         qBound<int>(0, pt.y() / color_size.height(), rowcols.height() - 1)
@@ -219,7 +285,7 @@ void Swatch::paintEvent(QPaintEvent* event)
     if ( rowcols.isEmpty() )
         return;
 
-    QSizeF color_size(float(width())/rowcols.width(), float(height())/rowcols.height());
+    QSizeF color_size = p->actualColorSize(rowcols);
     QPainter painter(this);
 
     // For some reason QStyle::PE_Frame doesn't work propely with custom widgets
@@ -238,8 +304,6 @@ void Swatch::paintEvent(QPaintEvent* event)
     QRect r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
     painter.setClipRect(r);
 
-    painter.setBrush(Qt::transparent);
-
     int count = p->palette.count();
     for ( int y = 0, i = 0; i < count; y++ )
     {
@@ -254,17 +318,32 @@ void Swatch::paintEvent(QPaintEvent* event)
 
     if ( p->drop_index != -1 )
     {
-        float x = p->drop_index % rowcols.width() * color_size.width();
-        float y = p->drop_index / rowcols.width() * color_size.height();
-        painter.setPen(QPen(p->drop_color, 2));
-        painter.drawLine(x, y, x, y+color_size.height());
+        QRectF drop_area = p->indexRect(p->drop_index, rowcols, color_size);
+        if ( p->drop_overwrite )
+        {
+            painter.setBrush(p->drop_color);
+            painter.setPen(QPen(Qt::gray));
+            painter.drawRect(drop_area);
+        }
+        else
+        {
+            painter.setPen(QPen(p->drop_color, 2));
+            painter.setBrush(Qt::transparent);
+            painter.drawLine(drop_area.topLeft(), drop_area.bottomLeft());
+            // Draw also on the previous line when the first item of a line is selected
+            if ( p->drop_index % rowcols.width() == 0 && p->drop_index != 0 )
+            {
+                drop_area = p->indexRect(p->drop_index-1, rowcols, color_size);
+                drop_area.translate(color_size.width(), 0);
+                painter.drawLine(drop_area.topLeft(), drop_area.bottomLeft());
+            }
+        }
     }
 
     if ( p->selected != -1 )
     {
-        int x = p->selected % rowcols.width();
-        int y = p->selected / rowcols.width();
-        QRectF rect(QPointF(x*color_size.width(), y*color_size.height()), color_size);
+        QRectF rect = p->indexRect(p->selected, rowcols, color_size);
+        painter.setBrush(Qt::transparent);
         painter.setPen(QPen(Qt::darkGray, 2));
         painter.drawRect(rect);
         painter.setPen(QPen(Qt::gray, 2, Qt::DotLine));
@@ -378,7 +457,7 @@ void Swatch::dragEnterEvent(QDragEnterEvent *event)
 
     if ( p->drop_color.isValid() && p->drop_index != -1 )
     {
-        if ( event->proposedAction() == Qt::MoveAction )
+        if ( event->proposedAction() == Qt::MoveAction && event->source() == this )
             event->setDropAction(Qt::MoveAction);
         else
             event->setDropAction(Qt::CopyAction);
@@ -431,11 +510,11 @@ void Swatch::dropEvent(QDropEvent *event)
             p->palette.insertColor(p->drop_index, p->drop_color, name);
         }
     }
-    /*// Move into a color cell
-    else if ( event->dropAction() == Qt::MoveAction && drop_index < p->palette.count() )
+    // Move into a color cell
+    else if ( p->drop_overwrite )
     {
-        p->palette.setColorAt(drop_index, color, name);
-    }*/
+        p->palette.setColorAt(p->drop_index, p->drop_color, name);
+    }
     // Insert the dropped color
     else
     {
