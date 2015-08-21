@@ -38,7 +38,6 @@ HEADERS += \
     $$PWD/include/hue_slider.hpp \
     $$PWD/include/color_dialog.hpp \
     $$PWD/include/color_selector.hpp \
-    $$PWD/src/paint_border.hpp \
     $$PWD/include/color_delegate.hpp \
     $$PWD/include/color_list_widget.hpp \
     $$PWD/include/bound_color_selector.hpp \

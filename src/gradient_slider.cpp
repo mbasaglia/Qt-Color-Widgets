@@ -23,7 +23,6 @@
 */
 
 #include "gradient_slider.hpp"
-#include "paint_border.hpp"
 
 #include <QPainter>
 #include <QStyleOptionSlider>
@@ -151,6 +150,15 @@ void GradientSlider::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
+    QStyleOptionFrame panel;
+    panel.initFrom(this);
+    panel.lineWidth = 1;
+    panel.midLineWidth = 0;
+    panel.state |= QStyle::State_Sunken;
+    style()->drawPrimitive(QStyle::PE_Frame, &panel, &painter, this);
+    QRect r = style()->subElementRect(QStyle::SE_FrameContents, &panel, this);
+    painter.setClipRect(r);
+
     if(orientation() == Qt::Horizontal)
         p->gradient.setFinalStop(1, 0);
     else
@@ -162,34 +170,20 @@ void GradientSlider::paintEvent(QPaintEvent *)
     painter.setBrush(p->gradient);
     painter.drawRect(1,1,geometry().width()-2,geometry().height()-2);
 
-    detail::paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
-    /*paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
-
-    paint_br_border(painter,size(),palette().color(QPalette::Light),1);*/
-    detail::paint_br_border(painter,size(),palette().color(QPalette::Midlight),0);
-
+    painter.setClipping(false);
     QStyleOptionSlider opt_slider;
     initStyleOption(&opt_slider);
+    opt_slider.state &= ~QStyle::State_HasFocus;
     opt_slider.subControls = QStyle::SC_SliderHandle;
     if (isSliderDown())
+    {
         opt_slider.state |= QStyle::State_Sunken;
+        opt_slider.activeSubControls = QStyle::SC_SliderHandle;
+    }
     opt_slider.rect = style()->subControlRect(QStyle::CC_Slider,&opt_slider,
                                               QStyle::SC_SliderHandle,this);
-    opt_slider.rect.adjust(1,1,-1,-1);
+
     style()->drawComplexControl(QStyle::CC_Slider, &opt_slider, &painter, this);
-
-
-
-    /*QStyleOptionFrameV3 opt_frame;
-    opt_frame.init(this);
-    opt_frame.frameShape = QFrame::StyledPanel;
-    opt_frame.rect = geometry();
-    opt_frame.state = QStyle::State_Sunken;
-
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::NoBrush);
-    painter.translate(-geometry().topLeft());
-    style()->drawControl(QStyle::CE_ShapedFrame, &opt_frame, &painter, this);*/
 }
 
 } // namespace color_widgets

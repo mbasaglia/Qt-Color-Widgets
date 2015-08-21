@@ -31,6 +31,7 @@
 #include <QMimeData>
 #include <QDropEvent>
 #include <QDragEnterEvent>
+#include <QStyleOption>
 
 namespace color_widgets {
 
@@ -220,6 +221,23 @@ void Swatch::paintEvent(QPaintEvent* event)
 
     QSizeF color_size(float(width())/rowcols.width(), float(height())/rowcols.height());
     QPainter painter(this);
+
+    // For some reason QStyle::PE_Frame doesn't work propely with custom widgets
+    // (At least on my theme)
+    // ie: it doesn't change color depending on the focus status
+    // It works fine in GradientSlider because it inherits QSlider.
+    // The problem is not in the styleoption, but depends on the last
+    // argument to QStyle::drawPrimitive()
+    // For these reason, this uses PE_PanelLineEdit,
+    // which appears to be working fine.
+    QStyleOptionFrame panel;
+    panel.initFrom(this);
+    panel.lineWidth = 1;
+    //panel.state |= QStyle::State_Sunken;
+    style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, &painter, this);
+    QRect r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
+    painter.setClipRect(r);
+
     painter.setBrush(Qt::transparent);
 
     int count = p->palette.count();
@@ -232,19 +250,14 @@ void Swatch::paintEvent(QPaintEvent* event)
         }
     }
 
+    painter.setClipping(false);
+
     if ( p->drop_index != -1 )
     {
         float x = p->drop_index % rowcols.width() * color_size.width();
         float y = p->drop_index / rowcols.width() * color_size.height();
         painter.setPen(QPen(p->drop_color, 2));
         painter.drawLine(x, y, x, y+color_size.height());
-    }
-
-    if ( hasFocus() )
-    {
-        QColor outline = QWidget::palette().color(QPalette::Highlight);
-        painter.setPen(QPen(outline, 0));
-        painter.drawRect(rect().adjusted(0,0,-1,-1));
     }
 
     if ( p->selected != -1 )

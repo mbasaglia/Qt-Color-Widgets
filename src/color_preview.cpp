@@ -26,7 +26,6 @@
 
 #include <QStylePainter>
 #include <QStyleOptionFrame>
-#include "paint_border.hpp"
 #include <QMouseEvent>
 #include <QDrag>
 #include <QMimeData>
@@ -113,6 +112,15 @@ void ColorPreview::paint(QPainter &painter, QRect rect) const
         break;
     }
 
+    QStyleOptionFrame panel;
+    panel.initFrom(this);
+    panel.lineWidth = 2;
+    panel.midLineWidth = 0;
+    panel.state |= QStyle::State_Sunken;
+    style()->drawPrimitive(QStyle::PE_Frame, &panel, &painter, this);
+    QRect r = style()->subElementRect(QStyle::SE_FrameContents, &panel, this);
+    painter.setClipRect(r);
+
     if(c1.alpha()<255 || c2.alpha()<255)
         painter.fillRect(1, 1, rect.width()-2, rect.height()-2, p->back);
 
@@ -120,12 +128,6 @@ void ColorPreview::paint(QPainter &painter, QRect rect) const
     int h = rect.height() - 2;
     painter.fillRect(1, 1, w, h, c1);
     painter.fillRect(1+w, 1, w, h, c2);
-
-    detail::paint_tl_border(painter,size(),palette().color(QPalette::Mid),0);
-    detail::paint_tl_border(painter,size(),palette().color(QPalette::Dark),1);
-
-    detail::paint_br_border(painter,size(),palette().color(QPalette::Midlight),1);
-    detail::paint_br_border(painter,size(),palette().color(QPalette::Button),0);
 }
 
 void ColorPreview::setColor(const QColor &c)
