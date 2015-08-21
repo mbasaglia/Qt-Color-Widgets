@@ -288,6 +288,8 @@ void Swatch::clearSelection()
     setSelected(-1);
 }
 
+/// \todo Properties to set a fixed number of rows or columns, overriding the
+/// palette settings
 void Swatch::paintEvent(QPaintEvent* event)
 {
     QSize rowcols = p->rowcols();
