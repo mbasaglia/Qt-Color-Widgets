@@ -503,6 +503,17 @@ void Swatch::mouseDoubleClickEvent(QMouseEvent *event)
     }
 }
 
+void Swatch::wheelEvent(QWheelEvent* event)
+{
+    if ( event->delta() > 0 )
+        p->selected = qMin(p->selected + 1, p->palette.count() - 1);
+    else if ( p->selected == -1 )
+            p->selected = p->palette.count() - 1;
+    else if ( p->selected > 0 )
+        p->selected--;
+    setSelected(p->selected);
+}
+
 void Swatch::dragEnterEvent(QDragEnterEvent *event)
 {
     if ( p->readonly )
