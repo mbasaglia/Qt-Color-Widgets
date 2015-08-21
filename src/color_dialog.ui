@@ -245,7 +245,7 @@
        <item row="0" column="1">
         <widget class="color_widgets::HueSlider" name="slide_hue">
          <property name="minimum">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="maximum">
           <number>359</number>
