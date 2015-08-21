@@ -148,6 +148,8 @@ signals:
     void readOnlyChanged(bool readOnly);
 
 protected:
+    bool event(QEvent* event) Q_DECL_OVERRIDE;
+
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;

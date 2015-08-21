@@ -32,6 +32,7 @@
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QStyleOption>
+#include <QToolTip>
 
 namespace color_widgets {
 
@@ -679,6 +680,35 @@ void Swatch::setReadOnly(bool readOnly)
         emit readOnlyChanged(p->readonly = readOnly);
         setAcceptDrops(!p->readonly);
     }
+}
+
+bool Swatch::event(QEvent* event)
+{
+    if(event->type() == QEvent::ToolTip)
+    {
+        QHelpEvent* help_ev = static_cast<QHelpEvent*>(event);
+        int index = indexAt(help_ev->pos());
+        if ( index != -1 )
+        {
+            QColor color = p->palette.colorAt(index);
+            QString name = p->palette.nameAt(index);
+            QString message;
+            message = tr("%1 %2 %3").arg(color.red()).arg(color.green()).arg(color.blue());
+            if ( !name.isEmpty() )
+                message = tr("%1 (%2)").arg(name).arg(message);
+            QToolTip::showText(help_ev->globalPos(), message, this,
+                               p->indexRect(index).toRect());
+            event->accept();
+        }
+        else
+        {
+            QToolTip::hideText();
+            event->ignore();
+        }
+        return true;
+    }
+
+    return QWidget::event(event);
 }
 
 } // namespace color_widgets
