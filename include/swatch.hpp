@@ -104,6 +104,8 @@ signals:
     void colorSelected(const QColor& color);
     void colorSizeChanged(const QSize& colorSize);
     void colorSizePolicyChanged(ColorSizePolicy colorSizePolicy);
+    void doubleClicked(int index);
+    void rightClicked(int index);
 
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
@@ -113,6 +115,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;

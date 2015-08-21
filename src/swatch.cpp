@@ -180,10 +180,6 @@ public:
     }
 };
 
-/**
- * \todo
- *      * event on doubleclick (to allow changing the color)
- */
 Swatch::Swatch(QWidget* parent)
     : QWidget(parent), p(new Private(this))
 {
@@ -320,8 +316,8 @@ void Swatch::paintEvent(QPaintEvent* event)
     {
         for ( int x = 0; x < rowcols.width() && i < count; x++, i++ )
         {
-            QRectF rect(QPointF(x*color_size.width(), y*color_size.height()), color_size);
-            painter.fillRect(rect, p->palette.colorAt(i));
+            painter.fillRect(p->indexRect(i, rowcols, color_size),
+                             p->palette.colorAt(i));
         }
     }
 
@@ -431,6 +427,12 @@ void Swatch::mousePressEvent(QMouseEvent *event)
         p->drag_pos = event->pos();
         p->drag_index = indexAt(event->pos());
     }
+    else if ( event->button() == Qt::RightButton )
+    {
+        int index = indexAt(event->pos());
+        if ( index != -1 )
+            emit rightClicked(index);
+    }
 }
 
 void Swatch::mouseMoveEvent(QMouseEvent *event)
@@ -462,6 +464,16 @@ void Swatch::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void Swatch::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if ( event->button() == Qt::LeftButton )
+    {
+        int index = indexAt(event->pos());
+        if ( index != -1 )
+            emit doubleClicked(index);
+    }
+}
+
 void Swatch::dragEnterEvent(QDragEnterEvent *event)
 {
     p->dropEvent(event);
@@ -486,11 +498,7 @@ void Swatch::dragLeaveEvent(QDragLeaveEvent *event)
 {
     p->clearDrop();
 }
-/**
- * \todo
- *      * For move select new color or overwrite based on the position
- *      * Show drop location on paint
- */
+
 void Swatch::dropEvent(QDropEvent *event)
 {
     QString name;
@@ -509,7 +517,6 @@ void Swatch::dropEvent(QDropEvent *event)
     if ( event->dropAction() == Qt::MoveAction && event->source() == this )
     {
         // Not moved => noop
-        /// \todo Disallow this instead of accepting
         if ( p->drop_index != p->drag_index + 1 )
         {
             // Erase the old color
