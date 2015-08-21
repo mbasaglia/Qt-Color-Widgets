@@ -100,20 +100,6 @@ QString Swatch_Plugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
            " <widget class=\"color_widgets::Swatch\" name=\"swatch\">\n"
-           "  <property name=\"geometry\">\n"
-           "   <rect>\n"
-           "    <x>0</x>\n"
-           "    <y>0</y>\n"
-           "    <width>256</width>\n"
-           "    <height>256</height>\n"
-           "   </rect>\n"
-           "  </property>\n"
-           "  <property name=\"sizePolicy\">\n"
-           "   <sizepolicy hsizetype=\"Expanding\" vsizetype=\"Expanding\">\n"
-           "    <horstretch>0</horstretch>\n"
-           "    <verstretch>0</verstretch>\n"
-           "   </sizepolicy>\n"
-           "  </property>\n"
            " </widget>\n"
            "</ui>\n";
 }

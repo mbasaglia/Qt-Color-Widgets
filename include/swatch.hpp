@@ -44,10 +44,16 @@ class Swatch : public QWidget
      */
     Q_PROPERTY(int selected READ selected WRITE setSelected NOTIFY selectedChanged)
 
+    /**
+     * \brief Preferred size for a color square
+     */
+    Q_PROPERTY(QSize colorSize READ colorSize WRITE setColorSize NOTIFY colorSizeChanged)
 
 public:
     Swatch(QWidget* parent = 0);
     ~Swatch();
+
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     const ColorPalette& palette() const;
     ColorPalette& palette();
@@ -70,15 +76,19 @@ public:
      */
     QColor colorAt(const QPoint& p);
 
+    QSize colorSize() const;
+
 public slots:
     void setPalette(const ColorPalette& palette);
     void setSelected(int selected);
     void clearSelection();
+    void setColorSize(const QSize& colorSize);
 
 signals:
     void paletteChanged(const ColorPalette& palette);
     void selectedChanged(int selected);
     void colorSelected(const QColor& color);
+    void colorSizeChanged(const QSize& colorSize);
 
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;

@@ -39,13 +39,22 @@ class Swatch::Private
 public:
     ColorPalette palette; ///< Palette with colors and related metadata
     int selected; ///< Current selection index (-1 for no selection)
+    QSize color_size;
 
     QPoint drag_pos; ///< Point used to keep track of dragging
     int drag_index; ///< Index used by drags
     int drop_index; ///< Index for a requested drop
     QColor drop_color; ///< Dropped color
 
-    Private() : selected(-1), drag_index(-1), drop_index(-1) {}
+    Swatch* owner;
+
+    Private(Swatch* owner)
+        : selected(-1),
+          color_size(16,16),
+          drag_index(-1),
+          drop_index(-1),
+          owner(owner)
+    {}
 
     /**
      * \brief Number of rows/columns in the palette
@@ -58,9 +67,8 @@ public:
 
         int columns = palette.columns();
 
-        /// \todo evaluate the proper number of columns based on the geometry
         if ( columns == -1 )
-            columns = 8;
+            columns = qMin(palette.count(), owner->width() / color_size.width());
 
         int rows = std::ceil( float(count) / columns );
 
@@ -70,10 +78,10 @@ public:
     /**
      * \brief Sets the drop properties
      */
-    void dropEvent(Swatch* self, QDropEvent* event)
+    void dropEvent(QDropEvent* event)
     {
         // Find the output location
-        drop_index = self->indexAt(event->pos());
+        drop_index = owner->indexAt(event->pos());
         if ( drop_index == -1 )
             drop_index = palette.count();
 
@@ -88,18 +96,18 @@ public:
             drop_color = QColor(event->mimeData()->text());
         }
 
-        self->update();
+        owner->update();
     }
 
     /**
      * \brief Clears drop properties
      */
-    void clearDrop(Swatch* self)
+    void clearDrop()
     {
         drop_index = -1;
         drop_color = QColor();
 
-        self->update();
+        owner->update();
     }
 };
 
@@ -108,17 +116,31 @@ public:
  *      * event on doubleclick (to allow changing the color)
  */
 Swatch::Swatch(QWidget* parent)
-    : QWidget(parent), p(new Private)
+    : QWidget(parent), p(new Private(this))
 {
     connect(&p->palette, SIGNAL(colorsChanged(QVector<QColor>)),SLOT(paletteModified()));
     connect(&p->palette, SIGNAL(columnsChanged(int)),SLOT(update()));
     setFocusPolicy(Qt::StrongFocus);
     setAcceptDrops(true);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 Swatch::~Swatch()
 {
     delete p;
+}
+
+QSize Swatch::sizeHint() const
+{
+    QSize rowcols = p->rowcols();
+
+    if ( !p->color_size.isValid() || !rowcols.isValid() )
+        return QSize();
+
+    return QSize(
+        p->color_size.width()  * rowcols.width(),
+        p->color_size.height() * rowcols.height()
+    );
 }
 
 const ColorPalette& Swatch::palette() const
@@ -339,7 +361,7 @@ void Swatch::mouseReleaseEvent(QMouseEvent *event)
 
 void Swatch::dragEnterEvent(QDragEnterEvent *event)
 {
-    p->dropEvent(this, event);
+    p->dropEvent(event);
 
     if ( p->drop_color.isValid() && p->drop_index != -1 )
     {
@@ -354,12 +376,12 @@ void Swatch::dragEnterEvent(QDragEnterEvent *event)
 
 void Swatch::dragMoveEvent(QDragMoveEvent* event)
 {
-    p->dropEvent(this, event);
+    p->dropEvent(event);
 }
 
 void Swatch::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    p->clearDrop(this);
+    p->clearDrop();
 }
 /**
  * \todo
@@ -378,7 +400,7 @@ void Swatch::dropEvent(QDropEvent *event)
     if ( !p->drop_color.isValid() || p->drop_index == -1 )
         return;
 
-    p->dropEvent(this, event);
+    p->dropEvent(event);
 
     // Move unto self
     if ( event->dropAction() == Qt::MoveAction && event->source() == this )
@@ -410,7 +432,7 @@ void Swatch::dropEvent(QDropEvent *event)
     // Finalize
     event->accept();
     p->drag_index = -1;
-    p->clearDrop(this);
+    p->clearDrop();
 }
 
 void Swatch::paletteModified()
@@ -418,6 +440,17 @@ void Swatch::paletteModified()
     if ( p->selected >= p->palette.count() )
         clearSelection();
     update();
+}
+
+/// \todo policy to make this a hint, minimum, or fixed size
+QSize Swatch::colorSize() const
+{
+    return p->color_size;
+}
+
+void Swatch::setColorSize(const QSize& colorSize)
+{
+    emit colorSizeChanged(p->color_size = colorSize);
 }
 
 } // namespace color_widgets
