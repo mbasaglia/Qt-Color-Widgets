@@ -49,11 +49,23 @@ class Swatch : public QWidget
      */
     Q_PROPERTY(QSize colorSize READ colorSize WRITE setColorSize NOTIFY colorSizeChanged)
 
+    Q_PROPERTY(ColorSizePolicy colorSizePolicy READ colorSizePolicy WRITE setColorSizePolicy NOTIFY colorSizePolicyChanged)
+
+
 public:
+    enum ColorSizePolicy
+    {
+        Hint,    ///< The size is just a hint
+        Minimum, ///< Can expand but not contract
+        Fixed    ///< Must be exactly as specified
+    };
+    Q_ENUMS(ColorSizePolicy)
+
     Swatch(QWidget* parent = 0);
     ~Swatch();
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     const ColorPalette& palette() const;
     ColorPalette& palette();
@@ -77,18 +89,21 @@ public:
     QColor colorAt(const QPoint& p);
 
     QSize colorSize() const;
+    ColorSizePolicy colorSizePolicy() const;
 
 public slots:
     void setPalette(const ColorPalette& palette);
     void setSelected(int selected);
     void clearSelection();
     void setColorSize(const QSize& colorSize);
+    void setColorSizePolicy(ColorSizePolicy colorSizePolicy);
 
 signals:
     void paletteChanged(const ColorPalette& palette);
     void selectedChanged(int selected);
     void colorSelected(const QColor& color);
     void colorSizeChanged(const QSize& colorSize);
+    void colorSizePolicyChanged(ColorSizePolicy colorSizePolicy);
 
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;

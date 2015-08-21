@@ -41,6 +41,7 @@ public:
     ColorPalette palette;    ///< Palette with colors and related metadata
     int          selected;   ///< Current selection index (-1 for no selection)
     QSize        color_size; ///< Preferred size for the color squares
+    ColorSizePolicy size_policy;
 
     QPoint  drag_pos;       ///< Point used to keep track of dragging
     int     drag_index;     ///< Index used by drags
@@ -53,6 +54,7 @@ public:
     Private(Swatch* owner)
         : selected(-1),
           color_size(16,16),
+          size_policy(Hint),
           drag_index(-1),
           drop_index(-1),
           drop_overwrite(false),
@@ -208,6 +210,13 @@ QSize Swatch::sizeHint() const
         p->color_size.width()  * rowcols.width(),
         p->color_size.height() * rowcols.height()
     );
+}
+
+QSize Swatch::minimumSizeHint() const
+{
+    if ( p->size_policy != Hint )
+        return sizeHint();
+    return QSize();
 }
 
 const ColorPalette& Swatch::palette() const
@@ -531,10 +540,15 @@ void Swatch::paletteModified()
 {
     if ( p->selected >= p->palette.count() )
         clearSelection();
+
+    if ( p->size_policy == Minimum )
+        setMinimumSize(sizeHint());
+    else if ( p->size_policy == Fixed )
+        setFixedSize(sizeHint());
+
     update();
 }
 
-/// \todo policy to make this a hint, minimum, or fixed size
 QSize Swatch::colorSize() const
 {
     return p->color_size;
@@ -542,7 +556,24 @@ QSize Swatch::colorSize() const
 
 void Swatch::setColorSize(const QSize& colorSize)
 {
-    emit colorSizeChanged(p->color_size = colorSize);
+    if ( p->color_size != colorSize )
+        emit colorSizeChanged(p->color_size = colorSize);
+}
+
+Swatch::ColorSizePolicy Swatch::colorSizePolicy() const
+{
+    return p->size_policy;
+}
+
+void Swatch::setColorSizePolicy(ColorSizePolicy colorSizePolicy)
+{
+    if ( p->size_policy != colorSizePolicy )
+    {
+        setMinimumSize(0,0);
+        setFixedSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
+        paletteModified();
+        emit colorSizePolicyChanged(p->size_policy = colorSizePolicy);
+    }
 }
 
 } // namespace color_widgets
