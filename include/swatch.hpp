@@ -75,6 +75,12 @@ class Swatch : public QWidget
      */
     Q_PROPERTY(int forcedColumns READ forcedColumns WRITE setForcedColumns NOTIFY forcedColumnsChanged)
 
+    /**
+     * \brief Whether the palette can be modified via user interaction
+     * \note Even when this is \b false, it can still be altered programmatically
+     */
+    Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly NOTIFY readOnlyChanged)
+
 public:
     enum ColorSizePolicy
     {
@@ -117,6 +123,8 @@ public:
     int forcedRows() const;
     int forcedColumns() const;
 
+    bool readOnly() const;
+
 public slots:
     void setPalette(const ColorPalette& palette);
     void setSelected(int selected);
@@ -125,6 +133,7 @@ public slots:
     void setColorSizePolicy(ColorSizePolicy colorSizePolicy);
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
+    void setReadOnly(bool readOnly);
 
 signals:
     void paletteChanged(const ColorPalette& palette);
@@ -136,6 +145,7 @@ signals:
     void rightClicked(int index);
     void forcedRowsChanged(int forcedRows);
     void forcedColumnsChanged(int forcedColumns);
+    void readOnlyChanged(bool readOnly);
 
 protected:
     void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
@@ -146,7 +156,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-
 
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE;

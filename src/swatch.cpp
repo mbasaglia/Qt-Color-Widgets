@@ -44,6 +44,7 @@ public:
     ColorSizePolicy size_policy;
     int          forced_rows;
     int          forced_columns;
+    bool         readonly;  ///< Whether the palette can be modified via user interaction
 
     QPoint  drag_pos;       ///< Point used to keep track of dragging
     int     drag_index;     ///< Index used by drags
@@ -59,6 +60,7 @@ public:
           size_policy(Hint),
           forced_rows(0),
           forced_columns(0),
+          readonly(false),
           drag_index(-1),
           drop_index(-1),
           drop_overwrite(false),
@@ -422,7 +424,7 @@ void Swatch::keyPressEvent(QKeyEvent* event)
             break;
 
         case Qt::Key_Delete:
-            if (selected != -1 )
+            if (selected != -1 && !p->readonly )
             {
                 p->palette.eraseColor(selected);
                 selected = qMin(selected, p->palette.count() - 1);
@@ -430,7 +432,7 @@ void Swatch::keyPressEvent(QKeyEvent* event)
             break;
 
         case Qt::Key_Backspace:
-            if (selected != -1 )
+            if (selected != -1 && !p->readonly )
             {
                 p->palette.eraseColor(selected);
                 if ( p->palette.count() == 0 )
@@ -439,11 +441,8 @@ void Swatch::keyPressEvent(QKeyEvent* event)
                     selected = qMax(selected - 1, 0);
             }
             break;
-
-
     }
     setSelected(selected);
-
 }
 
 void Swatch::mousePressEvent(QMouseEvent *event)
@@ -479,7 +478,10 @@ void Swatch::mouseMoveEvent(QMouseEvent *event)
         QDrag *drag = new QDrag(this);
         drag->setMimeData(mimedata);
         drag->setPixmap(preview);
-        drag->exec(Qt::CopyAction|Qt::MoveAction);
+        Qt::DropActions actions = Qt::CopyAction;
+        if ( p->readonly )
+            actions |= Qt::MoveAction;
+        drag->exec(actions);
     }
 }
 
@@ -503,6 +505,9 @@ void Swatch::mouseDoubleClickEvent(QMouseEvent *event)
 
 void Swatch::dragEnterEvent(QDragEnterEvent *event)
 {
+    if ( p->readonly )
+        return;
+
     p->dropEvent(event);
 
     if ( p->drop_color.isValid() && p->drop_index != -1 )
@@ -518,6 +523,8 @@ void Swatch::dragEnterEvent(QDragEnterEvent *event)
 
 void Swatch::dragMoveEvent(QDragMoveEvent* event)
 {
+    if ( p->readonly )
+        return;
     p->dropEvent(event);
 }
 
@@ -528,6 +535,9 @@ void Swatch::dragLeaveEvent(QDragLeaveEvent *event)
 
 void Swatch::dropEvent(QDropEvent *event)
 {
+    if ( p->readonly )
+        return;
+
     QString name;
 
     // Gather up the color
@@ -643,6 +653,20 @@ void Swatch::setForcedRows(int forcedRows)
     {
         emit forcedColumnsChanged(p->forced_columns = 0);
         emit forcedRowsChanged(p->forced_rows = forcedRows);
+    }
+}
+
+bool Swatch::readOnly() const
+{
+    return p->readonly;
+}
+
+void Swatch::setReadOnly(bool readOnly)
+{
+    if ( readOnly != p->readonly )
+    {
+        emit readOnlyChanged(p->readonly = readOnly);
+        setAcceptDrops(!p->readonly);
     }
 }
 
