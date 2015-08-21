@@ -421,6 +421,26 @@ void Swatch::keyPressEvent(QKeyEvent* event)
                 selected += columns - (selected % columns) - 1;
             break;
 
+        case Qt::Key_Delete:
+            if (selected != -1 )
+            {
+                p->palette.eraseColor(selected);
+                selected = qMin(selected, p->palette.count() - 1);
+            }
+            break;
+
+        case Qt::Key_Backspace:
+            if (selected != -1 )
+            {
+                p->palette.eraseColor(selected);
+                if ( p->palette.count() == 0 )
+                    selected = -1;
+                else
+                    selected = qMax(selected - 1, 0);
+            }
+            break;
+
+
     }
     setSelected(selected);
 
