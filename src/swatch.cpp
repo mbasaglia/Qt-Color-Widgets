@@ -42,6 +42,10 @@ public:
 
     QPoint drag_pos; ///< Point used to keep track of dragging
     int drag_index; ///< Index used by drags
+    int drop_index; ///< Index for a requested drop
+    QColor drop_color; ///< Dropped color
+
+    Private() : selected(-1), drag_index(-1), drop_index(-1) {}
 
     /**
      * \brief Number of rows/columns in the palette
@@ -62,6 +66,41 @@ public:
 
         return QSize(columns, rows);
     }
+
+    /**
+     * \brief Sets the drop properties
+     */
+    void dropEvent(Swatch* self, QDropEvent* event)
+    {
+        // Find the output location
+        drop_index = self->indexAt(event->pos());
+        if ( drop_index == -1 )
+            drop_index = palette.count();
+
+        // Gather up the color
+        if ( event->mimeData()->hasColor() )
+        {
+            drop_color = event->mimeData()->colorData().value<QColor>();
+            drop_color.setAlpha(255);
+        }
+        else if ( event->mimeData()->hasText() )
+        {
+            drop_color = QColor(event->mimeData()->text());
+        }
+
+        self->update();
+    }
+
+    /**
+     * \brief Clears drop properties
+     */
+    void clearDrop(Swatch* self)
+    {
+        drop_index = -1;
+        drop_color = QColor();
+
+        self->update();
+    }
 };
 
 /**
@@ -71,8 +110,6 @@ public:
 Swatch::Swatch(QWidget* parent)
     : QWidget(parent), p(new Private)
 {
-    p->selected = -1;
-    p->drag_index = -1;
     connect(&p->palette, SIGNAL(colorsChanged(QVector<QColor>)),SLOT(paletteModified()));
     connect(&p->palette, SIGNAL(columnsChanged(int)),SLOT(update()));
     setFocusPolicy(Qt::StrongFocus);
@@ -171,6 +208,14 @@ void Swatch::paintEvent(QPaintEvent* event)
             QRectF rect(QPointF(x*color_size.width(), y*color_size.height()), color_size);
             painter.fillRect(rect, p->palette.colorAt(i));
         }
+    }
+
+    if ( p->drop_index != -1 )
+    {
+        float x = p->drop_index % rowcols.width() * color_size.width();
+        float y = p->drop_index / rowcols.width() * color_size.height();
+        painter.setPen(QPen(p->drop_color, 2));
+        painter.drawLine(x, y, x, y+color_size.height());
     }
 
     if ( hasFocus() )
@@ -294,8 +339,9 @@ void Swatch::mouseReleaseEvent(QMouseEvent *event)
 
 void Swatch::dragEnterEvent(QDragEnterEvent *event)
 {
-    if ( event->mimeData()->hasColor() ||
-         ( event->mimeData()->hasText() && QColor(event->mimeData()->text()).isValid() ) )
+    p->dropEvent(this, event);
+
+    if ( p->drop_color.isValid() && p->drop_index != -1 )
     {
         if ( event->proposedAction() == Qt::MoveAction )
             event->setDropAction(Qt::MoveAction);
@@ -306,10 +352,15 @@ void Swatch::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void dragMoveEvent(QDropEvent* event)
+void Swatch::dragMoveEvent(QDragMoveEvent* event)
 {
+    p->dropEvent(this, event);
 }
 
+void Swatch::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    p->clearDrop(this);
+}
 /**
  * \todo
  *      * For move select new color or overwrite based on the position
@@ -317,49 +368,33 @@ void dragMoveEvent(QDropEvent* event)
  */
 void Swatch::dropEvent(QDropEvent *event)
 {
-    QColor color;
     QString name;
 
     // Gather up the color
-    if ( event->mimeData()->hasColor() )
-    {
-        color = event->mimeData()->colorData().value<QColor>();
-        if ( event->mimeData()->hasText() )
+    if ( event->mimeData()->hasColor() && event->mimeData()->hasText() )
             name = event->mimeData()->text();
-    }
-    else if ( event->mimeData()->hasText() )
-    {
-        color = QColor(event->mimeData()->text());
-    }
 
     // Not a color, discard
-    if ( !color.isValid() )
+    if ( !p->drop_color.isValid() || p->drop_index == -1 )
         return;
 
-    // Find the output location
-    int drop_index = indexAt(event->pos());
-    if ( drop_index == -1 )
-        drop_index = p->palette.count();
+    p->dropEvent(this, event);
 
     // Move unto self
     if ( event->dropAction() == Qt::MoveAction && event->source() == this )
     {
         // Not moved => noop
         /// \todo Disallow this instead of accepting
-        if ( drop_index == p->drag_index + 1 )
+        if ( p->drop_index != p->drag_index + 1 )
         {
-            // Finalize
-            event->accept();
-            p->drag_index = -1;
-            return;
+            // Erase the old color
+            p->palette.eraseColor(p->drag_index);
+            if ( p->drop_index > p->drag_index )
+                p->drop_index--;
+            p->selected = p->drop_index;
+            // Insert the dropped color
+            p->palette.insertColor(p->drop_index, p->drop_color, name);
         }
-        // Erase the old color
-        p->palette.eraseColor(p->drag_index);
-        if ( drop_index > p->drag_index )
-            drop_index--;
-        p->selected = drop_index;
-        // Insert the dropped color
-        p->palette.insertColor(drop_index, color, name);
     }
     /*// Move into a color cell
     else if ( event->dropAction() == Qt::MoveAction && drop_index < p->palette.count() )
@@ -369,12 +404,13 @@ void Swatch::dropEvent(QDropEvent *event)
     // Insert the dropped color
     else
     {
-        p->palette.insertColor(drop_index, color, name);
+        p->palette.insertColor(p->drop_index, p->drop_color, name);
     }
 
     // Finalize
     event->accept();
     p->drag_index = -1;
+    p->clearDrop(this);
 }
 
 void Swatch::paletteModified()
