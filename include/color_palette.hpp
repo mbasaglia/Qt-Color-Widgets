@@ -29,6 +29,7 @@
 #include <QVector>
 #include <QObject>
 #include <QPair>
+#include <QPixmap>
 #include "colorwidgets_global.hpp"
 
 namespace color_widgets {
@@ -108,6 +109,11 @@ public:
     QString fileName() const;
 
     bool dirty() const;
+
+    /**
+     * \brief Returns a preview image of the colors in the palette
+     */
+    QPixmap preview(const QSize& size, const QColor& background=Qt::transparent) const;
 
 public slots:
     void setColumns(int columns);

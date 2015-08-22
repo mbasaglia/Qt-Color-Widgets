@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QHash>
+#include <QPainter>
 
 namespace color_widgets {
 
@@ -367,6 +368,56 @@ void ColorPalette::setFileName(const QString& name)
 QString ColorPalette::unnamed(const QString& name) const
 {
     return name.isEmpty() ? tr("Unnamed") : name;
+}
+
+
+QPixmap ColorPalette::preview(const QSize& size, const QColor& background) const
+{
+    if ( !size.isValid() || p->colors.empty() )
+        return QPixmap();
+
+    QPixmap out( size );
+    out.fill(background);
+    QPainter painter(&out);
+
+    int count = p->colors.size();
+    int columns = p->columns;
+    if ( !columns )
+        columns = std::ceil( std::sqrt( count * float(size.width()) / size.height() ) );
+    int rows = std::ceil( float(count) / columns );
+    QSizeF color_size(float(size.width()) / columns, float(size.height()) / rows);
+
+    for ( int y = 0, i = 0; y < rows && i < count; y++ )
+    {
+        for ( int x = 0; x < columns && i < count; x++, i++ )
+        {
+            painter.fillRect(QRectF(x*color_size.width(), y*color_size.height(),
+                             color_size.width(), color_size.height()),
+                             p->colors[i].first
+                            );
+        }
+    }
+
+    return out;
+}
+
+bool ColorPalette::dirty() const
+{
+    return p->dirty;
+}
+
+void ColorPalette::setDirty(bool dirty)
+{
+    p->dirty = dirty;
+}
+
+QVector<QColor> ColorPalette::onlyColors() const
+{
+    QVector<QColor> out;
+    out.reserve(p->colors.size());
+    for ( int i = 0; i < p->colors.size(); i++ )
+        out.push_back(p->colors[i].second);
+    return out;
 }
 
 } // namespace color_widgets
