@@ -36,6 +36,7 @@ public:
     int             columns;
     QString         name;
     QString         fileName;
+    bool            dirty;
 
     bool valid_index(int index)
     {
@@ -58,6 +59,7 @@ ColorPalette::ColorPalette(const QString& name)
 {
     setName(name);
     p->columns = 0;
+    p->dirty = false;
 }
 
 ColorPalette::ColorPalette(const QVector<QPair<QColor,QString> >& colors,
@@ -67,6 +69,7 @@ ColorPalette::ColorPalette(const QVector<QPair<QColor,QString> >& colors,
     setName(name);
     setColumns(columns);
     setColors(colors);
+    p->dirty = false;
 }
 ColorPalette::ColorPalette(const ColorPalette& other)
     : p ( new Private(*other.p) )
@@ -97,7 +100,6 @@ ColorPalette& ColorPalette::operator=(ColorPalette&& other)
 {
     std::swap(p, other.p);
     emit colorsChanged(p->colors);
-    emit namesChanged(p->names);
     emit columnsChanged(p->columns);
     emit nameChanged(p->name);
     emit fileNameChanged(p->fileName);
@@ -142,6 +144,7 @@ bool ColorPalette::load(const QString& name)
     p->colors.clear();
     p->columns = 0;
     p->name = QString();
+    p->dirty = false;
 
     QFile file(name);
 
@@ -194,6 +197,7 @@ bool ColorPalette::load(const QString& name)
     }
 
     emit colorsChanged(p->colors);
+    p->dirty = false;
 
     return true;
 }
@@ -240,7 +244,13 @@ bool ColorPalette::save() const
                << unnamed(p->colors[i].second) << '\n';
     }
 
-    return !file.error();
+    if ( !file.error() )
+    {
+        p->dirty = false;
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -256,7 +266,10 @@ void ColorPalette::setColumns(int columns)
         columns = 0;
 
     if ( columns != p->columns )
+    {
+        p->dirty = true;
         emit columnsChanged( p->columns = columns );
+    }
 }
 
 void ColorPalette::setColors(const QVector<QColor>& colors)
@@ -264,14 +277,14 @@ void ColorPalette::setColors(const QVector<QColor>& colors)
     p->colors.clear();
     foreach(const QColor& col, colors)
         p->colors.push_back(qMakePair(col,QString()));
-
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
 void ColorPalette::setColors(const QVector<QPair<QColor,QString> >& colors)
 {
     p->colors = colors;
-
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
@@ -283,6 +296,7 @@ void ColorPalette::setColorAt(int index, const QColor& color)
 
     p->colors[index].first = color;
 
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
@@ -293,6 +307,7 @@ void ColorPalette::setColorAt(int index, const QColor& color, const QString& nam
 
     p->colors[index].first = color;
     p->colors[index].second = name;
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
@@ -303,6 +318,7 @@ void ColorPalette::setNameAt(int index, const QString& name)
 
     p->colors[index].second = name;
 
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
@@ -310,6 +326,7 @@ void ColorPalette::setNameAt(int index, const QString& name)
 void ColorPalette::appendColor(const QColor& color, const QString& name)
 {
     p->colors.push_back(qMakePair(color,name));
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
@@ -320,6 +337,7 @@ void ColorPalette::insertColor(int index, const QColor& color, const QString& na
 
     p->colors.insert(index, qMakePair(color, name));
 
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
@@ -330,16 +348,19 @@ void ColorPalette::eraseColor(int index)
 
     p->colors.remove(index);
 
+    p->dirty = true;
     emit colorsChanged(p->colors);
 }
 
 void ColorPalette::setName(const QString& name)
 {
+    p->dirty = true;
     p->name = name;
 }
 
 void ColorPalette::setFileName(const QString& name)
 {
+    p->dirty = true;
     p->fileName = name;
 }
 

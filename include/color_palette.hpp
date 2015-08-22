@@ -41,7 +41,6 @@ class QCP_EXPORT ColorPalette : public QObject
      * \brief The list of colors
      */
     Q_PROPERTY(QVector<value_type> colors READ colors WRITE setColors NOTIFY colorsChanged)
-
     /**
      * \brief Name of the palette
      */
@@ -58,6 +57,10 @@ class QCP_EXPORT ColorPalette : public QObject
      * \brief Name of the file the palette has been read from
      */
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
+    /**
+     * \brief Whether it has been modified and it might be advisable to save it
+     */
+    Q_PROPERTY(bool dirty READ dirty WRITE setDirty)
 
 public:
     typedef QPair<QColor,QString> value_type;
@@ -104,6 +107,8 @@ public:
 
     QString fileName() const;
 
+    bool dirty() const;
+
 public slots:
     void setColumns(int columns);
 
@@ -148,6 +153,7 @@ public slots:
 
     void setName(const QString& name);
     void setFileName(const QString& name);
+    void setDirty(bool dirty);
 
 signals:
     void colorsChanged(const QVector<QPair<QColor,QString> >&);
