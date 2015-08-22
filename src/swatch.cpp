@@ -436,12 +436,8 @@ void Swatch::keyPressEvent(QKeyEvent* event)
             break;
 
         case Qt::Key_Delete:
-            if (selected != -1 && !p->readonly )
-            {
-                p->palette.eraseColor(selected);
-                selected = qMin(selected, p->palette.count() - 1);
-            }
-            break;
+            removeSelected();
+            return;
 
         case Qt::Key_Backspace:
             if (selected != -1 && !p->readonly )
@@ -455,6 +451,16 @@ void Swatch::keyPressEvent(QKeyEvent* event)
             break;
     }
     setSelected(selected);
+}
+
+void Swatch::removeSelected()
+{
+    if (p->selected != -1 && !p->readonly )
+    {
+        int selected = p->selected;
+        p->palette.eraseColor(p->selected);
+        setSelected(qMin(selected, p->palette.count() - 1));
+    }
 }
 
 void Swatch::mousePressEvent(QMouseEvent *event)

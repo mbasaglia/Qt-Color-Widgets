@@ -134,6 +134,10 @@ public slots:
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
     void setReadOnly(bool readOnly);
+    /**
+     * \brief Remove the currently seleceted color
+     **/
+    void removeSelected();
 
 signals:
     void paletteChanged(const ColorPalette& palette);

@@ -30,6 +30,7 @@ class ColorPaletteWidget::Private : public Ui::ColorPaletteWidget
 {
 public:
     ColorPaletteModel* model = nullptr;
+    bool read_only = false;
 };
 
 
@@ -42,6 +43,21 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     connect(p->swatch, &Swatch::forcedRowsChanged, this, &ColorPaletteWidget::forcedRowsChanged);
     connect(p->swatch, &Swatch::forcedColumnsChanged, this, &ColorPaletteWidget::forcedColumnsChanged);
     connect(p->swatch, &Swatch::colorSelected, this, &ColorPaletteWidget::currentColorChanged);
+    connect(p->button_color_add, &QAbstractButton::clicked, [this](){
+        if ( !p->read_only )
+        {
+            ColorDialog dialog(this);
+            dialog.setAlphaEnabled(false);
+            if ( p->swatch->selected() != -1 )
+                dialog.setColor(p->swatch->selectedColor());
+            if ( dialog.exec() )
+            {
+                p->swatch->palette().appendColor(dialog.color());
+                p->swatch->setSelected(p->swatch->palette().count()-1);
+            }
+        }
+    });
+    connect(p->button_color_remove, &QAbstractButton::clicked, p->swatch, &Swatch::removeSelected);
 }
 
 ColorPaletteWidget::~ColorPaletteWidget() = default;
@@ -77,7 +93,7 @@ int ColorPaletteWidget::forcedColumns() const
 
 bool ColorPaletteWidget::readOnly() const
 {
-    return p->swatch->readOnly();
+    return p->read_only;
 }
 
 QColor ColorPaletteWidget::currentColor() const
@@ -113,13 +129,13 @@ void ColorPaletteWidget::setForcedColumns(int forcedColumns)
 }
 void ColorPaletteWidget::setReadOnly(bool readOnly)
 {
-    if ( readOnly == p->swatch->readOnly() )
+    if ( readOnly == p->read_only )
         return;
 
     p->swatch->setReadOnly(readOnly);
     p->group_edit_list->setVisible(!readOnly);
     p->group_edit_palette->setVisible(!readOnly);
-    emit readOnlyChanged(readOnly);
+    emit readOnlyChanged(p->read_only = readOnly);
 }
 
 bool ColorPaletteWidget::setCurrentColor(const QColor& color)
@@ -164,7 +180,7 @@ void ColorPaletteWidget::on_palette_list_currentIndexChanged(int index)
 
 void ColorPaletteWidget::on_swatch_doubleClicked(int index)
 {
-    if ( !p->swatch->readOnly() )
+    if ( !p->read_only )
     {
         ColorDialog dialog(this);
         dialog.setAlphaEnabled(false);
