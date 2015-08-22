@@ -195,8 +195,17 @@ public:
 Swatch::Swatch(QWidget* parent)
     : QWidget(parent), p(new Private(this))
 {
-    connect(&p->palette, SIGNAL(colorsChanged(QVector<QPair<QColor,QString> >)),SLOT(paletteModified()));
-    connect(&p->palette, SIGNAL(columnsChanged(int)),SLOT(update()));
+    connect(&p->palette, &ColorPalette::colorsChanged, this, &Swatch::paletteModified);
+    connect(&p->palette, &ColorPalette::columnsChanged, this, (void(QWidget::*)())&QWidget::update);
+    connect(&p->palette, &ColorPalette::colorsUpdated, this, (void(QWidget::*)())&QWidget::update);
+    connect(&p->palette, &ColorPalette::colorChanged, [this](int index){
+        if ( index == p->selected )
+            emit colorSelected( p->palette.colorAt(index) );
+    });
+    connect(&p->palette, &ColorPalette::colorRemoved, [this](int index){
+        if ( index == p->selected )
+            clearSelection();
+    });
     setFocusPolicy(Qt::StrongFocus);
     setAcceptDrops(true);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -273,6 +282,7 @@ QColor Swatch::colorAt(const QPoint& pt)
 
 void Swatch::setPalette(const ColorPalette& palette)
 {
+    clearSelection();
     p->palette = palette;
     update();
     emit paletteChanged(p->palette);
@@ -286,7 +296,8 @@ void Swatch::setSelected(int selected)
     if ( selected != p->selected )
     {
         emit selectedChanged( p->selected = selected );
-        emit colorSelected( p->palette.colorAt(p->selected) );
+        if ( selected != -1 )
+            emit colorSelected( p->palette.colorAt(p->selected) );
         update();
     }
 }

@@ -77,6 +77,7 @@ public:
     /**
      * \brief Get the palette at the given index (row)
      * \pre 0 <= index < rowCount()
+     * \todo Maybe it's unsafe to be able to modify them outside the model
      */
     ColorPalette& palette(int index);
 

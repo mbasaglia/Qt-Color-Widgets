@@ -31,6 +31,7 @@ SOURCES += \
     $$PWD/src/abstract_widget_list.cpp \
     $$PWD/src/color_palette.cpp \
     $$PWD/src/color_palette_model.cpp \
+    $$PWD/src/color_palette_widget.cpp \
     $$PWD/src/swatch.cpp
 
 HEADERS += \
@@ -47,10 +48,12 @@ HEADERS += \
     $$PWD/include/colorwidgets_global.hpp \
     $$PWD/include/color_palette.hpp \
     $$PWD/include/color_palette_model.hpp \
+    $$PWD/include/color_widget.hpp \
     $$PWD/include/swatch.hpp
 
 FORMS += \
-    $$PWD/src/color_dialog.ui
+    $$PWD/src/color_dialog.ui \
+    $$PWD/src/color_palette_widget.ui
 
 RESOURCES += \
     $$PWD/src/pattern.qrc

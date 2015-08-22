@@ -72,10 +72,8 @@ public:
     ColorPalette(const ColorPalette& other);
     ColorPalette& operator=(const ColorPalette& other);
     ~ColorPalette();
-#ifdef Q_COMPILER_RVALUE_REFS
     ColorPalette(ColorPalette&& other);
     ColorPalette& operator=(ColorPalette&& other);
-#endif // Q_COMPILER_RVALUE_REFS
 
     /**
      * \brief Color at the given index
@@ -162,16 +160,40 @@ public slots:
     void setDirty(bool dirty);
 
 signals:
+    /**
+     * \brief Emitted when all the colors have changed
+     */
     void colorsChanged(const QVector<QPair<QColor,QString> >&);
     void columnsChanged(int);
     void nameChanged(const QString&);
     void fileNameChanged(const QString&);
+    /**
+     * \brief Emitted when the color or the name at the given index has been modified
+     */
+    void colorChanged(int index);
+    /**
+     * \brief Emitted when the color at the given index has been removed
+     */
+    void colorRemoved(int index);
+    /**
+     * \brief Emitted when a single color has been added
+     */
+    void colorAdded(int index);
+    /**
+     * \brief Emitted when the colors have been modified with a simple operation (set, append etc.)
+     */
+    void colorsUpdated(const QVector<QPair<QColor,QString>>&);
 
 private:
     /**
      * \brief Returns \c name if it isn't null, otherwise a default value
      */
     QString unnamed(const QString& name = QString()) const;
+
+    /**
+     * \brief Emit all the necessary signals when the palette has been completely overwritten
+     */
+    void emitUpdate();
 
     class Private;
     Private *p;

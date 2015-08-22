@@ -73,17 +73,16 @@ ColorPalette::ColorPalette(const QVector<QPair<QColor,QString> >& colors,
     setColors(colors);
     p->dirty = false;
 }
+
 ColorPalette::ColorPalette(const ColorPalette& other)
     : p ( new Private(*other.p) )
 {
 }
+
 ColorPalette& ColorPalette::operator=(const ColorPalette& other)
 {
     *p = *other.p;
-    emit colorsChanged(p->colors);
-    emit columnsChanged(p->columns);
-    emit nameChanged(p->name);
-    emit fileNameChanged(p->fileName);
+    emitUpdate();
     return *this;
 }
 
@@ -92,7 +91,6 @@ ColorPalette::~ColorPalette()
     delete p;
 }
 
-#ifdef Q_COMPILER_RVALUE_REFS
 ColorPalette::ColorPalette(ColorPalette&& other)
     : p ( other.p )
 {
@@ -101,13 +99,17 @@ ColorPalette::ColorPalette(ColorPalette&& other)
 ColorPalette& ColorPalette::operator=(ColorPalette&& other)
 {
     std::swap(p, other.p);
+    emitUpdate();
+    return *this;
+}
+
+void ColorPalette::emitUpdate()
+{
     emit colorsChanged(p->colors);
     emit columnsChanged(p->columns);
     emit nameChanged(p->name);
     emit fileNameChanged(p->fileName);
-    return *this;
 }
-#endif // Q_COMPILER_RVALUE_REFS
 
 QColor ColorPalette::colorAt(int index) const
 {
@@ -142,7 +144,6 @@ QString ColorPalette::name() const
 bool ColorPalette::load(const QString& name)
 {
     p->fileName = name;
-    emit fileNameChanged(p->fileName);
     p->colors.clear();
     p->columns = 0;
     p->dirty = false;
@@ -150,14 +151,19 @@ bool ColorPalette::load(const QString& name)
 
     QFile file(name);
 
-    /// \todo emit signals on return false
     if ( !file.open(QFile::ReadOnly|QFile::Text) )
+    {
+        emitUpdate();
         return false;
+    }
 
     QTextStream stream( &file );
 
     if ( stream.readLine() != "GIMP Palette" )
+    {
+        emitUpdate();
         return false;
+    }
 
     QString line;
 
@@ -171,25 +177,27 @@ bool ColorPalette::load(const QString& name)
         if ( line[0] == '#' )
             break;
         int colon = line.indexOf(':');
-        if ( colon != -1 )
-            properties[line.left(colon).toLower()] =
-                line.right(line.size() - colon - 1).trimmed();
+        if ( colon == -1 )
+            break;
+        properties[line.left(colon).toLower()] =
+            line.right(line.size() - colon - 1).trimmed();
     }
     /// \todo Store extra properties in the palette object
     setName(properties["name"]);
     setColumns(properties["columns"].toInt());
 
     // Skip comments
-    while( !stream.atEnd() )
-    {
-        qint64 pos = stream.pos();
-        line = stream.readLine();
-        if ( !line.isEmpty() && line[0] != '#' )
+    if ( !stream.atEnd() && line[0] == '#' )
+        while( !stream.atEnd() )
         {
-            stream.seek(pos);
-            break;
+            qint64 pos = stream.pos();
+            line = stream.readLine();
+            if ( !line.isEmpty() && line[0] != '#' )
+            {
+                stream.seek(pos);
+                break;
+            }
         }
-    }
 
     while( !stream.atEnd() )
     {
@@ -300,7 +308,8 @@ void ColorPalette::setColorAt(int index, const QColor& color)
     p->colors[index].first = color;
 
     p->dirty = true;
-    emit colorsChanged(p->colors);
+    emit colorChanged(index);
+    emit colorsUpdated(p->colors);
 }
 
 void ColorPalette::setColorAt(int index, const QColor& color, const QString& name)
@@ -311,7 +320,8 @@ void ColorPalette::setColorAt(int index, const QColor& color, const QString& nam
     p->colors[index].first = color;
     p->colors[index].second = name;
     p->dirty = true;
-    emit colorsChanged(p->colors);
+    emit colorChanged(index);
+    emit colorsUpdated(p->colors);
 }
 
 void ColorPalette::setNameAt(int index, const QString& name)
@@ -322,7 +332,8 @@ void ColorPalette::setNameAt(int index, const QString& name)
     p->colors[index].second = name;
 
     p->dirty = true;
-    emit colorsChanged(p->colors);
+    emit colorChanged(index);
+    emit colorsUpdated(p->colors);
 }
 
 
@@ -330,7 +341,8 @@ void ColorPalette::appendColor(const QColor& color, const QString& name)
 {
     p->colors.push_back(qMakePair(color,name));
     p->dirty = true;
-    emit colorsChanged(p->colors);
+    emit colorAdded(p->colors.size()-1);
+    emit colorsUpdated(p->colors);
 }
 
 void ColorPalette::insertColor(int index, const QColor& color, const QString& name)
@@ -341,7 +353,8 @@ void ColorPalette::insertColor(int index, const QColor& color, const QString& na
     p->colors.insert(index, qMakePair(color, name));
 
     p->dirty = true;
-    emit colorsChanged(p->colors);
+    emit colorAdded(index);
+    emit colorsUpdated(p->colors);
 }
 
 void ColorPalette::eraseColor(int index)
@@ -352,7 +365,8 @@ void ColorPalette::eraseColor(int index)
     p->colors.remove(index);
 
     p->dirty = true;
-    emit colorsChanged(p->colors);
+    emit colorRemoved(index);
+    emit colorsUpdated(p->colors);
 }
 
 void ColorPalette::setName(const QString& name)
