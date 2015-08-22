@@ -27,6 +27,7 @@
 #include <QTextStream>
 #include <QHash>
 #include <QPainter>
+#include <QFileInfo>
 
 namespace color_widgets {
 
@@ -144,11 +145,12 @@ bool ColorPalette::load(const QString& name)
     emit fileNameChanged(p->fileName);
     p->colors.clear();
     p->columns = 0;
-    p->name = QString();
     p->dirty = false;
+    p->name = QFileInfo(name).baseName();
 
     QFile file(name);
 
+    /// \todo emit signals on return false
     if ( !file.open(QFile::ReadOnly|QFile::Text) )
         return false;
 

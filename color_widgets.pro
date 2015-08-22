@@ -38,30 +38,7 @@ isEmpty(PREFIX) {
 }
 target.path = $$PREFIX/lib
 headers.path = $$PREFIX/include/QtColorWidgets
-headers.files = \
-	include/AbstractWidgetList \
-	include/BoundColorSelector \
-	include/ColorDelegate \
-	include/ColorDialog \
-	include/ColorListWidget \
-	include/ColorPreview \
-	include/ColorSelector \
-	include/ColorWheel \
-	include/GradientSlider \
-	include/HueSlider \
-	include/abstract_widget_list.hpp \
-	include/color_delegate.hpp \
-	include/color_list_widget.hpp \
-	include/color_preview.hpp \
-	include/color_wheel.hpp \
-	include/bound_color_selector.hpp \
-	include/color_dialog.hpp \
-	include/colorwidgets_global.hpp \
-	include/color_selector.hpp \
-	include/gradient_slider.hpp \
-	include/hue_slider.hpp \
-    include/color_palette.hpp \
-    include/swatch.hpp
+headers.files = $$HEADERS
 
 INSTALLS += target headers
 

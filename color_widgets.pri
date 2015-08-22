@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
+CONFIG += c++11
 
 INCLUDEPATH += $$PWD/src $$PWD/include
 
@@ -29,6 +30,7 @@ SOURCES += \
     $$PWD/src/bound_color_selector.cpp \
     $$PWD/src/abstract_widget_list.cpp \
     $$PWD/src/color_palette.cpp \
+    $$PWD/src/color_palette_model.cpp \
     $$PWD/src/swatch.cpp
 
 HEADERS += \
@@ -44,6 +46,7 @@ HEADERS += \
     $$PWD/include/abstract_widget_list.hpp \
     $$PWD/include/colorwidgets_global.hpp \
     $$PWD/include/color_palette.hpp \
+    $$PWD/include/color_palette_model.hpp \
     $$PWD/include/swatch.hpp
 
 FORMS += \
