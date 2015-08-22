@@ -40,11 +40,8 @@ class QCP_EXPORT ColorPalette : public QObject
     /**
      * \brief The list of colors
      */
-    Q_PROPERTY(QVector<QColor> colors READ colors WRITE setColors NOTIFY colorsChanged)
-    /**
-     * \brief The list of color names
-     */
-    Q_PROPERTY(QVector<QString> names READ names NOTIFY namesChanged)
+    Q_PROPERTY(QVector<value_type> colors READ colors WRITE setColors NOTIFY colorsChanged)
+
     /**
      * \brief Name of the palette
      */
@@ -63,6 +60,8 @@ class QCP_EXPORT ColorPalette : public QObject
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
 
 public:
+    typedef QPair<QColor,QString> value_type;
+
     ColorPalette(const QVector<QColor>& colors, const QString& name = QString(), int columns = 0);
     ColorPalette(const QVector<QPair<QColor,QString> >& colors, const QString& name = QString(), int columns = 0);
     explicit ColorPalette(const QString& name = QString());
@@ -84,8 +83,8 @@ public:
      */
     Q_INVOKABLE QString nameAt(int index) const;
 
-    QVector<QColor> colors() const;
-    QVector<QString> names() const;
+    QVector<QPair<QColor,QString> > colors() const;
+    QVector<QColor> onlyColors() const;
 
     int count() const;
     int columns();
@@ -114,7 +113,11 @@ public slots:
     /**
      * \brief Change the color at the given index
      */
-    void setColorAt(int index, const QColor& color, const QString& name = QString());
+    void setColorAt(int index, const QColor& color);
+    /**
+     * \brief Change the color at the given index
+     */
+    void setColorAt(int index, const QColor& color, const QString& name);
     /**
      * \brief Change the name of a color
      */
@@ -147,8 +150,7 @@ public slots:
     void setFileName(const QString& name);
 
 signals:
-    void colorsChanged(const QVector<QColor>&);
-    void namesChanged(const QVector<QString>&);
+    void colorsChanged(const QVector<QPair<QColor,QString> >&);
     void columnsChanged(int);
     void nameChanged(const QString&);
     void fileNameChanged(const QString&);

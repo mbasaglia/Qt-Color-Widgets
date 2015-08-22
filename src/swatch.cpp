@@ -195,7 +195,7 @@ public:
 Swatch::Swatch(QWidget* parent)
     : QWidget(parent), p(new Private(this))
 {
-    connect(&p->palette, SIGNAL(colorsChanged(QVector<QColor>)),SLOT(paletteModified()));
+    connect(&p->palette, SIGNAL(colorsChanged(QVector<QPair<QColor,QString> >)),SLOT(paletteModified()));
     connect(&p->palette, SIGNAL(columnsChanged(int)),SLOT(update()));
     setFocusPolicy(Qt::StrongFocus);
     setAcceptDrops(true);
@@ -692,10 +692,10 @@ bool Swatch::event(QEvent* event)
         {
             QColor color = p->palette.colorAt(index);
             QString name = p->palette.nameAt(index);
-            QString message;
-            message = tr("%1 %2 %3").arg(color.red()).arg(color.green()).arg(color.blue());
+            QString message = color.name();
             if ( !name.isEmpty() )
                 message = tr("%1 (%2)").arg(name).arg(message);
+            message = "<tt style='background-color:"+color.name()+";color:"+color.name()+";'>MM</tt> "+message.toHtmlEscaped();
             QToolTip::showText(help_ev->globalPos(), message, this,
                                p->indexRect(index).toRect());
             event->accept();
