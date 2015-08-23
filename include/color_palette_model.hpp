@@ -92,6 +92,12 @@ public:
      */
     bool updatePalette(int index, const ColorPalette& palette, bool save = true);
 
+    /**
+     * \brief Remove a palette from the model and optionally from the filesystem
+     * \returns \b true if the palette has been successfully removed
+     */
+    bool removePalette(int index, bool remove_file = true);
+
 public slots:
     void setSavePath(const QString& savePath);
     void setSearchPaths(const QStringList& searchPaths);

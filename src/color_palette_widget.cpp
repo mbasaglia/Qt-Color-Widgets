@@ -38,11 +38,18 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     : QWidget(parent), p(new Private)
 {
     p->setupUi(this);
+
+    // Connext Swatch signals
     connect(p->swatch, &Swatch::colorSizeChanged, this, &ColorPaletteWidget::colorSizeChanged);
     connect(p->swatch, &Swatch::colorSizePolicyChanged, this, &ColorPaletteWidget::colorSizePolicyChanged);
     connect(p->swatch, &Swatch::forcedRowsChanged, this, &ColorPaletteWidget::forcedRowsChanged);
     connect(p->swatch, &Swatch::forcedColumnsChanged, this, &ColorPaletteWidget::forcedColumnsChanged);
     connect(p->swatch, &Swatch::colorSelected, this, &ColorPaletteWidget::currentColorChanged);
+
+    connect(&p->swatch->palette(), &ColorPalette::dirtyChanged, p->button_palette_save, &QWidget::setEnabled);
+    connect(&p->swatch->palette(), &ColorPalette::dirtyChanged, p->button_palette_revert, &QWidget::setEnabled);
+
+    // Buttons changing the colors in the current palette
     connect(p->button_color_add, &QAbstractButton::clicked, [this](){
         if ( !p->read_only && p->palette_list->currentIndex() != -1 )
         {
@@ -58,9 +65,11 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
         }
     });
     connect(p->button_color_remove, &QAbstractButton::clicked, p->swatch, &Swatch::removeSelected);
+
+    // Buttons modifying the current palette file
     connect(p->button_palette_delete, &QAbstractButton::clicked, [this]() {
         if ( !p->read_only && p->model && p->palette_list->currentIndex() != -1 )
-            p->model->removeRow(p->palette_list->currentIndex());
+            p->model->removePalette(p->palette_list->currentIndex());
     });
     connect(p->button_palette_save, &QAbstractButton::clicked, [this](){
         if ( !p->read_only && p->model && p->palette_list->currentIndex() != -1 && p->swatch->palette().dirty() )
@@ -69,6 +78,12 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
                 p->swatch->palette().setDirty(false);
             }
             /// \todo else ask for a file name (?)
+    });
+    connect(p->button_palette_revert, &QAbstractButton::clicked, [this](){
+        if ( p->model && p->palette_list->currentIndex() != -1 )
+        {
+             p->swatch->setPalette(p->model->palette(p->palette_list->currentIndex()));
+        }
     });
 }
 
@@ -188,6 +203,8 @@ void ColorPaletteWidget::on_palette_list_currentIndexChanged(int index)
         p->swatch->setPalette(ColorPalette());
     else
         p->swatch->setPalette(p->model->palette(index));
+
+    p->swatch->palette().setDirty(false);
 }
 
 void ColorPaletteWidget::on_swatch_doubleClicked(int index)

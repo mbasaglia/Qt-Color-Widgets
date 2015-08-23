@@ -61,7 +61,7 @@ class QCP_EXPORT ColorPalette : public QObject
     /**
      * \brief Whether it has been modified and it might be advisable to save it
      */
-    Q_PROPERTY(bool dirty READ dirty WRITE setDirty)
+    Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
 
 public:
     typedef QPair<QColor,QString> value_type;
@@ -153,7 +153,7 @@ public slots:
      * \brief save to file, the filename is \c fileName or determined automatically
      * \returns \b true on success
      */
-    bool save() const;
+    bool save();
 
     void setName(const QString& name);
     void setFileName(const QString& name);
@@ -167,6 +167,7 @@ signals:
     void columnsChanged(int);
     void nameChanged(const QString&);
     void fileNameChanged(const QString&);
+    void dirtyChanged(bool);
     /**
      * \brief Emitted when the color or the name at the given index has been modified
      */

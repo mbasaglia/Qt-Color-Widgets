@@ -104,7 +104,7 @@ QVariant ColorPaletteModel::data(const QModelIndex &index, int role) const
 
     return QVariant();
 }
-/// \todo Policy on whether to remove them from the filesystem or not
+
 bool ColorPaletteModel::removeRows(int row, int count, const QModelIndex & parent)
 {
     if ( !p->acceptable(row) || count <= 0 )
@@ -267,6 +267,28 @@ bool ColorPaletteModel::updatePalette(int index, const ColorPalette& palette, bo
         return p->attemptSave(local_palette,
             save_dir.absoluteFilePath(QString("%1%2.gpl").arg(local_palette.name()).arg(max+1))
         );
+    }
+
+    return true;
+}
+
+bool ColorPaletteModel::removePalette(int index, bool remove_file)
+{
+    if ( !p->acceptable(index) )
+        return false;
+
+    QString file_name = p->palettes[index].fileName();
+
+    beginRemoveRows(QModelIndex(), index, index);
+    p->palettes.removeAt(index);
+    endRemoveRows();
+
+    if ( !file_name.isEmpty() && remove_file )
+    {
+        QFileInfo file(file_name);
+        if ( file.isWritable() && file.isFile() )
+            return QFile::remove(file_name);
+        return false;
     }
 
     return true;
