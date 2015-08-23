@@ -23,13 +23,14 @@
 #include "color_palette_model.hpp"
 #include <QDir>
 #include <QList>
+#include <QRegularExpression>
 
 namespace color_widgets {
 
 class ColorPaletteModel::Private
 {
 public:
-    /// \todo Keep sorted by name
+    /// \todo Keep sorted by name (?)
     QList<ColorPalette> palettes;
     QSize icon_size;
     QStringList search_paths;
@@ -41,7 +42,12 @@ public:
 
     bool acceptable(const QModelIndex& index) const
     {
-        return index.row() >= 0 && index.row() <= palettes.count();
+        return acceptable(index.row());
+    }
+
+    bool acceptable(int row) const
+    {
+        return row >= 0 && row <= palettes.count();
     }
 
     QList<ColorPalette>::iterator find(const QString& name)
@@ -50,6 +56,19 @@ public:
             [&name](const ColorPalette& palette) {
                 return palette.name() == name;
         });
+    }
+
+    bool attemptSave(ColorPalette& palette, const QString& filename)
+    {
+        if ( filename.isEmpty() )
+            return false;
+        return palette.save(filename);
+    }
+
+    void fixUnnamed(ColorPalette& palette)
+    {
+        if ( palette.name().isEmpty() )
+            palette.setName(ColorPaletteModel::tr("Unnamed"));
     }
 };
 
@@ -84,6 +103,28 @@ QVariant ColorPaletteModel::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+/// \todo Policy on whether to remove them from the filesystem or not
+bool ColorPaletteModel::removeRows(int row, int count, const QModelIndex & parent)
+{
+    if ( !p->acceptable(row) || count <= 0 )
+        return false;
+
+    auto begin = p->palettes.begin() + row;
+    auto end = row + count >= p->palettes.size() ? p->palettes.end() : begin + count;
+    for ( auto it = begin; it != end; ++it )
+    {
+        if ( !it->fileName().isEmpty() )
+        {
+            QFileInfo file(it->fileName());
+            if ( file.isWritable() && file.isFile() )
+                QFile::remove(it->fileName());
+        }
+    }
+
+    p->palettes.erase(begin, end);
+
+    return true;
 }
 
 QSize ColorPaletteModel::iconSize() const
@@ -157,8 +198,7 @@ void ColorPaletteModel::load()
 void ColorPaletteModel::addPalette(const ColorPalette& palette)
 {
     p->palettes.push_back(palette);
-    if ( p->palettes.back().name().isEmpty() )
-        p->palettes.back().setName(tr("Unnamed"));
+    p->fixUnnamed(p->palettes.back());
 }
 
 bool ColorPaletteModel::hasPalette(const QString& name) const
@@ -176,9 +216,60 @@ const ColorPalette& ColorPaletteModel::palette(int index) const
     return p->palettes[index];
 }
 
-ColorPalette& ColorPaletteModel::palette(int index)
+bool ColorPaletteModel::updatePalette(int index, const ColorPalette& palette, bool save)
 {
-    return p->palettes[index];
+    if ( !p->acceptable(index) )
+        return false;
+
+    // Store the old file name
+    QString filename = p->palettes[index].fileName();
+    // Update the palette
+    ColorPalette& local_palette = p->palettes[index] = palette;
+    p->fixUnnamed(local_palette);
+
+    if ( save )
+    {
+        // Attempt to save with the existing file names
+        if ( p->attemptSave(local_palette, filename) ||
+                p->attemptSave(local_palette, local_palette.fileName()) )
+            return true;
+
+        // Set up the save directory
+        QDir save_dir(p->save_path);
+        if ( !save_dir.exists() && !QDir().mkdir(p->save_path) )
+            return false;
+
+        // Attempt to save as (Name).gpl
+        filename = local_palette.name()+".gpl";
+        if ( !save_dir.exists(filename) &&
+                p->attemptSave(local_palette, save_dir.absoluteFilePath(filename)) )
+            return true;
+
+        // Get all of the files matching the pattern *.gpl
+        save_dir.setNameFilters(QStringList() << "*.gpl");
+        save_dir.setFilter(QDir::Files);
+        QStringList existing_files = save_dir.entryList();
+
+        // For all the files that match (Name)(Number).gpl, find the maximum (Number)
+        QRegularExpression name_regex(QRegularExpression::escape(local_palette.name())+"([0-9]+)\\.gpl");
+        int max = 0;
+        for ( const auto& existing_file : existing_files )
+        {
+            QRegularExpressionMatch match = name_regex.match(existing_file);
+            if ( match.hasMatch() )
+            {
+                int num = match.captured(1).toInt();
+                if ( num > max )
+                    max = num;
+            }
+        }
+
+        return p->attemptSave(local_palette,
+            save_dir.absoluteFilePath(QString("%1%2.gpl").arg(local_palette.name()).arg(max+1))
+        );
+    }
+
+    return true;
 }
 
 } // namespace color_widgets

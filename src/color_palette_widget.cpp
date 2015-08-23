@@ -44,7 +44,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     connect(p->swatch, &Swatch::forcedColumnsChanged, this, &ColorPaletteWidget::forcedColumnsChanged);
     connect(p->swatch, &Swatch::colorSelected, this, &ColorPaletteWidget::currentColorChanged);
     connect(p->button_color_add, &QAbstractButton::clicked, [this](){
-        if ( !p->read_only )
+        if ( !p->read_only && p->palette_list->currentIndex() != -1 )
         {
             ColorDialog dialog(this);
             dialog.setAlphaEnabled(false);
@@ -58,6 +58,18 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
         }
     });
     connect(p->button_color_remove, &QAbstractButton::clicked, p->swatch, &Swatch::removeSelected);
+    connect(p->button_palette_delete, &QAbstractButton::clicked, [this]() {
+        if ( !p->read_only && p->model && p->palette_list->currentIndex() != -1 )
+            p->model->removeRow(p->palette_list->currentIndex());
+    });
+    connect(p->button_palette_save, &QAbstractButton::clicked, [this](){
+        if ( !p->read_only && p->model && p->palette_list->currentIndex() != -1 && p->swatch->palette().dirty() )
+            if ( p->model->updatePalette( p->palette_list->currentIndex(), p->swatch->palette() ) )
+            {
+                p->swatch->palette().setDirty(false);
+            }
+            /// \todo else ask for a file name (?)
+    });
 }
 
 ColorPaletteWidget::~ColorPaletteWidget() = default;

@@ -52,6 +52,7 @@ public:
     ~ColorPaletteModel();
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex()) Q_DECL_OVERRIDE;
 
     QString savePath() const;
     QStringList searchPaths() const;
@@ -75,11 +76,21 @@ public:
     const ColorPalette& palette(int index) const;
 
     /**
-     * \brief Get the palette at the given index (row)
-     * \pre 0 <= index < rowCount()
-     * \todo Maybe it's unsafe to be able to modify them outside the model
+     * \brief Updates an existing palette
+     * \param index Palette index
+     * \param palette New palette
+     * \param save Whether to save the palette to the filesystem
+     *
+     * Saving will try: (in this order)
+     *      * To overwrite the file pointed by the old palette
+     *      * To write to the new palette file name
+     *      * To create a file in the save path
+     * If all of the above fail, the palette will be replaced interally
+     * but not on the filesystem
+     *
+     * \returns \b true if the palette has been successfully updated (and saved)
      */
-    ColorPalette& palette(int index);
+    bool updatePalette(int index, const ColorPalette& palette, bool save = true);
 
 public slots:
     void setSavePath(const QString& savePath);
