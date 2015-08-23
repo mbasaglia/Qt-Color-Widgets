@@ -117,13 +117,27 @@ public:
         QRectF drop_rect = indexRect(drop_index);
         if ( drop_index < palette.count() && drop_rect.isValid() )
         {
-            // Dragged to the last quarter of the size of the square, add after
-            if ( event->posF().x() >= drop_rect.left() + drop_rect.width() * 3.0 / 4 )
-                drop_index++;
-            // Dragged to the middle of the square, overwrite existing color
-            else if ( event->posF().x() > drop_rect.left() + drop_rect.width() / 4 &&
-                    ( event->dropAction() != Qt::MoveAction || event->source() != owner ) )
-                drop_overwrite = true;
+            // 1 column => vertical style
+            if ( palette.columns() == 1 || forced_columns == 1 )
+            {
+                // Dragged to the last quarter of the size of the square, add after
+                if ( event->posF().y() >= drop_rect.top() + drop_rect.height() * 3.0 / 4 )
+                    drop_index++;
+                // Dragged to the middle of the square, overwrite existing color
+                else if ( event->posF().x() > drop_rect.top() + drop_rect.height() / 4 &&
+                        ( event->dropAction() != Qt::MoveAction || event->source() != owner ) )
+                    drop_overwrite = true;
+            }
+            else
+            {
+                // Dragged to the last quarter of the size of the square, add after
+                if ( event->posF().x() >= drop_rect.left() + drop_rect.width() * 3.0 / 4 )
+                    drop_index++;
+                // Dragged to the middle of the square, overwrite existing color
+                else if ( event->posF().x() > drop_rect.left() + drop_rect.width() / 4 &&
+                        ( event->dropAction() != Qt::MoveAction || event->source() != owner ) )
+                    drop_overwrite = true;
+            }
         }
 
         owner->update();
@@ -353,6 +367,13 @@ void Swatch::paintEvent(QPaintEvent* event)
             painter.setPen(QPen(Qt::gray));
             painter.drawRect(drop_area);
         }
+        else if ( rowcols.width() == 1 )
+        {
+            // 1 column => vertical style
+            painter.setPen(QPen(p->drop_color, 2));
+            painter.setBrush(Qt::transparent);
+            painter.drawLine(drop_area.topLeft(), drop_area.topRight());
+        }
         else
         {
             painter.setPen(QPen(p->drop_color, 2));
@@ -497,7 +518,7 @@ void Swatch::mouseMoveEvent(QMouseEvent *event)
         drag->setMimeData(mimedata);
         drag->setPixmap(preview);
         Qt::DropActions actions = Qt::CopyAction;
-        if ( p->readonly )
+        if ( !p->readonly )
             actions |= Qt::MoveAction;
         drag->exec(actions);
     }
@@ -583,7 +604,7 @@ void Swatch::dropEvent(QDropEvent *event)
     if ( event->dropAction() == Qt::MoveAction && event->source() == this )
     {
         // Not moved => noop
-        if ( p->drop_index != p->drag_index + 1 )
+        if ( p->drop_index != p->drag_index && p->drop_index != p->drag_index + 1 )
         {
             // Erase the old color
             p->palette.eraseColor(p->drag_index);
