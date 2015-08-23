@@ -126,7 +126,7 @@ ColorPaletteModel::~ColorPaletteModel()
 
 int ColorPaletteModel::rowCount(const QModelIndex &) const
 {
-    return p->palettes.count();
+    return count();
 }
 
 QVariant ColorPaletteModel::data(const QModelIndex &index, int role) const
@@ -243,6 +243,11 @@ bool ColorPaletteModel::hasPalette(const QString& name) const
     return p->find(name) != p->palettes.end();
 }
 
+int ColorPaletteModel::count() const
+{
+    return p->palettes.size();
+}
+
 const ColorPalette& ColorPaletteModel::palette(const QString& name) const
 {
     return *p->find(name);
@@ -305,5 +310,19 @@ bool ColorPaletteModel::addPalette(const ColorPalette& palette,  bool save)
     return true;
 }
 
+
+int ColorPaletteModel::indexFromFile(const QString& filename) const
+{
+    QString canonical = QFileInfo(filename).canonicalFilePath();
+    int i = 0;
+    for ( const auto& pal : p->palettes )
+    {
+        if ( !pal.fileName().isEmpty() &&
+                QFileInfo(pal.fileName()).canonicalFilePath() == canonical )
+            return i;
+        i++;
+    }
+    return -1;
+}
 
 } // namespace color_widgets

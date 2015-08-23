@@ -112,7 +112,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
             {
                 new_palette.setName(name);
                 p->model->addPalette(new_palette);
-                p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+                p->palette_list->setCurrentIndex(p->model->count()-1);
             }
         }
     });
@@ -127,7 +127,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
             {
                 ColorPalette new_palette(name);
                 p->model->addPalette(new_palette);
-                p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+                p->palette_list->setCurrentIndex(p->model->count()-1);
             }
         }
     });
@@ -148,11 +148,18 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
                     default_dir, tr("GIMP Palettes (*.gpl);;All Files (*)"));
             if ( !palette_file.isEmpty() )
             {
+                int existing = p->model->indexFromFile(palette_file);
+                if ( existing != -1 )
+                {
+                    p->palette_list->setCurrentIndex(existing);
+                    return;
+                }
+
                 ColorPalette palette;
                 if ( palette.load(palette_file) )
                 {
                     p->model->addPalette(palette, false);
-                    p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+                    p->palette_list->setCurrentIndex(p->model->count()-1);
                 }
                 else
                 {

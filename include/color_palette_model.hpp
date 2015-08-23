@@ -59,6 +59,11 @@ public:
     QSize iconSize() const;
 
     /**
+     * \brief Number of palettes
+     */
+    int count() const;
+
+    /**
      * \brief Returns a reference to the first palette with the given name
      * \pre hasPalette(name)
      */
@@ -71,7 +76,7 @@ public:
 
     /**
      * \brief Get the palette at the given index (row)
-     * \pre 0 <= index < rowCount()
+     * \pre 0 <= index < count()
      */
     const ColorPalette& palette(int index) const;
 
@@ -103,6 +108,12 @@ public:
      * \returns \b true if the palette has been successfully added
      */
     bool addPalette(const ColorPalette& palette, bool save = true);
+
+    /**
+     * \brief The index of the palette with the given file name
+     * \returns -1 if none is found
+     */
+    int indexFromFile(const QString& filename) const;
 
 public slots:
     void setSavePath(const QString& savePath);
