@@ -98,12 +98,17 @@ public:
      */
     bool removePalette(int index, bool remove_file = true);
 
+    /**
+     * \brief Remove a palette to the model and optionally to the filesystem
+     * \returns \b true if the palette has been successfully added
+     */
+    bool addPalette(const ColorPalette& palette, bool save = true);
+
 public slots:
     void setSavePath(const QString& savePath);
     void setSearchPaths(const QStringList& searchPaths);
     void addSearchPath(const QString& path);
     void setIconSize(const QSize& iconSize);
-    void addPalette(const ColorPalette& palette);
 
     /**
      * \brief Load palettes files found in the search paths

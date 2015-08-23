@@ -23,6 +23,7 @@
 #include "color_palette_widget.hpp"
 #include "ui_color_palette_widget.h"
 #include "color_dialog.hpp"
+#include <QInputDialog>
 
 namespace color_widgets {
 
@@ -83,6 +84,39 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
         if ( p->model && p->palette_list->currentIndex() != -1 )
         {
              p->swatch->setPalette(p->model->palette(p->palette_list->currentIndex()));
+        }
+    });
+
+    // Buttons creating new palettes
+    connect(p->button_palette_duplicate, &QAbstractButton::clicked, [this](){
+        if ( p->model && p->palette_list->currentIndex() != -1 )
+        {
+            ColorPalette new_palette = p->model->palette(p->palette_list->currentIndex());
+            new_palette.setFileName(QString());
+            bool ok = false;
+            QString name = QInputDialog::getText(this, tr("New Palette"),
+                tr("Name"), QLineEdit::Normal, new_palette.name(), &ok);
+            if ( ok )
+            {
+                new_palette.setName(name);
+                p->model->addPalette(new_palette);
+                p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+            }
+        }
+    });
+    /// \todo Show a dialog that asks for the number of columns (?)
+    connect(p->button_palette_new, &QAbstractButton::clicked, [this](){
+        if ( p->model && p->palette_list->currentIndex() != -1 )
+        {
+            bool ok = false;
+            QString name = QInputDialog::getText(this, tr("New Palette"),
+                tr("Name"), QLineEdit::Normal, QString(), &ok);
+            if ( ok )
+            {
+                ColorPalette new_palette(name);
+                p->model->addPalette(new_palette);
+                p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+            }
         }
     });
 }

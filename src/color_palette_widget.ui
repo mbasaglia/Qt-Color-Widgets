@@ -59,7 +59,9 @@
            <string>Open a new palette from file</string>
           </property>
           <property name="icon">
-           <iconset theme="document-open"/>
+           <iconset theme="document-open">
+            <normaloff/>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -69,17 +71,21 @@
            <string>Create a new palette</string>
           </property>
           <property name="icon">
-           <iconset theme="document-new"/>
+           <iconset theme="document-new">
+            <normaloff/>
+           </iconset>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="document_palette_duplicate">
+         <widget class="QToolButton" name="button_palette_duplicate">
           <property name="toolTip">
            <string>Duplicate the current palette</string>
           </property>
           <property name="icon">
-           <iconset theme="edit-copy"/>
+           <iconset theme="edit-copy">
+            <normaloff/>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -115,7 +121,9 @@
          <string>Delete the current palette</string>
         </property>
         <property name="icon">
-         <iconset theme="document-close"/>
+         <iconset theme="document-close">
+          <normaloff/>
+         </iconset>
         </property>
        </widget>
       </item>
@@ -125,7 +133,9 @@
          <string>Revert changes to the current palette</string>
         </property>
         <property name="icon">
-         <iconset theme="document-revert"/>
+         <iconset theme="document-revert">
+          <normaloff/>
+         </iconset>
         </property>
        </widget>
       </item>
@@ -135,7 +145,9 @@
          <string>Save changes to the current palette</string>
         </property>
         <property name="icon">
-         <iconset theme="document-save"/>
+         <iconset theme="document-save">
+          <normaloff/>
+         </iconset>
         </property>
        </widget>
       </item>
@@ -158,7 +170,9 @@
          <string>Add a color to the palette</string>
         </property>
         <property name="icon">
-         <iconset theme="list-add"/>
+         <iconset theme="list-add">
+          <normaloff/>
+         </iconset>
         </property>
        </widget>
       </item>
@@ -168,7 +182,9 @@
          <string>Remove the selected color from the palette</string>
         </property>
         <property name="icon">
-         <iconset theme="list-remove"/>
+         <iconset theme="list-remove">
+          <normaloff/>
+         </iconset>
         </property>
        </widget>
       </item>
