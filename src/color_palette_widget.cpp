@@ -24,6 +24,8 @@
 #include "ui_color_palette_widget.h"
 #include "color_dialog.hpp"
 #include <QInputDialog>
+#include <QFileDialog>
+#include <QMessageBox>
 
 namespace color_widgets {
 
@@ -32,6 +34,16 @@ class ColorPaletteWidget::Private : public Ui::ColorPaletteWidget
 public:
     ColorPaletteModel* model = nullptr;
     bool read_only = false;
+
+    bool hasSelectedPalette()
+    {
+        return model && palette_list->currentIndex() != -1;
+    }
+
+    const ColorPalette& selectedPalette()
+    {
+        return model->palette(palette_list->currentIndex());
+    }
 };
 
 
@@ -52,7 +64,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
 
     // Buttons changing the colors in the current palette
     connect(p->button_color_add, &QAbstractButton::clicked, [this](){
-        if ( !p->read_only && p->palette_list->currentIndex() != -1 )
+        if ( !p->read_only && p->hasSelectedPalette() )
         {
             ColorDialog dialog(this);
             dialog.setAlphaEnabled(false);
@@ -69,11 +81,11 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
 
     // Buttons modifying the current palette file
     connect(p->button_palette_delete, &QAbstractButton::clicked, [this]() {
-        if ( !p->read_only && p->model && p->palette_list->currentIndex() != -1 )
+        if ( !p->read_only && p->hasSelectedPalette() )
             p->model->removePalette(p->palette_list->currentIndex());
     });
     connect(p->button_palette_save, &QAbstractButton::clicked, [this](){
-        if ( !p->read_only && p->model && p->palette_list->currentIndex() != -1 && p->swatch->palette().dirty() )
+        if ( !p->read_only && p->hasSelectedPalette() && p->swatch->palette().dirty() )
             if ( p->model->updatePalette( p->palette_list->currentIndex(), p->swatch->palette() ) )
             {
                 p->swatch->palette().setDirty(false);
@@ -81,17 +93,17 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
             /// \todo else ask for a file name (?)
     });
     connect(p->button_palette_revert, &QAbstractButton::clicked, [this](){
-        if ( p->model && p->palette_list->currentIndex() != -1 )
+        if ( p->hasSelectedPalette() )
         {
-             p->swatch->setPalette(p->model->palette(p->palette_list->currentIndex()));
+             p->swatch->setPalette(p->selectedPalette());
         }
     });
 
     // Buttons creating new palettes
     connect(p->button_palette_duplicate, &QAbstractButton::clicked, [this](){
-        if ( p->model && p->palette_list->currentIndex() != -1 )
+        if ( p->hasSelectedPalette() )
         {
-            ColorPalette new_palette = p->model->palette(p->palette_list->currentIndex());
+            ColorPalette new_palette = p->selectedPalette();
             new_palette.setFileName(QString());
             bool ok = false;
             QString name = QInputDialog::getText(this, tr("New Palette"),
@@ -106,7 +118,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     });
     /// \todo Show a dialog that asks for the number of columns (?)
     connect(p->button_palette_new, &QAbstractButton::clicked, [this](){
-        if ( p->model && p->palette_list->currentIndex() != -1 )
+        if ( p->hasSelectedPalette() )
         {
             bool ok = false;
             QString name = QInputDialog::getText(this, tr("New Palette"),
@@ -116,6 +128,37 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
                 ColorPalette new_palette(name);
                 p->model->addPalette(new_palette);
                 p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+            }
+        }
+    });
+    /// \todo Maybe copy it over the savePath
+    connect(p->button_palette_open, &QAbstractButton::clicked, [this](){
+        if ( p->model )
+        {
+            QString default_dir;
+            if ( p->hasSelectedPalette() )
+            {
+                const ColorPalette& palette = p->selectedPalette();
+                if ( !palette.fileName().isEmpty() )
+                    default_dir = QFileInfo(palette.fileName()).dir().path();
+            }
+
+            QString palette_file  =
+                QFileDialog::getOpenFileName(this, tr("Open Palette"),
+                    default_dir, tr("GIMP Palettes (*.gpl);;All Files (*)"));
+            if ( !palette_file.isEmpty() )
+            {
+                ColorPalette palette;
+                if ( palette.load(palette_file) )
+                {
+                    p->model->addPalette(palette, false);
+                    p->palette_list->setCurrentIndex(p->model->rowCount()-1);
+                }
+                else
+                {
+                    QMessageBox::warning(this, tr("Open Palette"),
+                        tr("Failed to load the palette file\n%1").arg(palette_file));
+                }
             }
         }
     });
