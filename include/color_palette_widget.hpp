@@ -49,7 +49,7 @@ class ColorPaletteWidget : public QWidget
     /**
      * \brief Policy for colorSize
      **/
-    Q_PROPERTY(Swatch::ColorSizePolicy colorSizePolicy READ colorSizePolicy WRITE setColorSizePolicy NOTIFY colorSizePolicyChanged)
+    Q_PROPERTY(color_widgets::Swatch::ColorSizePolicy colorSizePolicy READ colorSizePolicy WRITE setColorSizePolicy NOTIFY colorSizePolicyChanged)
 
     /**
      * \brief Forces the Swatch to display that many rows of colors
@@ -84,7 +84,6 @@ class ColorPaletteWidget : public QWidget
      * \brief Currently selected color
      */
     Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor NOTIFY currentColorChanged)
-
 
 public:
     ColorPaletteWidget(QWidget* parent = nullptr);

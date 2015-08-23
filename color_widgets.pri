@@ -48,7 +48,7 @@ HEADERS += \
     $$PWD/include/colorwidgets_global.hpp \
     $$PWD/include/color_palette.hpp \
     $$PWD/include/color_palette_model.hpp \
-    $$PWD/include/color_widget.hpp \
+    $$PWD/include/color_palette_widget.hpp \
     $$PWD/include/swatch.hpp
 
 FORMS += \

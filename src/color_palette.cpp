@@ -75,7 +75,7 @@ ColorPalette::ColorPalette(const QVector<QPair<QColor,QString> >& colors,
 }
 
 ColorPalette::ColorPalette(const ColorPalette& other)
-    : p ( new Private(*other.p) )
+    : QObject(), p ( new Private(*other.p) )
 {
 }
 
@@ -92,7 +92,7 @@ ColorPalette::~ColorPalette()
 }
 
 ColorPalette::ColorPalette(ColorPalette&& other)
-    : p ( other.p )
+    : QObject(), p ( other.p )
 {
     other.p = nullptr;
 }

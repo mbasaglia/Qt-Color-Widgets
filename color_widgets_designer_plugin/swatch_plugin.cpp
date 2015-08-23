@@ -65,20 +65,17 @@ QString Swatch_Plugin::group() const
 
 QIcon Swatch_Plugin::icon() const
 {
-    color_widgets::Swatch w;
-    w.palette().setColumns(6);
+    color_widgets::ColorPalette w;
+    w.setColumns(6);
     for ( int i = 0; i < 4; i++ )
     {
-        for ( int j = 0; j < w.palette().columns(); j++ )
+        for ( int j = 0; j < w.columns(); j++ )
         {
-            float f = float(j)/w.palette().columns();
-            w.palette().appendColor(QColor::fromHsvF(i/5.0,1-f,0.5+f/2));
+            float f = float(j)/w.columns();
+            w.appendColor(QColor::fromHsvF(i/5.0,1-f,0.5+f/2));
         }
     }
-    w.resize(64,64);
-    QPixmap pix(64,64);
-    w.render(&pix);
-    return QIcon(pix);
+    return QIcon(w.preview(QSize(64,64)));
 }
 
 QString Swatch_Plugin::toolTip() const
