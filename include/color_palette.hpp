@@ -94,11 +94,27 @@ public:
     QString name() const;
 
     /**
+     * \brief Use a color table to set the colors
+     */
+    Q_INVOKABLE void loadColorTable(const QVector<QRgb>& color_table);
+
+    /**
+     * \brief Use the pixels on an image to set the palette colors
+     */
+    Q_INVOKABLE bool loadImage(const QImage& image);
+
+    /**
+     * \brief Creates a ColorPalette from a Gimp palette (gpl) file
+     */
+    static ColorPalette fromImage(const QImage& image);
+
+    /**
      * \brief Load contents from a Gimp palette (gpl) file
      * \returns \b true On Success
      * \note If this function returns \b false, the palette will become empty
      */
     Q_INVOKABLE bool load(const QString& name);
+
     /**
      * \brief Creates a ColorPalette from a Gimp palette (gpl) file
      */

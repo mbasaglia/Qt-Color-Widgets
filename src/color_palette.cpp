@@ -142,6 +142,49 @@ QString ColorPalette::name() const
     return p->name;
 }
 
+void ColorPalette::loadColorTable(const QVector<QRgb>& color_table)
+{
+    p->colors.clear();
+    p->colors.reserve(color_table.size());
+    for ( QRgb c : color_table )
+    {
+        QColor color ( c );
+        color.setAlpha(255);
+        p->colors.push_back(qMakePair(color,QString()));
+    }
+    emit colorsChanged(p->colors);
+    setDirty(true);
+}
+
+bool ColorPalette::loadImage(const QImage& image)
+{
+    if ( image.isNull() )
+        return false;
+    setColumns(image.width());
+
+    p->colors.clear();
+    p->colors.reserve(image.width()*image.height());
+    for ( int y = 0; y < image.height(); y++ )
+    {
+        for ( int x = 0; x < image.width(); x++ )
+        {
+            QColor color ( image.pixel(x, y) );
+            color.setAlpha(255);
+            p->colors.push_back(qMakePair(color,QString()));
+        }
+    }
+    emit colorsChanged(p->colors);
+    setDirty(true);
+    return true;
+}
+
+ColorPalette ColorPalette::fromImage(const QImage& image)
+{
+    ColorPalette p;
+    p.fromImage(image);
+    return p;
+}
+
 bool ColorPalette::load(const QString& name)
 {
     p->fileName = name;

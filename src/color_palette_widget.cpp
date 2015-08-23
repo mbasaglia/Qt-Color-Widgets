@@ -26,6 +26,7 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QImageReader>
 
 namespace color_widgets {
 
@@ -43,6 +44,66 @@ public:
     const ColorPalette& selectedPalette()
     {
         return model->palette(palette_list->currentIndex());
+    }
+
+    void addPalette(ColorPalette& palette)
+    {
+        bool save = false;
+        // Save palettes in the savePath
+        /// \todo This currently breaks opening the right directory
+        /// ie: the one containing the original file.
+        if ( !palette.fileName().isEmpty() )
+        {
+            QFileInfo file(palette.fileName());
+            if ( file.dir().canonicalPath() != QDir(model->savePath()).canonicalPath() )
+            {
+                palette.setFileName(QString());
+                save = true;
+            }
+        }
+        model->addPalette(palette, save);
+        palette_list->setCurrentIndex(model->count()-1);
+    }
+
+    bool openImage(const QString& file)
+    {
+        QImage image(file);
+        if ( !image.isNull() )
+        {
+            ColorPalette palette;
+            palette.loadImage(image);
+            palette.setName(QFileInfo(file).baseName());
+            palette.setFileName(file+".gpl");
+            addPalette(palette);
+            return true;
+        }
+        return false;
+    }
+
+    bool openGpl(const QString& file)
+    {
+        int existing = model->indexFromFile(file);
+        if ( existing != -1 )
+        {
+            palette_list->setCurrentIndex(existing);
+            return true;
+        }
+
+        ColorPalette palette;
+        if ( palette.load(file) )
+        {
+            addPalette(palette);
+            return true;
+        }
+
+        return false;
+    }
+
+    bool openPalette(const QString& file, int type)
+    {
+        if ( type == 1 )
+            return openImage(file);
+        return openGpl(file);
     }
 };
 
@@ -131,8 +192,12 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
             }
         }
     });
-    /// \todo Maybe copy it over the savePath
-    connect(p->button_palette_open, &QAbstractButton::clicked, [this](){
+
+    QString image_formats;
+    foreach(QByteArray ba, QImageReader::supportedImageFormats())
+        image_formats += " *."+QString(ba);
+
+    connect(p->button_palette_open, &QAbstractButton::clicked, [this, image_formats](){
         if ( p->model )
         {
             QString default_dir;
@@ -143,29 +208,25 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
                     default_dir = QFileInfo(palette.fileName()).dir().path();
             }
 
-            QString palette_file  =
-                QFileDialog::getOpenFileName(this, tr("Open Palette"),
-                    default_dir, tr("GIMP Palettes (*.gpl);;All Files (*)"));
-            if ( !palette_file.isEmpty() )
-            {
-                int existing = p->model->indexFromFile(palette_file);
-                if ( existing != -1 )
-                {
-                    p->palette_list->setCurrentIndex(existing);
-                    return;
-                }
+            QStringList file_formats = QStringList()
+                << tr("GIMP Palettes (*.gpl)")
+                << tr("Palette Image (%1)").arg(image_formats)
+                << tr("All Files (*)");
+            QFileDialog open_dialog(this, tr("Open Palette"), default_dir);
+            open_dialog.setFileMode(QFileDialog::ExistingFile);
+            open_dialog.setAcceptMode(QFileDialog::AcceptOpen);
+            open_dialog.setNameFilters(file_formats);
 
-                ColorPalette palette;
-                if ( palette.load(palette_file) )
-                {
-                    p->model->addPalette(palette, false);
-                    p->palette_list->setCurrentIndex(p->model->count()-1);
-                }
-                else
-                {
-                    QMessageBox::warning(this, tr("Open Palette"),
-                        tr("Failed to load the palette file\n%1").arg(palette_file));
-                }
+            if ( !open_dialog.exec() )
+                return;
+
+            int type = file_formats.indexOf(open_dialog.selectedNameFilter());
+            QString file_name = open_dialog.selectedFiles()[0];
+
+            if ( !p->openPalette( file_name, type ) )
+            {
+                QMessageBox::warning(this, tr("Open Palette"),
+                    tr("Failed to load the palette file\n%1").arg(file_name));
             }
         }
     });
