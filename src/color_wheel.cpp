@@ -465,10 +465,9 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
 
             qreal ycenter = side/2;
             qreal ymin = ycenter-slice_h/2;
-            qreal ymax = ycenter+slice_h/2;
 
-            if ( pt.y() >= ymin && pt.y() <= ymax )
-                p->sat = (pt.y()-ymin)/slice_h;
+            if ( slice_h > 0 )
+                p->sat = qBound(0.0, (pt.y()-ymin)/slice_h, 1.0);
         }
 
         emit colorSelected(color());
@@ -484,11 +483,11 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
         QLineF ray = p->line_to_point(ev->pos());
         if ( ray.length() <= p->inner_radius() )
             p->mouse_status = Drag_Square;
-        /// \todo if click inside with distance from the selector indicator
-        /// > selector_radius => place it there directly
-        /// (without the need to drag)
         else if ( ray.length() <= p->outer_radius() )
             p->mouse_status = Drag_Circle;
+
+        // Update the color
+        mouseMoveEvent(ev);
     }
 }
 

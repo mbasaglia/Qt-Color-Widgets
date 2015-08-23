@@ -205,7 +205,7 @@ void ColorPaletteModel::setSearchPaths(const QStringList& searchPaths)
 
 void ColorPaletteModel::addSearchPath(const QString& path)
 {
-    /// \todo Should compare absolute canonical paths,
+    /// \todo Should compare canonical paths
     /// and these checks should also be made in setSearchPaths
     if ( !p->search_paths.contains(path) )
     {
