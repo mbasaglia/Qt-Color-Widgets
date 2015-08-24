@@ -69,14 +69,14 @@ public:
     void setColors(const QVector<QColor> &colors);
 
     /**
-     * Set the first color of the gradient
+     * \brief Set the first color of the gradient
      *
      * If the gradient is currently empty it will create a stop with the given color
      */
     void setFirstColor(const QColor &c);
 
     /**
-     * Set the last color of the gradient
+     * \brief Set the last color of the gradient
      *
      * If the gradient is has less than two colors,
      * it will create a stop with the given color
@@ -84,18 +84,28 @@ public:
     void setLastColor(const QColor &c);
 
     /**
-     * Get the first color
+     * \brief Get the first color
      *
-     * Returns QColor() con empty gradient
+     * \returns QColor() con empty gradient
      */
     QColor firstColor() const;
 
     /**
-     * Get the last color
+     * \brief Get the last color
      *
-     * Returns QColor() con empty gradient
+     * \returns QColor() con empty gradient
      */
     QColor lastColor() const;
+
+signals:
+    /**
+     * \brief Emitted on value changed
+     * \param percent percentage (0 = minimum, 1 = maximum)
+     */
+    void percentChanged(qreal percent);
+
+private slots:
+    void emitPercentChanged(int value);
     
 protected:
     void paintEvent(QPaintEvent *ev);

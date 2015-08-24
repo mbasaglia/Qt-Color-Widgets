@@ -48,11 +48,13 @@ public:
 GradientSlider::GradientSlider(QWidget *parent) :
     QSlider(Qt::Horizontal, parent), p(new Private)
 {
+    connect(this, &QSlider::valueChanged, this, &GradientSlider::emitPercentChanged);
 }
 
 GradientSlider::GradientSlider(Qt::Orientation orientation, QWidget *parent) :
     QSlider(orientation, parent), p(new Private)
 {
+    connect(this, &QSlider::valueChanged, this, &GradientSlider::emitPercentChanged);
 }
 
 GradientSlider::~GradientSlider()
@@ -145,7 +147,6 @@ QColor GradientSlider::lastColor() const
     return s.empty() ? QColor() : s.back().second;
 }
 
-
 void GradientSlider::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -184,6 +185,11 @@ void GradientSlider::paintEvent(QPaintEvent *)
                                               QStyle::SC_SliderHandle,this);
 
     style()->drawComplexControl(QStyle::CC_Slider, &opt_slider, &painter, this);
+}
+
+void GradientSlider::emitPercentChanged(int value)
+{
+    emit percentChanged( qreal(value - minimum()) / (maximum() - minimum()) );
 }
 
 } // namespace color_widgets
