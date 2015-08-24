@@ -97,9 +97,9 @@ public:
         }
         switch ( comp_y )
         {
-            case Hue:       pt.setY(size.height()*hue); break;
-            case Saturation:pt.setY(size.height()*sat); break;
-            case Value:     pt.setY(size.height()*val); break;
+            case Hue:       pt.setY(size.height()*(1-hue)); break;
+            case Saturation:pt.setY(size.height()*(1-sat)); break;
+            case Value:     pt.setY(size.height()*(1-val)); break;
         }
         return pt;
     }
@@ -107,8 +107,8 @@ public:
     void setColorFromPos(const QPoint& pt, const QSize& size)
     {
         QPointF ptfloat(
-            qBound(0.0, qreal(pt.x()) / size.width(), 1.1),
-            qBound(0.0, qreal(pt.y()) / size.height(), 1.1)
+            qBound(0.0, qreal(pt.x()) / size.width(), 1.0),
+            qBound(0.0, 1 - qreal(pt.y()) / size.height(), 1.0)
         );
         switch ( comp_x )
         {
@@ -240,18 +240,21 @@ void Color2DSlider::paintEvent(QPaintEvent*)
 void Color2DSlider::mousePressEvent(QMouseEvent* event)
 {
     p->setColorFromPos(event->pos(), size());
+    emit colorChanged(color());
     update();
 }
 
 void Color2DSlider::mouseMoveEvent(QMouseEvent* event)
 {
     p->setColorFromPos(event->pos(), size());
+    emit colorChanged(color());
     update();
 }
 
 void Color2DSlider::mouseReleaseEvent(QMouseEvent* event)
 {
     p->setColorFromPos(event->pos(), size());
+    emit colorChanged(color());
     update();
 }
 

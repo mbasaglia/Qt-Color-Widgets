@@ -31,6 +31,7 @@
 #include "color_list_plugin.hpp"
 #include "swatch_plugin.hpp"
 #include "color_palette_widget_plugin.hpp"
+#include "color_2d_slider_plugin.hpp"
 
 ColorWidgets_PluginCollection::ColorWidgets_PluginCollection(QObject *parent) :
     QObject(parent)
@@ -43,6 +44,7 @@ ColorWidgets_PluginCollection::ColorWidgets_PluginCollection(QObject *parent) :
     widgets.push_back(new ColorListWidget_Plugin(this));
     widgets.push_back(new Swatch_Plugin(this));
     widgets.push_back(new ColorPaletteWidget_Plugin(this));
+    widgets.push_back(new Color2DSlider_Plugin(this));
 }
 
 QList<QDesignerCustomWidgetInterface *> ColorWidgets_PluginCollection::customWidgets() const

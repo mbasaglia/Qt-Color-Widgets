@@ -40,7 +40,8 @@ SOURCES += \
     color_selector_plugin.cpp \
     color_list_plugin.cpp \
     swatch_plugin.cpp \
-    color_palette_widget_plugin.cpp
+    color_palette_widget_plugin.cpp \
+    color_2d_slider_plugin.cpp
 
 HEADERS += \
     color_preview_plugin.hpp \
@@ -51,7 +52,8 @@ HEADERS += \
     color_selector_plugin.hpp \
     color_list_plugin.hpp \
     swatch_plugin.hpp \
-    color_palette_widget_plugin.hpp
+    color_palette_widget_plugin.hpp\
+    color_2d_slider_plugin.hpp
 
 include(../color_widgets.pri)
 

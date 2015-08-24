@@ -20,6 +20,8 @@
     along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#ifndef COLOR_WIDGETS_COLOR_2D_SLIDER_HPP
+#define COLOR_WIDGETS_COLOR_2D_SLIDER_HPP
 
 #include "colorwidgets_global.hpp"
 #include <QWidget>
@@ -123,3 +125,5 @@ private:
 };
 
 } // namespace color_widgets
+
+#endif // COLOR_WIDGETS_COLOR_2D_SLIDER_HPP
