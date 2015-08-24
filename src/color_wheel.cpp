@@ -26,8 +26,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QLineF>
-#include <qmath.h>
 #include <cmath>
+#include "color_utils.hpp"
 
 namespace color_widgets {
 
@@ -41,92 +41,6 @@ enum Mouse_Status
 static const ColorWheel::Display_Flags hard_default_flags = ColorWheel::SHAPE_TRIANGLE|ColorWheel::ANGLE_ROTATING|ColorWheel::COLOR_HSV;
 static ColorWheel::Display_Flags default_flags = hard_default_flags;
 static const double selector_radius = 6;
-
-static qreal color_chromaF(const QColor& c)
-{
-    qreal max = qMax(c.redF(), qMax(c.greenF(), c.blueF()));
-    qreal min = qMin(c.redF(), qMin(c.greenF(), c.blueF()));
-    return max - min;
-}
-static qreal color_lumaF(const QColor& c)
-{
-    return 0.30 * c.redF() + 0.59 * c.greenF() + 0.11 * c.blueF();
-}
-static QColor color_from_lch(qreal hue, qreal chroma, qreal luma, qreal alpha = 1 )
-{
-    qreal h1 = hue*6;
-    qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
-    QColor col;
-    if ( h1 >= 0 && h1 < 1 )
-        col = QColor::fromRgbF(chroma,x,0);
-    else if ( h1 < 2 )
-        col = QColor::fromRgbF(x,chroma,0);
-    else if ( h1 < 3 )
-        col = QColor::fromRgbF(0,chroma,x);
-    else if ( h1 < 4 )
-        col = QColor::fromRgbF(0,x,chroma);
-    else if ( h1 < 5 )
-        col = QColor::fromRgbF(x,0,chroma);
-    else if ( h1 < 6 )
-        col = QColor::fromRgbF(chroma,0,x);
-
-    qreal m = luma - color_lumaF(col);
-
-    return QColor::fromRgbF(
-        qBound(0.0,col.redF()+m,1.0),
-        qBound(0.0,col.greenF()+m,1.0),
-        qBound(0.0,col.blueF()+m,1.0),
-        alpha);
-}
-static QColor rainbow_lch(qreal hue)
-{
-    return color_from_lch(hue,1,1);
-}
-static QColor rainbow_hsv(qreal hue)
-{
-    return QColor::fromHsvF(hue,1,1);
-}
-
-static qreal color_lightnessF(const QColor& c)
-{
-    return ( qMax(c.redF(),qMax(c.greenF(),c.blueF())) +
-             qMin(c.redF(),qMin(c.greenF(),c.blueF())) ) / 2;
-}
-static qreal color_HSL_saturationF(const QColor& col)
-{
-    qreal c = color_chromaF(col);
-    qreal l = color_lightnessF(col);
-    if ( qFuzzyCompare(l+1,1) || qFuzzyCompare(l+1,2) )
-        return 0;
-    return c / (1-qAbs(2*l-1));
-}
-static QColor color_from_hsl(qreal hue, qreal sat, qreal lig, qreal alpha = 1 )
-{
-    qreal chroma = (1 - qAbs(2*lig-1))*sat;
-    qreal h1 = hue*6;
-    qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
-    QColor col;
-    if ( h1 >= 0 && h1 < 1 )
-        col = QColor::fromRgbF(chroma,x,0);
-    else if ( h1 < 2 )
-        col = QColor::fromRgbF(x,chroma,0);
-    else if ( h1 < 3 )
-        col = QColor::fromRgbF(0,chroma,x);
-    else if ( h1 < 4 )
-        col = QColor::fromRgbF(0,x,chroma);
-    else if ( h1 < 5 )
-        col = QColor::fromRgbF(x,0,chroma);
-    else if ( h1 < 6 )
-        col = QColor::fromRgbF(chroma,0,x);
-
-    qreal m = lig-chroma/2;
-
-    return QColor::fromRgbF(
-        qBound(0.0,col.redF()+m,1.0),
-        qBound(0.0,col.greenF()+m,1.0),
-        qBound(0.0,col.blueF()+m,1.0),
-        alpha);
-}
 
 class ColorWheel::Private
 {
@@ -148,7 +62,7 @@ public:
         : w(widget), hue(0), sat(0), val(0),
         wheel_width(20), mouse_status(Nothing),
         display_flags(FLAGS_DEFAULT),
-        color_from(&QColor::fromHsvF), rainbow_from_hue(&rainbow_hsv)
+        color_from(&QColor::fromHsvF), rainbow_from_hue(&detail::rainbow_hsv)
     { }
 
     /// Calculate outer wheel radius from idget center
@@ -306,14 +220,14 @@ public:
         else if ( display_flags & ColorWheel::COLOR_HSL )
         {
             hue = qMax(0.0, c.hueF());
-            sat = color_HSL_saturationF(c);
-            val = color_lightnessF(c);
+            sat = detail::color_HSL_saturationF(c);
+            val = detail::color_lightnessF(c);
         }
         else if ( display_flags & ColorWheel::COLOR_LCH )
         {
             hue = qMax(0.0, c.hsvHueF());
-            sat = color_chromaF(c);
-            val = color_lumaF(c);
+            sat = detail::color_chromaF(c);
+            val = detail::color_lumaF(c);
         }
     }
 };
@@ -548,18 +462,18 @@ void ColorWheel::setDisplayFlags(Display_Flags flags)
         if ( flags & ColorWheel::COLOR_HSL )
         {
             p->hue = old_col.hueF();
-            p->sat = color_HSL_saturationF(old_col);
-            p->val = color_lightnessF(old_col);
-            p->color_from = &color_from_hsl;
-            p->rainbow_from_hue = &rainbow_hsv;
+            p->sat = detail::color_HSL_saturationF(old_col);
+            p->val = detail::color_lightnessF(old_col);
+            p->color_from = &detail::color_from_hsl;
+            p->rainbow_from_hue = &detail::rainbow_hsv;
         }
         else if ( flags & ColorWheel::COLOR_LCH )
         {
             p->hue = old_col.hueF();
-            p->sat = color_chromaF(old_col);
-            p->val = color_lumaF(old_col);
-            p->color_from = &color_from_lch;
-            p->rainbow_from_hue = &rainbow_lch;
+            p->sat = detail::color_chromaF(old_col);
+            p->val = detail::color_lumaF(old_col);
+            p->color_from = &detail::color_from_lch;
+            p->rainbow_from_hue = &detail::rainbow_lch;
         }
         else
         {
@@ -567,7 +481,7 @@ void ColorWheel::setDisplayFlags(Display_Flags flags)
             p->sat = old_col.hsvSaturationF();
             p->val = old_col.valueF();
             p->color_from = &QColor::fromHsvF;
-            p->rainbow_from_hue = &rainbow_hsv;
+            p->rainbow_from_hue = &detail::rainbow_hsv;
         }
         p->render_ring();
     }

@@ -32,7 +32,9 @@ SOURCES += \
     $$PWD/src/color_palette.cpp \
     $$PWD/src/color_palette_model.cpp \
     $$PWD/src/color_palette_widget.cpp \
-    $$PWD/src/swatch.cpp
+    $$PWD/src/swatch.cpp \
+    $$PWD/src/color_utils.cpp \
+    $$PWD/src/color_2d_slider.cpp
 
 HEADERS += \
     $$PWD/include/color_wheel.hpp \
@@ -49,7 +51,9 @@ HEADERS += \
     $$PWD/include/color_palette.hpp \
     $$PWD/include/color_palette_model.hpp \
     $$PWD/include/color_palette_widget.hpp \
-    $$PWD/include/swatch.hpp
+    $$PWD/include/swatch.hpp \
+    $$PWD/src/color_utils.hpp \
+    $$PWD/include/color_2d_slider.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui \
