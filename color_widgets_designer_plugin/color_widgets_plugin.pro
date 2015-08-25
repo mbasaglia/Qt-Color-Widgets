@@ -41,7 +41,9 @@ SOURCES += \
     color_list_plugin.cpp \
     swatch_plugin.cpp \
     color_palette_widget_plugin.cpp \
-    color_2d_slider_plugin.cpp
+    color_2d_slider_plugin.cpp \
+    color_line_edit_plugin.cpp \
+    # add new sources above this line
 
 HEADERS += \
     color_preview_plugin.hpp \
@@ -53,7 +55,9 @@ HEADERS += \
     color_list_plugin.hpp \
     swatch_plugin.hpp \
     color_palette_widget_plugin.hpp\
-    color_2d_slider_plugin.hpp
+    color_2d_slider_plugin.hpp \
+    color_line_edit_plugin.hpp \
+    # add new headers above this line
 
 include(../color_widgets.pri)
 
