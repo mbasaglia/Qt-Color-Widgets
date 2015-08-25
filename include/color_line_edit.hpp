@@ -50,6 +50,10 @@ class QCP_EXPORT ColorLineEdit : public QLineEdit
      * \brief Whether the widget displays and edits the alpha channel
      */
     Q_PROPERTY(bool showAlpha READ showAlpha WRITE setShowAlpha NOTIFY showAlphaChanged)
+    /**
+     * \brief If \b true, the background of the widget is changed to show the color
+     */
+    Q_PROPERTY(bool previewColor READ previewColor WRITE setPreviewColor NOTIFY previewColorChanged)
 
 public:
     explicit ColorLineEdit(QWidget* parent = nullptr);
@@ -57,10 +61,12 @@ public:
 
     QColor color() const;
     bool showAlpha() const;
+    bool previewColor() const;
 
 public slots:
     void setColor(const QColor& color);
     void setShowAlpha(bool showAlpha);
+    void setPreviewColor(bool previewColor);
 
 signals:
     /**
@@ -77,10 +83,12 @@ signals:
     void colorEditingFinished(const QColor& color);
 
     void showAlphaChanged(bool showAlpha);
+    void previewColorChanged(bool previewColor);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent * event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
 private:
     class Private;

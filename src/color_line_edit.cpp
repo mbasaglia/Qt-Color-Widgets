@@ -21,16 +21,22 @@
 */
 
 #include "color_line_edit.hpp"
+
 #include <QRegularExpression>
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QApplication>
+#include <QPainter>
+#include <QStyleOptionFrame>
+
+#include "color_utils.hpp"
 
 namespace color_widgets {
 
-static QRegularExpression regex_3hex_rgb ("^#[[:xdigit]]{3}$");
+static QRegularExpression regex_qcolor ("^(?:(?:#[[:xdigit:]]{3})|(?:#[[:xdigit:]]{6})|(?:[[:alpha:]]+))$");
 static QRegularExpression regex_func_rgb (R"(^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)");
-static QRegularExpression regex_hex_rgba ("^#[[:xdigit]]{8}$");
+static QRegularExpression regex_hex_rgba ("^#[[:xdigit:]]{8}$");
 static QRegularExpression regex_func_rgba (R"(^rgba?\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)");
 
 class ColorLineEdit::Private
@@ -38,6 +44,8 @@ class ColorLineEdit::Private
 public:
     QColor color;
     bool show_alpha = false;
+    bool preview_color = false;
+    QBrush background;
 
     QString stringFromColor(const QColor& c)
     {
@@ -51,14 +59,10 @@ public:
         QString xs = s.trimmed();
         QRegularExpressionMatch match;
 
-        match = regex_3hex_rgb.match(xs);
+        match = regex_qcolor.match(xs);
         if ( match.hasMatch() )
         {
-            return QColor(
-                QString(2,xs[1]).toInt(nullptr,16),
-                QString(2,xs[2]).toInt(nullptr,16),
-                QString(2,xs[3]).toInt(nullptr,16)
-            );
+            return QColor(xs);
         }
 
         match = regex_func_rgb.match(xs);
@@ -96,13 +100,27 @@ public:
             }
         }
 
-        return QColor(xs);
+        return QColor();
+    }
+
+    void setPalette(const QColor& color, ColorLineEdit* parent)
+    {
+        if ( preview_color )
+        {
+            QPalette pal = parent->palette();
+            pal.setColor(QPalette::Base, color.alpha() < 255 ? Qt::transparent : color);
+            pal.setColor(QPalette::Text,
+                detail::color_lumaF(color) > 0.5 || color.alphaF() < 0.2 ? Qt::black : Qt::white);
+            parent->setPalette(pal);
+        }
     }
 };
 
 ColorLineEdit::ColorLineEdit(QWidget* parent)
     : QLineEdit(parent), p(new Private)
 {
+    p->background.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
+    setColor(Qt::white);
     /// \todo determine if having this connection might be useful
     /*connect(this, &QLineEdit::textChanged, [this](const QString& text){
         QColor color = p->colorFromString(text);
@@ -113,6 +131,8 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         QColor color = p->colorFromString(text);
         if ( color.isValid() )
         {
+            p->color = color;
+            p->setPalette(color, this);
             emit colorEdited(color);
             emit colorChanged(color);
         }
@@ -127,10 +147,11 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         }
         else
         {
-            setText(p->color.name());
+            setText(p->stringFromColor(p->color));
             emit colorEditingFinished(p->color);
             emit colorChanged(color);
         }
+        p->setPalette(p->color, this);
     });
 }
 
@@ -149,6 +170,7 @@ void ColorLineEdit::setColor(const QColor& color)
     if ( color != p->color )
     {
         p->color = color;
+        p->setPalette(p->color, this);
         setText(p->stringFromColor(p->color));
         emit colorChanged(p->color);
     }
@@ -156,9 +178,10 @@ void ColorLineEdit::setColor(const QColor& color)
 
 void ColorLineEdit::setShowAlpha(bool showAlpha)
 {
-    if ( p->show_alpha )
+    if ( p->show_alpha != showAlpha )
     {
         p->show_alpha = showAlpha;
+        p->setPalette(p->color, this);
         setText(p->stringFromColor(p->color));
         emit showAlphaChanged(p->show_alpha);
     }
@@ -193,6 +216,41 @@ void ColorLineEdit::dropEvent(QDropEvent *event)
             event->accept();
         }
     }
+}
+
+bool ColorLineEdit::previewColor() const
+{
+    return p->preview_color;
+}
+
+void ColorLineEdit::setPreviewColor(bool previewColor)
+{
+    if ( previewColor != p->preview_color )
+    {
+        p->preview_color = previewColor;
+
+        if ( p->preview_color )
+            p->setPalette(p->color, this);
+        else
+            setPalette(QApplication::palette());
+
+        emit previewColorChanged(p->preview_color);
+    }
+}
+
+void ColorLineEdit::paintEvent(QPaintEvent* event)
+{
+    if ( p->preview_color && p->show_alpha && p->color.alpha() < 255 )
+    {
+        QPainter painter(this);
+        QStyleOptionFrame panel;
+        initStyleOption(&panel);
+        QRect r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, nullptr);
+        painter.fillRect(r, p->background);
+        painter.fillRect(r, p->color);
+    }
+
+    QLineEdit::paintEvent(event);
 }
 
 } // namespace color_widgets

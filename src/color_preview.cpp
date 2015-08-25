@@ -37,7 +37,7 @@ class ColorPreview::Private
 public:
     QColor col; ///< color to be viewed
     QColor comparison; ///< comparison color
-    QBrush back;///< Background brush, visible on transaprent color
+    QBrush back;///< Background brush, visible on a transparent color
     Display_Mode display_mode; ///< How the color(s) are to be shown
 
     Private() : col(Qt::red), back(Qt::darkGray, Qt::DiagCrossPattern), display_mode(NoAlpha)
@@ -121,13 +121,13 @@ void ColorPreview::paint(QPainter &painter, QRect rect) const
     QRect r = style()->subElementRect(QStyle::SE_FrameContents, &panel, this);
     painter.setClipRect(r);
 
-    if(c1.alpha()<255 || c2.alpha()<255)
-        painter.fillRect(1, 1, rect.width()-2, rect.height()-2, p->back);
+    if ( c1.alpha() < 255 || c2.alpha() < 255 )
+        painter.fillRect(0, 0, rect.width(), rect.height(), p->back);
 
-    int w = (rect.width() - 2) / 2;
-    int h = rect.height() - 2;
-    painter.fillRect(1, 1, w, h, c1);
-    painter.fillRect(1+w, 1, w, h, c2);
+    int w = rect.width() / 2;
+    int h = rect.height();
+    painter.fillRect(0, 0, w, h, c1);
+    painter.fillRect(w, 0, w, h, c2);
 }
 
 void ColorPreview::setColor(const QColor &c)
