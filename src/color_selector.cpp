@@ -32,7 +32,7 @@ namespace color_widgets {
 class ColorSelector::Private
 {
 public:
-    Update_Mode update_mode;
+    UpdateMode update_mode;
     ColorDialog *dialog;
     QColor old_color;
 
@@ -50,8 +50,8 @@ ColorSelector::ColorSelector(QWidget *parent) :
     connect(this,SIGNAL(colorChanged(QColor)),this,SLOT(update_old_color(QColor)));
     connect(p->dialog,SIGNAL(rejected()),this,SLOT(reject_dialog()));
     connect(p->dialog,SIGNAL(colorSelected(QColor)), this, SLOT(accept_dialog()));
-    connect(p->dialog,SIGNAL(wheelFlagsChanged(ColorWheel::Display_Flags)),
-                SIGNAL(wheelFlagsChanged(ColorWheel::Display_Flags)));
+    connect(p->dialog,SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)),
+                SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)));
 
     setAcceptDrops(true);
 }
@@ -61,12 +61,12 @@ ColorSelector::~ColorSelector()
     delete p;
 }
 
-ColorSelector::Update_Mode ColorSelector::updateMode() const
+ColorSelector::UpdateMode ColorSelector::updateMode() const
 {
     return p->update_mode;
 }
 
-void ColorSelector::setUpdateMode(Update_Mode m)
+void ColorSelector::setUpdateMode(UpdateMode m)
 {
     p->update_mode = m;
 }
@@ -81,7 +81,7 @@ void ColorSelector::setDialogModality(Qt::WindowModality m)
     p->dialog->setWindowModality(m);
 }
 
-ColorWheel::Display_Flags ColorSelector::wheelFlags() const
+ColorWheel::DisplayFlags ColorSelector::wheelFlags() const
 {
     return p->dialog->wheelFlags();
 }
@@ -94,7 +94,7 @@ void ColorSelector::showDialog()
     p->dialog->show();
 }
 
-void ColorSelector::setWheelFlags(ColorWheel::Display_Flags flags)
+void ColorSelector::setWheelFlags(ColorWheel::DisplayFlags flags)
 {
     p->dialog->setWheelFlags(flags);
 }

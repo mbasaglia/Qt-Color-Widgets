@@ -38,11 +38,11 @@ class QCP_EXPORT ColorPreview : public QWidget
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
     Q_PROPERTY(QColor comparisonColor READ comparisonColor WRITE setComparisonColor DESIGNABLE true)
-    Q_PROPERTY(Display_Mode display_mode READ displayMode WRITE setDisplayMode DESIGNABLE true)
+    Q_PROPERTY(DisplayMode display_mode READ displayMode WRITE setDisplayMode DESIGNABLE true)
     Q_PROPERTY(QBrush background READ background WRITE setBackground DESIGNABLE true)
-    Q_ENUMS(Display_Mode)
+    Q_ENUMS(DisplayMode)
 public:
-    enum Display_Mode
+    enum DisplayMode
     {
         NoAlpha,    ///< Show current color with no transparency
         AllAlpha,   ///< show current color with transparency
@@ -60,10 +60,10 @@ public:
     void setBackground(const QBrush &bk);
 
     /// Get color display mode
-    Display_Mode displayMode() const;
+    DisplayMode displayMode() const;
 
     /// Set how transparent colors are handled
-    void setDisplayMode(Display_Mode dm);
+    void setDisplayMode(DisplayMode dm);
 
     /// Get current color
     QColor color() const;

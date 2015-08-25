@@ -34,6 +34,11 @@ old_classes=(
     Color_Wheel
     Gradient_Slider
     Hue_Slider
+    Button_Mode
+    Display_Mode
+    Update_Mode
+    Display_Enum
+    Display_Flags
 )
 file_extensions=(
     ui

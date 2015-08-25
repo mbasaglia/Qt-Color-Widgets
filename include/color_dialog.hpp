@@ -36,9 +36,9 @@ namespace color_widgets {
 class QCP_EXPORT ColorDialog : public QDialog
 {
     Q_OBJECT
-    Q_ENUMS(Button_Mode)
+    Q_ENUMS(ButtonMode)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
-    Q_PROPERTY(ColorWheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
+    Q_PROPERTY(ColorWheel::DisplayFlags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
     /**
      * \brief whether the color alpha channel can be edited.
      *
@@ -47,7 +47,7 @@ class QCP_EXPORT ColorDialog : public QDialog
     Q_PROPERTY(bool alphaEnabled READ alphaEnabled WRITE setAlphaEnabled NOTIFY alphaEnabledChanged)
 
 public:
-    enum Button_Mode {
+    enum ButtonMode {
         OkCancel,
         OkApplyCancel,
         Close
@@ -63,12 +63,12 @@ public:
     /**
      * Set the display mode for the color preview
      */
-    void setPreviewDisplayMode(ColorPreview::Display_Mode mode);
+    void setPreviewDisplayMode(ColorPreview::DisplayMode mode);
 
     /**
      * Get the color preview diplay mode
      */
-    ColorPreview::Display_Mode previewDisplayMode() const;
+    ColorPreview::DisplayMode previewDisplayMode() const;
 
     bool alphaEnabled() const;
 
@@ -80,12 +80,12 @@ public:
      * OkCancelApply - this is for non-modal dialogs
      * Close - for non-modal dialogs with direct color updates via colorChanged signal
      */
-    void setButtonMode(Button_Mode mode);
-    Button_Mode buttonMode() const;
+    void setButtonMode(ButtonMode mode);
+    ButtonMode buttonMode() const;
 
     QSize sizeHint() const;
 
-    ColorWheel::Display_Flags wheelFlags() const;
+    ColorWheel::DisplayFlags wheelFlags() const;
 
 public slots:
 
@@ -99,7 +99,7 @@ public slots:
      */
     void showColor(const QColor &oldcolor);
 
-    void setWheelFlags(ColorWheel::Display_Flags flags);
+    void setWheelFlags(ColorWheel::DisplayFlags flags);
 
     /**
      * Set whether the color alpha channel can be edited.
@@ -118,7 +118,7 @@ signals:
      */
     void colorSelected(QColor);
 
-    void wheelFlagsChanged(ColorWheel::Display_Flags flags);
+    void wheelFlagsChanged(ColorWheel::DisplayFlags flags);
     void alphaEnabledChanged(bool alphaEnabled);
 
 private slots:

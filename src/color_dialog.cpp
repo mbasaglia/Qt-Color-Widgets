@@ -39,7 +39,7 @@ class ColorDialog::Private
 {
 public:
     Ui_ColorDialog ui;
-    Button_Mode button_mode;
+    ButtonMode button_mode;
     bool pick_from_screen;
     bool alpha_enabled;
 
@@ -61,7 +61,7 @@ ColorDialog::ColorDialog(QWidget *parent, Qt::WindowFlags f) :
 
     setButtonMode(OkApplyCancel);
 
-    connect(p->ui.wheel,SIGNAL(displayFlagsChanged(ColorWheel::Display_Flags)),SIGNAL(wheelFlagsChanged(ColorWheel::Display_Flags)));
+    connect(p->ui.wheel,SIGNAL(displayFlagsChanged(ColorWheel::DisplayFlags)),SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)));
 }
 
 QSize ColorDialog::sizeHint() const
@@ -69,7 +69,7 @@ QSize ColorDialog::sizeHint() const
     return QSize(400,0);
 }
 
-ColorWheel::Display_Flags ColorDialog::wheelFlags() const
+ColorWheel::DisplayFlags ColorDialog::wheelFlags() const
 {
     return p->ui.wheel->displayFlags();
 }
@@ -106,17 +106,17 @@ void ColorDialog::showColor(const QColor &c)
     show();
 }
 
-void ColorDialog::setWheelFlags(ColorWheel::Display_Flags flags)
+void ColorDialog::setWheelFlags(ColorWheel::DisplayFlags flags)
 {
     p->ui.wheel->setDisplayFlags(flags);
 }
 
-void ColorDialog::setPreviewDisplayMode(ColorPreview::Display_Mode mode)
+void ColorDialog::setPreviewDisplayMode(ColorPreview::DisplayMode mode)
 {
     p->ui.preview->setDisplayMode(mode);
 }
 
-ColorPreview::Display_Mode ColorDialog::previewDisplayMode() const
+ColorPreview::DisplayMode ColorDialog::previewDisplayMode() const
 {
     return p->ui.preview->displayMode();
 }
@@ -142,7 +142,7 @@ bool ColorDialog::alphaEnabled() const
     return p->alpha_enabled;
 }
 
-void ColorDialog::setButtonMode(Button_Mode mode)
+void ColorDialog::setButtonMode(ButtonMode mode)
 {
     p->button_mode = mode;
     QDialogButtonBox::StandardButtons btns;
@@ -154,7 +154,7 @@ void ColorDialog::setButtonMode(Button_Mode mode)
     p->ui.buttonBox->setStandardButtons(btns);
 }
 
-ColorDialog::Button_Mode ColorDialog::buttonMode() const
+ColorDialog::ButtonMode ColorDialog::buttonMode() const
 {
     return p->button_mode;
 }

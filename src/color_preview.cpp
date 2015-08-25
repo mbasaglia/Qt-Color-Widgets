@@ -38,7 +38,7 @@ public:
     QColor col; ///< color to be viewed
     QColor comparison; ///< comparison color
     QBrush back;///< Background brush, visible on a transparent color
-    Display_Mode display_mode; ///< How the color(s) are to be shown
+    DisplayMode display_mode; ///< How the color(s) are to be shown
 
     Private() : col(Qt::red), back(Qt::darkGray, Qt::DiagCrossPattern), display_mode(NoAlpha)
     {}
@@ -66,12 +66,12 @@ QBrush ColorPreview::background() const
     return p->back;
 }
 
-ColorPreview::Display_Mode ColorPreview::displayMode() const
+ColorPreview::DisplayMode ColorPreview::displayMode() const
 {
     return p->display_mode;
 }
 
-void ColorPreview::setDisplayMode(Display_Mode m)
+void ColorPreview::setDisplayMode(DisplayMode m)
 {
     p->display_mode = m;
     update();

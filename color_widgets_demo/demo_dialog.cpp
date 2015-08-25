@@ -78,7 +78,7 @@ void Demo_Dialog::changeEvent(QEvent *e)
 void Demo_Dialog::on_combo_shape_activated(int index)
 {
     color_wheel->setDisplayFlag(
-        color_widgets::ColorWheel::Display_Enum(combo_shape->itemData(index).toInt()),
+        color_widgets::ColorWheel::DisplayEnum(combo_shape->itemData(index).toInt()),
         color_widgets::ColorWheel::SHAPE_FLAGS);
     color_widgets::ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
     color_list->setWheelFlags(color_wheel->displayFlags());
@@ -87,7 +87,7 @@ void Demo_Dialog::on_combo_shape_activated(int index)
 void Demo_Dialog::on_combo_angle_activated(int index)
 {
     color_wheel->setDisplayFlag(
-        color_widgets::ColorWheel::Display_Enum(combo_angle->itemData(index).toInt()),
+        color_widgets::ColorWheel::DisplayEnum(combo_angle->itemData(index).toInt()),
         color_widgets::ColorWheel::ANGLE_FLAGS);
     color_widgets::ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
     color_list->setWheelFlags(color_wheel->displayFlags());
@@ -96,7 +96,7 @@ void Demo_Dialog::on_combo_angle_activated(int index)
 void Demo_Dialog::on_combo_color_activated(int index)
 {
     color_wheel->setDisplayFlag(
-        color_widgets::ColorWheel::Display_Enum(combo_color->itemData(index).toInt()),
+        color_widgets::ColorWheel::DisplayEnum(combo_color->itemData(index).toInt()),
         color_widgets::ColorWheel::COLOR_FLAGS);
     color_widgets::ColorWheel::setDefaultDisplayFlags(color_wheel->displayFlags());
     color_list->setWheelFlags(color_wheel->displayFlags());

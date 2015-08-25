@@ -31,15 +31,15 @@
 
 namespace color_widgets {
 
-enum Mouse_Status
+enum MouseStatus
 {
     Nothing,
-    Drag_Circle,
-    Drag_Square
+    DragCircle,
+    DragSquare
 };
 
-static const ColorWheel::Display_Flags hard_default_flags = ColorWheel::SHAPE_TRIANGLE|ColorWheel::ANGLE_ROTATING|ColorWheel::COLOR_HSV;
-static ColorWheel::Display_Flags default_flags = hard_default_flags;
+static const ColorWheel::DisplayFlags hard_default_flags = ColorWheel::SHAPE_TRIANGLE|ColorWheel::ANGLE_ROTATING|ColorWheel::COLOR_HSV;
+static ColorWheel::DisplayFlags default_flags = hard_default_flags;
 static const double selector_radius = 6;
 
 class ColorWheel::Private
@@ -51,10 +51,10 @@ public:
 
     qreal hue, sat, val;
     unsigned int wheel_width;
-    Mouse_Status mouse_status;
+    MouseStatus mouse_status;
     QPixmap hue_ring;
     QImage inner_selector;
-    Display_Flags display_flags;
+    DisplayFlags display_flags;
     QColor (*color_from)(qreal,qreal,qreal,qreal);
     QColor (*rainbow_from_hue)(qreal);
 
@@ -346,7 +346,7 @@ void ColorWheel::paintEvent(QPaintEvent * )
 
 void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
 {
-    if (p->mouse_status == Drag_Circle )
+    if (p->mouse_status == DragCircle )
     {
         p->hue = p->line_to_point(ev->pos()).angle()/360.0;
         p->render_inner_selector();
@@ -355,7 +355,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
         emit colorChanged(color());
         update();
     }
-    else if(p->mouse_status == Drag_Square)
+    else if(p->mouse_status == DragSquare)
     {
         QLineF glob_mouse_ln = p->line_to_point(ev->pos());
         QLineF center_mouse_ln ( QPointF(0,0),
@@ -397,9 +397,9 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
         setFocus();
         QLineF ray = p->line_to_point(ev->pos());
         if ( ray.length() <= p->inner_radius() )
-            p->mouse_status = Drag_Square;
+            p->mouse_status = DragSquare;
         else if ( ray.length() <= p->outer_radius() )
-            p->mouse_status = Drag_Circle;
+            p->mouse_status = DragCircle;
 
         // Update the color
         mouseMoveEvent(ev);
@@ -448,7 +448,7 @@ void ColorWheel::setValue(qreal v)
 }
 
 
-void ColorWheel::setDisplayFlags(Display_Flags flags)
+void ColorWheel::setDisplayFlags(DisplayFlags flags)
 {
     if ( ! (flags & COLOR_FLAGS) )
         flags |= default_flags & COLOR_FLAGS;
@@ -493,12 +493,12 @@ void ColorWheel::setDisplayFlags(Display_Flags flags)
     emit displayFlagsChanged(flags);
 }
 
-ColorWheel::Display_Flags ColorWheel::displayFlags(Display_Flags mask) const
+ColorWheel::DisplayFlags ColorWheel::displayFlags(DisplayFlags mask) const
 {
     return p->display_flags & mask;
 }
 
-void ColorWheel::setDefaultDisplayFlags(Display_Flags flags)
+void ColorWheel::setDefaultDisplayFlags(DisplayFlags flags)
 {
     if ( !(flags & COLOR_FLAGS) )
         flags |= hard_default_flags & COLOR_FLAGS;
@@ -509,12 +509,12 @@ void ColorWheel::setDefaultDisplayFlags(Display_Flags flags)
     default_flags = flags;
 }
 
-ColorWheel::Display_Flags ColorWheel::defaultDisplayFlags(Display_Flags mask)
+ColorWheel::DisplayFlags ColorWheel::defaultDisplayFlags(DisplayFlags mask)
 {
     return default_flags & mask;
 }
 
-void ColorWheel::setDisplayFlag(Display_Flags flag, Display_Flags mask)
+void ColorWheel::setDisplayFlag(DisplayFlags flag, DisplayFlags mask)
 {
     setDisplayFlags((p->display_flags&~mask)|flag);
 }

@@ -34,7 +34,7 @@ class ColorListWidget::Private
 public:
     QList<QColor>               colors;
     QSignalMapper               mapper;
-    ColorWheel::Display_Flags  wheel_flags;
+    ColorWheel::DisplayFlags  wheel_flags;
 };
 
 ColorListWidget::ColorListWidget(QWidget *parent)
@@ -113,18 +113,18 @@ void ColorListWidget::append_widget(int col)
     //connect(cbs,SIGNAL(colorChanged(QColor)),SLOT(emit_changed()));
     p->mapper.setMapping(cbs,col);
     connect(cbs,SIGNAL(colorChanged(QColor)),&p->mapper,SLOT(map()));
-    connect(this,SIGNAL(wheelFlagsChanged(ColorWheel::Display_Flags)),
-            cbs,SLOT(setWheelFlags(ColorWheel::Display_Flags)));
+    connect(this,SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)),
+            cbs,SLOT(setWheelFlags(ColorWheel::DisplayFlags)));
     appendWidget(cbs);
     setRowHeight(count()-1,22);
 }
 
-ColorWheel::Display_Flags ColorListWidget::wheelFlags() const
+ColorWheel::DisplayFlags ColorListWidget::wheelFlags() const
 {
     return p->wheel_flags;
 }
 
-void ColorListWidget::setWheelFlags(ColorWheel::Display_Flags flags)
+void ColorListWidget::setWheelFlags(ColorWheel::DisplayFlags flags)
 {
     if ( p->wheel_flags != flags )
     {
