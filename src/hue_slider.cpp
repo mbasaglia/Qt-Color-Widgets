@@ -5,6 +5,7 @@
 @section License
 
     Copyright (C) 2014 Calle Laakkonen
+    Copyright (C) 2015 Mattia Basaglia
 
     This software is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,10 +32,12 @@ private:
     HueSlider *w;
 
 public:
-    qreal saturation;
-    qreal value;
+    qreal saturation = 1;
+    qreal value = 1;
+    qreal alpha = 1;
 
-    Private(HueSlider *widget) : w(widget), saturation(1), value(1)
+    Private(HueSlider *widget)
+        : w(widget)
     {
         updateGradient();
     }
@@ -44,7 +47,7 @@ public:
         static const double n_colors = 6;
         QGradientStops colors;
         colors.reserve(n_colors+1);
-        for(int i=0;i<=n_colors;++i)
+        for ( int i = 0; i <= n_colors; ++i )
             colors.append(QGradientStop(i/n_colors, QColor::fromHsvF(i/n_colors, saturation, value)));
         w->setColors(colors);
     }
@@ -84,6 +87,17 @@ qreal HueSlider::colorValue() const
 void HueSlider::setColorValue(qreal v)
 {
     p->value = qBound(0.0, v, 1.0);
+    p->updateGradient();
+}
+
+qreal HueSlider::colorAlpha() const
+{
+    return p->alpha;
+}
+
+void HueSlider::setColorAlpha(qreal alpha)
+{
+    p->alpha = alpha;
     p->updateGradient();
 }
 

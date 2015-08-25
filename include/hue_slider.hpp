@@ -5,6 +5,7 @@
 @section License
 
     Copyright (C) 2014 Calle Laakkonen
+    Copyright (C) 2015 Mattia Basaglia
 
     This software is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,19 +34,32 @@ namespace color_widgets {
 class QCP_EXPORT HueSlider : public GradientSlider
 {
     Q_OBJECT
+    /**
+     * \brief Saturation used in the rainbow gradient, as a [0-1] float
+     */
     Q_PROPERTY(qreal colorSaturation READ colorSaturation WRITE setColorSaturation)
+    /**
+     * \brief Value used in the rainbow gradient, as a [0-1] float
+     */
     Q_PROPERTY(qreal colorValue READ colorValue WRITE setColorValue)
+    /**
+     * \brief Alpha used in the rainbow gradient, as a [0-1] float
+     */
+    Q_PROPERTY(qreal colorAlpha READ colorAlpha WRITE setColorAlpha)
 
 public:
-    explicit HueSlider(QWidget *parent = 0);
-    explicit HueSlider(Qt::Orientation orientation, QWidget *parent = 0);
+    explicit HueSlider(QWidget *parent = nullptr);
+    explicit HueSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
     ~HueSlider();
 
     qreal colorSaturation() const;
-    void setColorSaturation(qreal value);
-
     qreal colorValue() const;
+    qreal colorAlpha() const;
+
+public slots:
     void setColorValue(qreal value);
+    void setColorSaturation(qreal value);
+    void setColorAlpha(qreal alpha);
 
 private:
     class Private;
