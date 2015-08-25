@@ -38,7 +38,7 @@ file(GLOB_RECURSE SOURCES src/*.cpp src/*.qrc)
 file(GLOB_RECURSE HEADERS include/*.hpp)
 qt5_wrap_cpp(SOURCES ${HEADERS})
 qt5_wrap_ui(SOURCES src/color_dialog.ui src/color_palette_widget.ui)
-qt5_add_resources(SOURCES src/pattern.qrc)
+qt5_add_resources(SOURCES src/color_widgets.qrc)
 
 # Library
 add_library(${LIBRARY_TARGET} ${SOURCES})

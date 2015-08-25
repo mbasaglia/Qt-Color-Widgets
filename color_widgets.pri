@@ -62,5 +62,5 @@ FORMS += \
     $$PWD/src/color_palette_widget.ui
 
 RESOURCES += \
-    $$PWD/src/pattern.qrc
+    $$PWD/src/color_widgets.qrc
 

@@ -28,6 +28,16 @@
 #include <QStyleOptionSlider>
 #include <QLinearGradient>
 
+static void loadResource()
+{
+    static bool loaded = false;
+    if ( !loaded )
+    {
+        Q_INIT_RESOURCE(color_widgets);
+        loaded = true;
+    }
+}
+
 namespace color_widgets {
 
 class GradientSlider::Private
@@ -39,6 +49,7 @@ public:
     Private() :
         back(Qt::darkGray, Qt::DiagCrossPattern)
     {
+        loadResource();
         back.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
         gradient.setCoordinateMode(QGradient::StretchToDeviceMode);
     }
