@@ -39,6 +39,12 @@ class QCP_EXPORT ColorDialog : public QDialog
     Q_ENUMS(Button_Mode)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged DESIGNABLE true)
     Q_PROPERTY(ColorWheel::Display_Flags wheelFlags READ wheelFlags WRITE setWheelFlags NOTIFY wheelFlagsChanged)
+    /**
+     * \brief whether the color alpha channel can be edited.
+     *
+     * If alpha is disabled, the selected color's alpha will always be 255.
+     */
+    Q_PROPERTY(bool alphaEnabled READ alphaEnabled WRITE setAlphaEnabled NOTIFY alphaEnabledChanged)
 
 public:
     enum Button_Mode {
@@ -63,12 +69,6 @@ public:
      * Get the color preview diplay mode
      */
     ColorPreview::Display_Mode previewDisplayMode() const;
-
-    /**
-     * Set whether the color alpha channel can be edited.
-     * If alpha is disabled, the selected color's alpha will always be 255.
-     */
-    void setAlphaEnabled(bool a);
 
     bool alphaEnabled() const;
 
@@ -101,6 +101,12 @@ public slots:
 
     void setWheelFlags(ColorWheel::Display_Flags flags);
 
+    /**
+     * Set whether the color alpha channel can be edited.
+     * If alpha is disabled, the selected color's alpha will always be 255.
+     */
+    void setAlphaEnabled(bool a);
+
 signals:
     /**
      * The current color was changed
@@ -113,6 +119,7 @@ signals:
     void colorSelected(QColor);
 
     void wheelFlagsChanged(ColorWheel::Display_Flags flags);
+    void alphaEnabledChanged(bool alphaEnabled);
 
 private slots:
     /// Update all the Ui elements to match the selected color
@@ -122,13 +129,12 @@ private slots:
     /// Update from RGB sliders
     void set_rgb();
 
-    void on_edit_hex_editingFinished();
-    void on_edit_hex_textEdited(const QString &arg1);
+    void on_edit_hex_colorChanged(const QColor& color);
+    void on_edit_hex_colorEditingFinished(const QColor& color);
 
     void on_buttonBox_clicked(QAbstractButton*);
 
 private:
-    void update_hex();
     void setColorInternal(const QColor &color);
 
 protected:

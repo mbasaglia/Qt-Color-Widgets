@@ -394,6 +394,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
 {
     if ( ev->buttons() & Qt::LeftButton )
     {
+        setFocus();
         QLineF ray = p->line_to_point(ev->pos());
         if ( ray.length() <= p->inner_radius() )
             p->mouse_status = Drag_Square;

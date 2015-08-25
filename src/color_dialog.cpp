@@ -85,14 +85,16 @@ QColor ColorDialog::color() const
 void ColorDialog::setColor(const QColor &c)
 {
     p->ui.preview->setComparisonColor(c);
+    p->ui.edit_hex->setModified(false);
     setColorInternal(c);
 }
 
 void ColorDialog::setColorInternal(const QColor &c)
 {
-    // Note. The difference between this method and setColor, is that setColor
-    // sets the official starting color of the dialog, while this is used to update
-    // the current color which might not be the final selected color.
+    /**
+     * \note Unlike setColor, this is used to update the current color which
+     * migth differ from the final selected color
+     */
     p->ui.wheel->setColor(c);
     p->ui.slide_alpha->setValue(c.alpha());
     update_widgets();
@@ -121,12 +123,18 @@ ColorPreview::Display_Mode ColorDialog::previewDisplayMode() const
 
 void ColorDialog::setAlphaEnabled(bool a)
 {
-    p->alpha_enabled = a;
+    if ( a != p->alpha_enabled )
+    {
+        p->alpha_enabled = a;
 
-    p->ui.line_alpha->setVisible(a);
-    p->ui.label_alpha->setVisible(a);
-    p->ui.slide_alpha->setVisible(a);
-    p->ui.spin_alpha->setVisible(a);
+        p->ui.edit_hex->setShowAlpha(a);
+        p->ui.line_alpha->setVisible(a);
+        p->ui.label_alpha->setVisible(a);
+        p->ui.slide_alpha->setVisible(a);
+        p->ui.spin_alpha->setVisible(a);
+
+        emit alphaEnabledChanged(a);
+    }
 }
 
 bool ColorDialog::alphaEnabled() const
@@ -198,8 +206,8 @@ void ColorDialog::update_widgets()
     p->ui.slide_alpha->setLastColor(apha_color);
     p->ui.spin_alpha->setValue(p->ui.slide_alpha->value());
 
-
-    p->ui.edit_hex->setText(col.name());
+    if ( !p->ui.edit_hex->isModified() )
+        p->ui.edit_hex->setColor(col);
 
     p->ui.preview->setColor(col);
 
@@ -239,62 +247,15 @@ void ColorDialog::set_rgb()
     }
 }
 
-
-void ColorDialog::on_edit_hex_editingFinished()
+void ColorDialog::on_edit_hex_colorChanged(const QColor& color)
 {
-    update_hex();
-
+    setColorInternal(color);
 }
 
-void ColorDialog::on_edit_hex_textEdited(const QString &arg1)
+void ColorDialog::on_edit_hex_colorEditingFinished(const QColor& color)
 {
-    int cursor = p->ui.edit_hex->cursorPosition();
-    update_hex();
-    //edit_hex->blockSignals(true);
-    p->ui.edit_hex->setText(arg1);
-    //edit_hex->blockSignals(false);
-    p->ui.edit_hex->setCursorPosition(cursor);
-}
-
-void ColorDialog::update_hex()
-{
-    QString xs = p->ui.edit_hex->text().trimmed();
-    xs.remove('#');
-
-    if ( xs.isEmpty() )
-        return;
-
-    if ( xs.indexOf(QRegExp("^[0-9a-fA-f]+$")) == -1 )
-    {
-        QColor c(xs);
-        if ( c.isValid() )
-        {
-            setColorInternal(c);
-            return;
-        }
-    }
-
-    if ( xs.size() == 3 )
-    {
-        p->ui.slide_red->setValue(QString(2,xs[0]).toInt(0,16));
-        p->ui.slide_green->setValue(QString(2,xs[1]).toInt(0,16));
-        p->ui.slide_blue->setValue(QString(2,xs[2]).toInt(0,16));
-    }
-    else
-    {
-        if ( xs.size() < 6 )
-        {
-            xs += QString(6-xs.size(),'0');
-        }
-        p->ui.slide_red->setValue(xs.mid(0,2).toInt(0,16));
-        p->ui.slide_green->setValue(xs.mid(2,2).toInt(0,16));
-        p->ui.slide_blue->setValue(xs.mid(4,2).toInt(0,16));
-
-        if ( xs.size() == 8 )
-            p->ui.slide_alpha->setValue(xs.mid(6,2).toInt(0,16));
-    }
-
-    set_rgb();
+    p->ui.edit_hex->setModified(false);
+    setColorInternal(color);
 }
 
 void ColorDialog::on_buttonBox_clicked(QAbstractButton *btn)
