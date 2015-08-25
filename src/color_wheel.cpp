@@ -23,10 +23,12 @@
 
 #include "color_wheel.hpp"
 
+#include <cmath>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QLineF>
-#include <cmath>
+#include <QDragEnterEvent>
+#include <QMimeData>
 #include "color_utils.hpp"
 
 namespace color_widgets {
@@ -236,6 +238,7 @@ ColorWheel::ColorWheel(QWidget *parent) :
     QWidget(parent), p(new Private(this))
 {
     setDisplayFlags(FLAGS_DEFAULT);
+    setAcceptDrops(true);
 }
 
 ColorWheel::~ColorWheel()
@@ -517,6 +520,31 @@ ColorWheel::DisplayFlags ColorWheel::defaultDisplayFlags(DisplayFlags mask)
 void ColorWheel::setDisplayFlag(DisplayFlags flag, DisplayFlags mask)
 {
     setDisplayFlags((p->display_flags&~mask)|flag);
+}
+
+void ColorWheel::dragEnterEvent(QDragEnterEvent* event)
+{
+    if ( event->mimeData()->hasColor() ||
+         ( event->mimeData()->hasText() && QColor(event->mimeData()->text()).isValid() ) )
+        event->acceptProposedAction();
+}
+
+void ColorWheel::dropEvent(QDropEvent* event)
+{
+    if ( event->mimeData()->hasColor() )
+    {
+        setColor(event->mimeData()->colorData().value<QColor>());
+        event->accept();
+    }
+    else if ( event->mimeData()->hasText() )
+    {
+        QColor col(event->mimeData()->text());
+        if ( col.isValid() )
+        {
+            setColor(col);
+            event->accept();
+        }
+    }
 }
 
 } //  namespace color_widgets

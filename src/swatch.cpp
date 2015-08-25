@@ -43,6 +43,7 @@ public:
     int          selected;   ///< Current selection index (-1 for no selection)
     QSize        color_size; ///< Preferred size for the color squares
     ColorSizePolicy size_policy;
+    QPen         border;
     int          forced_rows;
     int          forced_columns;
     bool         readonly;  ///< Whether the palette can be modified via user interaction
@@ -59,6 +60,7 @@ public:
         : selected(-1),
           color_size(16,16),
           size_policy(Hint),
+          border(Qt::black, 1),
           forced_rows(0),
           forced_columns(0),
           readonly(false),
@@ -347,12 +349,13 @@ void Swatch::paintEvent(QPaintEvent* event)
     painter.setClipRect(r);
 
     int count = p->palette.count();
+        painter.setPen(p->border);
     for ( int y = 0, i = 0; i < count; y++ )
     {
         for ( int x = 0; x < rowcols.width() && i < count; x++, i++ )
         {
-            painter.fillRect(p->indexRect(i, rowcols, color_size),
-                             p->palette.colorAt(i));
+            painter.setBrush(p->palette.colorAt(i));
+            painter.drawRect(p->indexRect(i, rowcols, color_size));
         }
     }
 
@@ -747,6 +750,21 @@ bool Swatch::event(QEvent* event)
     }
 
     return QWidget::event(event);
+}
+
+QPen Swatch::border() const
+{
+    return p->border;
+}
+
+void Swatch::setBorder(const QPen& border)
+{
+    if ( border != p->border )
+    {
+        p->border = border;
+        emit borderChanged(border);
+        update();
+    }
 }
 
 } // namespace color_widgets

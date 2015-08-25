@@ -52,6 +52,11 @@ class ColorPaletteWidget : public QWidget
     Q_PROPERTY(color_widgets::Swatch::ColorSizePolicy colorSizePolicy READ colorSizePolicy WRITE setColorSizePolicy NOTIFY colorSizePolicyChanged)
 
     /**
+     * \brief Border around the colors
+     */
+    Q_PROPERTY(QPen border READ border WRITE setBorder NOTIFY borderChanged)
+
+    /**
      * \brief Forces the Swatch to display that many rows of colors
      *
      * If there are too few elements, the widget will display less than this
@@ -99,6 +104,7 @@ public:
 
     QSize colorSize() const;
     Swatch::ColorSizePolicy colorSizePolicy() const;
+    QPen border() const;
 
     int forcedRows() const;
     int forcedColumns() const;
@@ -110,6 +116,7 @@ public slots:
     void setModel(ColorPaletteModel* model);
     void setColorSize(const QSize& colorSize);
     void setColorSizePolicy(Swatch::ColorSizePolicy colorSizePolicy);
+    void setBorder(const QPen& border);
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
     void setReadOnly(bool readOnly);
@@ -136,6 +143,7 @@ signals:
     void forcedColumnsChanged(int forcedColumns);
     void readOnlyChanged(bool readOnly);
     void currentColorChanged(const QColor& currentColor);
+    void borderChanged(const QPen& border);
 
 private slots:
     void on_palette_list_currentIndexChanged(int index);
