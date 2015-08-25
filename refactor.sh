@@ -34,6 +34,8 @@ old_classes=(
     Color_Wheel
     Gradient_Slider
     Hue_Slider
+)
+old_enums=(
     Button_Mode
     Display_Mode
     Update_Mode
@@ -52,9 +54,15 @@ file_extensions=(
 )
 
 
-function new_name()
+function new_class_name()
 {
     echo "$1" | sed -e 's/_//g' -r -e 's/^/color_widgets::/'
+}
+
+
+function new_enum_name()
+{
+    echo "$1" | sed -e 's/_//g'
 }
 
 directory="$1"
@@ -78,7 +86,11 @@ files="$(bash -c "$find_command")"
 replacements=""
 for class in ${old_classes[@]}
 do
-    replacements="$replacements $class $(new_name $class)"
+    replacements="$replacements $class $(new_class_name $class)"
+done
+for enum in ${old_enums[@]}
+do
+    replacements="$replacements $enum $(new_enum_name $enum)"
 done
 
 for file in $files
