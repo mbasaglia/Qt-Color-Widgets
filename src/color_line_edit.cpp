@@ -194,6 +194,9 @@ bool ColorLineEdit::showAlpha() const
 
 void ColorLineEdit::dragEnterEvent(QDragEnterEvent *event)
 {
+    if ( isReadOnly() )
+        return;
+
     if ( event->mimeData()->hasColor() ||
          ( event->mimeData()->hasText() && p->colorFromString(event->mimeData()->text()).isValid() ) )
         event->acceptProposedAction();
@@ -202,6 +205,9 @@ void ColorLineEdit::dragEnterEvent(QDragEnterEvent *event)
 
 void ColorLineEdit::dropEvent(QDropEvent *event)
 {
+    if ( isReadOnly() )
+        return;
+    
     if ( event->mimeData()->hasColor() )
     {
         setColor(event->mimeData()->colorData().value<QColor>());
