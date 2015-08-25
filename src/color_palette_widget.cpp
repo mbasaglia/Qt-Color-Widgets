@@ -119,6 +119,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     connect(p->swatch, &Swatch::forcedRowsChanged, this, &ColorPaletteWidget::forcedRowsChanged);
     connect(p->swatch, &Swatch::forcedColumnsChanged, this, &ColorPaletteWidget::forcedColumnsChanged);
     connect(p->swatch, &Swatch::colorSelected, this, &ColorPaletteWidget::currentColorChanged);
+    connect(p->swatch, &Swatch::borderChanged, this, &ColorPaletteWidget::borderChanged);
 
     connect(&p->swatch->palette(), &ColorPalette::dirtyChanged, p->button_palette_save, &QWidget::setEnabled);
     connect(&p->swatch->palette(), &ColorPalette::dirtyChanged, p->button_palette_revert, &QWidget::setEnabled);
@@ -254,6 +255,11 @@ Swatch::ColorSizePolicy ColorPaletteWidget::colorSizePolicy() const
     return p->swatch->colorSizePolicy();
 }
 
+QPen ColorPaletteWidget::border() const
+{
+    return p->swatch->border();
+}
+
 int ColorPaletteWidget::forcedRows() const
 {
     return p->swatch->forcedRows();
@@ -291,14 +297,22 @@ void ColorPaletteWidget::setColorSizePolicy(Swatch::ColorSizePolicy colorSizePol
 {
     p->swatch->setColorSizePolicy(colorSizePolicy);
 }
+
+void ColorPaletteWidget::setBorder(const QPen& border)
+{
+    p->swatch->setBorder(border);
+}
+
 void ColorPaletteWidget::setForcedRows(int forcedRows)
 {
     p->swatch->setForcedRows(forcedRows);
 }
+
 void ColorPaletteWidget::setForcedColumns(int forcedColumns)
 {
     p->swatch->setForcedColumns(forcedColumns);
 }
+
 void ColorPaletteWidget::setReadOnly(bool readOnly)
 {
     if ( readOnly == p->read_only )

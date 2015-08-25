@@ -24,6 +24,7 @@
 #define COLOR_WIDGETS_SWATCH_HPP
 
 #include <QWidget>
+#include <QPen>
 #include "color_palette.hpp"
 
 namespace color_widgets {
@@ -50,6 +51,11 @@ class Swatch : public QWidget
     Q_PROPERTY(QSize colorSize READ colorSize WRITE setColorSize NOTIFY colorSizeChanged)
 
     Q_PROPERTY(ColorSizePolicy colorSizePolicy READ colorSizePolicy WRITE setColorSizePolicy NOTIFY colorSizePolicyChanged)
+
+    /**
+     * \brief Border around the colors
+     */
+    Q_PROPERTY(QPen border READ border WRITE setBorder NOTIFY borderChanged)
 
     /**
      * \brief Forces the Swatch to display that many rows of colors
@@ -80,6 +86,7 @@ class Swatch : public QWidget
      * \note Even when this is \b false, it can still be altered programmatically
      */
     Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly NOTIFY readOnlyChanged)
+
 
 public:
     enum ColorSizePolicy
@@ -119,6 +126,7 @@ public:
 
     QSize colorSize() const;
     ColorSizePolicy colorSizePolicy() const;
+    QPen border() const;
 
     int forcedRows() const;
     int forcedColumns() const;
@@ -131,6 +139,7 @@ public slots:
     void clearSelection();
     void setColorSize(const QSize& colorSize);
     void setColorSizePolicy(ColorSizePolicy colorSizePolicy);
+    void setBorder(const QPen& border);
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
     void setReadOnly(bool readOnly);
@@ -150,6 +159,7 @@ signals:
     void forcedRowsChanged(int forcedRows);
     void forcedColumnsChanged(int forcedColumns);
     void readOnlyChanged(bool readOnly);
+    void borderChanged(const QPen& border);
 
 protected:
     bool event(QEvent* event) Q_DECL_OVERRIDE;
