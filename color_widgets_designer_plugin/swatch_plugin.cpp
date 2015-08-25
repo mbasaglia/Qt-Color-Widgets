@@ -80,12 +80,12 @@ QIcon Swatch_Plugin::icon() const
 
 QString Swatch_Plugin::toolTip() const
 {
-    return "Color selector";
+    return "A widget that displays a color palette";
 }
 
 QString Swatch_Plugin::whatsThis() const
 {
-    return "A widget that displays a color palette";
+    return toolTip();
 }
 
 bool Swatch_Plugin::isContainer() const

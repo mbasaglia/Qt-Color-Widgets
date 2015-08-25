@@ -94,12 +94,12 @@ QIcon ColorPaletteWidget_Plugin::icon() const
 
 QString ColorPaletteWidget_Plugin::toolTip() const
 {
-    return "Color selector";
+    return "A widget that displays a color palette";
 }
 
 QString ColorPaletteWidget_Plugin::whatsThis() const
 {
-    return "A widget that displays a color palette";
+    return toolTip();
 }
 
 bool ColorPaletteWidget_Plugin::isContainer() const

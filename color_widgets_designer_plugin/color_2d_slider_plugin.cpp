@@ -66,12 +66,12 @@ QIcon Color2DSlider_Plugin::icon() const
 
 QString Color2DSlider_Plugin::toolTip() const
 {
-    return "Color selector";
+    return "An analog widget to select 2 color components at the same time";
 }
 
 QString Color2DSlider_Plugin::whatsThis() const
 {
-    return "An analog widget to select 2 color components at the same time";
+    return toolTip();
 }
 
 bool Color2DSlider_Plugin::isContainer() const

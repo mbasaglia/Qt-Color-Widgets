@@ -67,12 +67,12 @@ QIcon ColorWheel_Plugin::icon() const
 
 QString ColorWheel_Plugin::toolTip() const
 {
-    return "Color selector";
+    return "A widget that allows an intuitive selection of HSL parameters for a QColor";
 }
 
 QString ColorWheel_Plugin::whatsThis() const
 {
-    return "A widget that allows an intuitive selection of HSL parameters for a QColor";
+    return toolTip();
 }
 
 bool ColorWheel_Plugin::isContainer() const
