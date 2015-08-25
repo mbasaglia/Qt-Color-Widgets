@@ -44,9 +44,4 @@ qt5_add_resources(SOURCES src/color_widgets.qrc)
 add_library(${LIBRARY_TARGET} ${SOURCES})
 target_link_libraries(${LIBRARY_TARGET} Qt5::Widgets)
 
-# Demo
-file(GLOB_RECURSE DEMO_SOURCES color_widgets_demo/*.cpp)
-qt5_wrap_cpp(DEMO_SOURCES color_widgets_demo/demo_dialog.hpp)
-qt5_wrap_ui(DEMO_SOURCES color_widgets_demo/demo_dialog.ui)
-add_executable(${LIBRARY_TARGET}_demo EXCLUDE_FROM_ALL ${SOURCES} ${DEMO_SOURCES})
-target_link_libraries(${LIBRARY_TARGET}_demo Qt5::Widgets)
+add_subdirectory(color_widgets_demo)
