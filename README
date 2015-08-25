@@ -16,6 +16,7 @@ The provided widgets are:
 * Swatch,             A widget to display a color palette
 * ColorPaletteWidget, A widget to use and manage a list of palettes
 * Color2DSlider,      An analog widget used to select 2 color components
+* ColorLineEdit,      A widget to manipulate a string representing a color
 
 they are all in the color_widgets namespace.
     
