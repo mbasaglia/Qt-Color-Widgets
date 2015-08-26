@@ -90,6 +90,11 @@ class ColorPaletteWidget : public QWidget
      */
     Q_PROPERTY(QColor currentColor READ currentColor WRITE setCurrentColor NOTIFY currentColorChanged)
 
+    /**
+     * \brief Currently selected model row
+     */
+    Q_PROPERTY(int currentRow READ currentRow WRITE setCurrentRow NOTIFY currentRowChanged)
+
 public:
     ColorPaletteWidget(QWidget* parent = nullptr);
     ~ColorPaletteWidget();
@@ -112,6 +117,8 @@ public:
     bool readOnly() const;
     QColor currentColor() const;
 
+    int currentRow() const;
+
 public slots:
     void setModel(ColorPaletteModel* model);
     void setColorSize(const QSize& colorSize);
@@ -120,6 +127,10 @@ public slots:
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
     void setReadOnly(bool readOnly);
+    /**
+     * \brief Clear the selected color
+     */
+    void clearCurrentColor();
     /**
      * \brief Attempt to select a color
      *
@@ -134,6 +145,17 @@ public slots:
      * \return \b true on success
      */
     bool setCurrentColor(const QString& name);
+    /**
+     * \brief Attempt to select a color by index
+     *
+     * If the given color is available in the current palete, it will be selected
+     * \return \b true on success
+     */
+    bool setCurrentColor(int index);
+    /**
+     * \brief Set the selected row in the model
+     */
+    void setCurrentRow(int currentRow);
 
 signals:
     void modelChanged(ColorPaletteModel* model);
@@ -143,7 +165,9 @@ signals:
     void forcedColumnsChanged(int forcedColumns);
     void readOnlyChanged(bool readOnly);
     void currentColorChanged(const QColor& currentColor);
+    void currentColorChanged(int index);
     void borderChanged(const QPen& border);
+    void currentRowChanged(int currentRow);
 
 private slots:
     void on_palette_list_currentIndexChanged(int index);

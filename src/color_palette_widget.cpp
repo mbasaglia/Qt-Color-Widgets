@@ -118,11 +118,17 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     connect(p->swatch, &Swatch::colorSizePolicyChanged, this, &ColorPaletteWidget::colorSizePolicyChanged);
     connect(p->swatch, &Swatch::forcedRowsChanged, this, &ColorPaletteWidget::forcedRowsChanged);
     connect(p->swatch, &Swatch::forcedColumnsChanged, this, &ColorPaletteWidget::forcedColumnsChanged);
-    connect(p->swatch, &Swatch::colorSelected, this, &ColorPaletteWidget::currentColorChanged);
+    connect(p->swatch, &Swatch::colorSelected,
+            this, (void (ColorPaletteWidget::*)(const QColor&)) &ColorPaletteWidget::currentColorChanged);
+    connect(p->swatch, &Swatch::selectedChanged,
+            this, (void (ColorPaletteWidget::*)(int)) &ColorPaletteWidget::currentColorChanged);
     connect(p->swatch, &Swatch::borderChanged, this, &ColorPaletteWidget::borderChanged);
 
     connect(&p->swatch->palette(), &ColorPalette::dirtyChanged, p->button_palette_save, &QWidget::setEnabled);
     connect(&p->swatch->palette(), &ColorPalette::dirtyChanged, p->button_palette_revert, &QWidget::setEnabled);
+
+    connect(p->palette_list, (void (QComboBox::*)(int))&QComboBox::currentIndexChanged,
+            this, &ColorPaletteWidget::currentRowChanged);
 
     // Buttons changing the colors in the current palette
     connect(p->button_color_add, &QAbstractButton::clicked, [this](){
@@ -356,6 +362,20 @@ bool ColorPaletteWidget::setCurrentColor(const QString& name)
     return false;
 }
 
+bool ColorPaletteWidget::setCurrentColor(int index)
+{
+    const auto& palette = p->swatch->palette();
+    if ( index >= 0 && index < palette.count() )
+    {
+        p->swatch->setSelected(index);
+        return true;
+    }
+
+    p->swatch->clearSelection();
+    return false;
+}
+
+
 void ColorPaletteWidget::on_palette_list_currentIndexChanged(int index)
 {
     if ( !p->model )
@@ -376,6 +396,21 @@ void ColorPaletteWidget::on_swatch_doubleClicked(int index)
         if ( dialog.exec() )
             p->swatch->palette().setColorAt(index, dialog.color());
     }
+}
+
+int ColorPaletteWidget::currentRow() const
+{
+    return p->palette_list->currentIndex();
+}
+
+void ColorPaletteWidget::setCurrentRow(int row)
+{
+    p->palette_list->setCurrentIndex(row);
+}
+
+void ColorPaletteWidget::clearCurrentColor()
+{
+    p->swatch->clearSelection();
 }
 
 } // namespace color_widgets
