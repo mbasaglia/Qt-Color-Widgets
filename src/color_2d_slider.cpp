@@ -230,6 +230,7 @@ void Color2DSlider::setComponentY(Color2DSlider::Component componentY)
 void Color2DSlider::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.drawImage(0,0,p->square);
 
     painter.setPen(QPen(p->val > 0.5 ? Qt::black : Qt::white, 3));
