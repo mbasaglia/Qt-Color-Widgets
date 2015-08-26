@@ -103,12 +103,21 @@ public:
         return QColor();
     }
 
+    bool customAlpha()
+    {
+        return preview_color && show_alpha && color.alpha() < 255;
+    }
+
     void setPalette(const QColor& color, ColorLineEdit* parent)
     {
         if ( preview_color )
         {
             QPalette pal = parent->palette();
-            pal.setColor(QPalette::Base, color.alpha() < 255 ? Qt::transparent : color);
+
+            if ( customAlpha() )
+                pal.setColor(QPalette::Base, Qt::transparent);
+            else
+                pal.setColor(QPalette::Base, color.rgb());
             pal.setColor(QPalette::Text,
                 detail::color_lumaF(color) > 0.5 || color.alphaF() < 0.2 ? Qt::black : Qt::white);
             parent->setPalette(pal);
@@ -246,7 +255,7 @@ void ColorLineEdit::setPreviewColor(bool previewColor)
 
 void ColorLineEdit::paintEvent(QPaintEvent* event)
 {
-    if ( p->preview_color && p->show_alpha && p->color.alpha() < 255 )
+    if ( p->customAlpha() )
     {
         QPainter painter(this);
         QStyleOptionFrame panel;
