@@ -96,16 +96,6 @@ public:
      * \returns QColor() con empty gradient
      */
     QColor lastColor() const;
-
-signals:
-    /**
-     * \brief Emitted on value changed
-     * \param percent percentage (0 = minimum, 1 = maximum)
-     */
-    void percentChanged(qreal percent);
-
-private slots:
-    void emitPercentChanged(int value);
     
 protected:
     void paintEvent(QPaintEvent *ev);

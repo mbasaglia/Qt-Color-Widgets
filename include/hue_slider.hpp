@@ -47,6 +47,17 @@ class QCP_EXPORT HueSlider : public GradientSlider
      */
     Q_PROPERTY(qreal colorAlpha READ colorAlpha WRITE setColorAlpha)
 
+    /**
+     * \brief Color with corresponding color* components
+     */
+    Q_PROPERTY(QColor color READ color WRITE setColor)
+
+    /**
+     * \brief Normalized Hue, as indicated from the slider
+     */
+    Q_PROPERTY(qreal colorHue READ colorHue WRITE setColorHue NOTIFY colorHueChanged)
+
+
 public:
     explicit HueSlider(QWidget *parent = nullptr);
     explicit HueSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
@@ -55,11 +66,25 @@ public:
     qreal colorSaturation() const;
     qreal colorValue() const;
     qreal colorAlpha() const;
+    QColor color() const;
+    qreal colorHue() const;
 
 public slots:
     void setColorValue(qreal value);
     void setColorSaturation(qreal value);
     void setColorAlpha(qreal alpha);
+    void setColorHue(qreal colorHue);
+    /**
+     * \brief Set Hue Saturation and ColorValue, ignoring alpha
+     */
+    void setColor(const QColor& color);
+    /**
+     * \brief Set Hue Saturation, ColorValue and Alpha
+     */
+    void setFullColor(const QColor& color);
+
+signals:
+    void colorHueChanged(qreal colorHue);
 
 private:
     class Private;

@@ -39,6 +39,10 @@ public:
     Private(HueSlider *widget)
         : w(widget)
     {
+        w->setRange(0, 359);
+        connect(w, &QSlider::valueChanged, [this]{
+            emit w->colorHueChanged(percent());
+        });
         updateGradient();
     }
 
@@ -50,6 +54,11 @@ public:
         for ( int i = 0; i <= n_colors; ++i )
             colors.append(QGradientStop(i/n_colors, QColor::fromHsvF(i/n_colors, saturation, value)));
         w->setColors(colors);
+    }
+
+    qreal percent()
+    {
+        return qreal(w->value() - w->minimum()) / (w->maximum() - w->minimum());
     }
 };
 
@@ -99,6 +108,35 @@ void HueSlider::setColorAlpha(qreal alpha)
 {
     p->alpha = alpha;
     p->updateGradient();
+}
+
+QColor HueSlider::color() const
+{
+    return QColor::fromHsvF(p->percent(), p->saturation, p->value, p->alpha);
+}
+
+void HueSlider::setColor(const QColor& color)
+{
+    p->saturation = color.saturationF();
+    p->value = color.valueF();
+    p->updateGradient();
+    setColorHue(color.hueF());
+}
+
+void HueSlider::setFullColor(const QColor& color)
+{
+    p->alpha = color.alphaF();
+    setColor(color);
+}
+
+qreal HueSlider::colorHue() const
+{
+    return p->percent();
+}
+
+void HueSlider::setColorHue(qreal colorHue)
+{
+    setValue(minimum()+colorHue*(maximum()-minimum()));
 }
 
 } // namespace color_widgets
