@@ -31,7 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace color_widgets {
 /**
- *  A color selector bound to a color reference
+ * \brief A color selector bound to a color reference
+ * \todo Maybe this can be removed
  */
 class QCP_EXPORT BoundColorSelector : public ColorSelector
 {
