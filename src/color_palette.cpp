@@ -477,7 +477,7 @@ QVector<QColor> ColorPalette::onlyColors() const
     QVector<QColor> out;
     out.reserve(p->colors.size());
     for ( int i = 0; i < p->colors.size(); i++ )
-        out.push_back(p->colors[i].second);
+        out.push_back(p->colors[i].first);
     return out;
 }
 
