@@ -19,21 +19,17 @@ The provided widgets are:
 * ColorLineEdit,      A widget to manipulate a string representing a color
 
 they are all in the color_widgets namespace.
-    
-    
-Demonstration
--------------
 
-A simple demo of the widget is provided in ./color_widgets_demo
+See [the gallery](gallery/README.md) for more information and screenshots.
 
-You can see a screenshot of the dialog at
-https://github.com/mbasaglia/Qt-Color-Picker/blob/master/color_widgets_demo/screenshot.png
 
 Using it in a project
 ---------------------
 
-Include color_widgets.pri in the QMake project file. 
-All the required files are in ./src
+For QMake-based projects, include color_widgets.pri in the QMake project file.
+For CMake-based projects, add this as subdirectory, it will be compiled as a
+library and you can link the required targets to ColorWidgets-qt5.
+All the required files are in ./src and ./include.
 
 
 Installing as a Qt Designer/Creator Plugin
@@ -52,8 +48,8 @@ Latest Version
 --------------
 
 The latest version of the sources can be found at the following locations
-https://github.com/mbasaglia/Qt-Color-Picker
-git://github.com/mbasaglia/Qt-Color-Picker.git
+https://github.com/mbasaglia/Qt-Color-Widgets
+git://github.com/mbasaglia/Qt-Color-Widgets.git
 
 
 License
