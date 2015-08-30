@@ -49,7 +49,7 @@ public:
 
     QString stringFromColor(const QColor& c)
     {
-        if ( !show_alpha )
+        if ( !show_alpha || c.alpha() == 255 )
             return c.name();
         return c.name()+QString::number(c.alpha(),16);
     }
