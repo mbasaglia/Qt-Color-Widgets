@@ -225,6 +225,7 @@ Swatch::Swatch(QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);
     setAcceptDrops(true);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setAttribute(Qt::WA_Hover, true);
 }
 
 Swatch::~Swatch()
@@ -332,20 +333,13 @@ void Swatch::paintEvent(QPaintEvent* event)
     QSizeF color_size = p->actualColorSize(rowcols);
     QPainter painter(this);
 
-    // For some reason QStyle::PE_Frame doesn't work propely with custom widgets
-    // (At least on my theme)
-    // ie: it doesn't change color depending on the focus status
-    // It works fine in GradientSlider because it inherits QSlider.
-    // The problem is not in the styleoption, but depends on the last
-    // argument to QStyle::drawPrimitive()
-    // For these reason, this uses PE_PanelLineEdit,
-    // which appears to be working fine.
     QStyleOptionFrame panel;
     panel.initFrom(this);
     panel.lineWidth = 1;
-    //panel.state |= QStyle::State_Sunken;
-    style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, &painter, this);
-    QRect r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
+    panel.midLineWidth = 0;
+    panel.state |= QStyle::State_Sunken;
+    style()->drawPrimitive(QStyle::PE_Frame, &panel, &painter, this);
+    QRect r = style()->subElementRect(QStyle::SE_FrameContents, &panel, this);
     painter.setClipRect(r);
 
     int count = p->palette.count();
