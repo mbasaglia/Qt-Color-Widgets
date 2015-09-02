@@ -48,10 +48,49 @@ endif()
 # Sources
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-# TODO: Use file lists instead of globbing
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.qrc)
+set(SOURCES
+src/color_list_widget.cpp
+src/gradient_slider.cpp
+src/color_line_edit.cpp
+src/swatch.cpp
+src/bound_color_selector.cpp
+src/color_palette_widget.cpp
+src/color_palette_model.cpp
+src/color_2d_slider.cpp
+src/abstract_widget_list.cpp
+src/color_delegate.cpp
+src/color_widgets.qrc
+src/color_utils.cpp
+src/color_dialog.cpp
+src/color_palette.cpp
+src/color_selector.cpp
+src/color_preview.cpp
+src/alphaback.png
+src/color_utils.hpp
+src/hue_slider.cpp
+src/color_wheel.cpp
+)
 
-file(GLOB_RECURSE HEADERS include/*.hpp)
+file(GLOB_RECURSE HEADERS
+include/color_palette_model.hpp
+include/color_palette_widget.hpp
+include/colorwidgets_global.hpp
+include/color_wheel.hpp
+include/color_line_edit.hpp
+include/swatch.hpp
+include/color_delegate.hpp
+include/color_palette.hpp
+include/hue_slider.hpp
+include/abstract_widget_list.hpp
+include/bound_color_selector.hpp
+include/color_dialog.hpp
+include/color_2d_slider.hpp
+include/color_selector.hpp
+include/color_list_widget.hpp
+include/color_preview.hpp
+include/gradient_slider.hpp
+)
+
 qt5_wrap_cpp(SOURCES ${HEADERS})
 qt5_wrap_ui(SOURCES src/color_dialog.ui src/color_palette_widget.ui)
 qt5_add_resources(SOURCES src/color_widgets.qrc)
