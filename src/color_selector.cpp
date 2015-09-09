@@ -37,7 +37,9 @@ public:
     QColor old_color;
 
     Private(QWidget *widget) : dialog(new ColorDialog(widget))
-    {}
+    {
+        dialog->setButtonMode(ColorDialog::OkCancel);
+    }
 };
 
 ColorSelector::ColorSelector(QWidget *parent) :
