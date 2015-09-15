@@ -48,7 +48,6 @@ private:
     ColorWheel * const w;
 
 public:
-
     qreal hue, sat, val;
     unsigned int wheel_width;
     MouseStatus mouse_status;
@@ -57,6 +56,7 @@ public:
     DisplayFlags display_flags;
     QColor (*color_from)(qreal,qreal,qreal,qreal);
     QColor (*rainbow_from_hue)(qreal);
+    int max_size = 128;
 
     Private(ColorWheel *widget)
         : w(widget), hue(0), sat(0), val(0),
@@ -103,16 +103,16 @@ public:
 
     void render_square()
     {
-        int sz = square_size();
-        inner_selector = QImage(sz, sz, QImage::Format_RGB32);
+        int width = qMin<int>(square_size(), max_size);
+        QSize size(width, width);
+        inner_selector = QImage(size, QImage::Format_RGB32);
 
-
-        for(int i = 0; i < sz; ++i)
+        for ( int y = 0; y < width; ++y )
         {
-            for(int j = 0;j < sz; ++j)
+            for ( int x = 0; x < width; ++x )
             {
-                inner_selector.setPixel( i, j,
-                        color_from(hue,double(i)/sz,double(j)/sz,1).rgb());
+                inner_selector.setPixel( x, y,
+                        color_from(hue,double(x)/width,double(y)/width,1).rgb());
             }
         }
     }
@@ -123,16 +123,18 @@ public:
      */
     void render_triangle()
     {
-        qreal side = triangle_side();
-        qreal height = triangle_height();
-        qreal ycenter = side/2;
-        inner_selector = QImage(height, side, QImage::Format_RGB32);
+        QSizeF size = selector_size();
+        if ( size.height() > max_size )
+            size *= max_size / size.height();
 
-        for (int x = 0; x < inner_selector.width(); x++ )
+        qreal ycenter = size.height()/2;
+        inner_selector = QImage(size.toSize(), QImage::Format_RGB32);
+
+        for (int x = 0; x < size.width(); x++ )
         {
-            qreal pval = x / height;
-            qreal slice_h = side * pval;
-            for (int y = 0; y < inner_selector.height(); y++ )
+            qreal pval = x / size.height();
+            qreal slice_h = size.height() * pval;
+            for (int y = 0; y < size.height(); y++ )
             {
                 qreal ymin = ycenter-slice_h/2;
                 qreal psat = qBound(0.0,(y-ymin)/slice_h,1.0);
@@ -157,6 +159,16 @@ public:
         if ( display_flags & SHAPE_TRIANGLE )
                 return QPointF(-inner_radius(),-triangle_side()/2);
         return QPointF(-square_size()/2,-square_size()/2);
+    }
+
+    /**
+     * \brief Size of the selector when rendered to the screen
+     */
+    QSizeF selector_size()
+    {
+        if ( display_flags & SHAPE_TRIANGLE )
+                return QSizeF(triangle_height(), triangle_side());
+        return QSizeF(square_size(), square_size());
     }
 
 
@@ -335,7 +347,7 @@ void ColorWheel::paintEvent(QPaintEvent * )
         painter.setClipPath(clip);
     }
 
-    painter.drawImage(0,0,p->inner_selector);
+    painter.drawImage(QRectF(QPointF(0, 0), p->selector_size()), p->inner_selector);
     painter.setClipping(false);
 
     // lum-sat selector
