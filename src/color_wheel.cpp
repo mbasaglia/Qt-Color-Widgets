@@ -130,11 +130,11 @@ public:
         qreal ycenter = size.height()/2;
         inner_selector = QImage(size.toSize(), QImage::Format_RGB32);
 
-        for (int x = 0; x < size.width(); x++ )
+        for (int x = 0; x < inner_selector.width(); x++ )
         {
             qreal pval = x / size.height();
             qreal slice_h = size.height() * pval;
-            for (int y = 0; y < size.height(); y++ )
+            for (int y = 0; y < inner_selector.height(); y++ )
             {
                 qreal ymin = ycenter-slice_h/2;
                 qreal psat = qBound(0.0,(y-ymin)/slice_h,1.0);
