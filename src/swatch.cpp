@@ -403,7 +403,9 @@ void Swatch::keyPressEvent(QKeyEvent* event)
 
     int selected = p->selected;
     int count = p->palette.count();
-    int columns = p->rowcols().width();
+    QSize rowcols = p->rowcols();
+    int columns = rowcols.width();
+    int rows = rowcols.height();
     switch ( event->key() )
     {
         default:
@@ -464,6 +466,25 @@ void Swatch::keyPressEvent(QKeyEvent* event)
                     selected = -1;
                 else
                     selected = qMax(selected - 1, 0);
+            }
+            break;
+
+        case Qt::Key_PageUp:
+            if ( selected == -1 )
+                selected = 0;
+            else
+                selected = selected % columns;
+            break;
+        case Qt::Key_PageDown:
+            if ( selected == -1 )
+            {
+                selected = count - 1;
+            }
+            else
+            {
+                selected = columns * (rows-1) + selected % columns;
+                if ( selected >= count )
+                    selected -= columns;
             }
             break;
     }
