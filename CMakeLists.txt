@@ -71,7 +71,7 @@ src/hue_slider.cpp
 src/color_wheel.cpp
 )
 
-file(GLOB_RECURSE HEADERS
+set(HEADERS
 include/color_palette_model.hpp
 include/color_palette_widget.hpp
 include/colorwidgets_global.hpp
