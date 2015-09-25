@@ -52,8 +52,3 @@ QList<QDesignerCustomWidgetInterface *> ColorWidgets_PluginCollection::customWid
 {
     return widgets;
 }
-
-#ifndef FRAMEWORK_QT5
-#include <QtCore/qplugin.h>
-Q_EXPORT_PLUGIN2(color_widgets, ColorWidgets_PluginCollection)
-#endif

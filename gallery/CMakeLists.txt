@@ -17,7 +17,7 @@
 set(SCREENSHOT_SOURCES screenshot.cpp)
 set(SCREENSHOT_BINARY screenshot_bin)
 add_executable(${SCREENSHOT_BINARY} EXCLUDE_FROM_ALL ${SCREENSHOT_SOURCES})
-target_link_libraries(${SCREENSHOT_BINARY} ${LIBRARY_TARGET})
+target_link_libraries(${SCREENSHOT_BINARY} ${COLOR_WIDGETS_LIBRARY})
 
 add_custom_target(gallery
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${SCREENSHOT_BINARY}

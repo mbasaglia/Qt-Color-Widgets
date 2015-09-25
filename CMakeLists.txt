@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 cmake_minimum_required(VERSION 2.6)
-set(LIBRARY_TARGET ColorWidgets-qt5)
+set(COLOR_WIDGETS_LIBRARY ColorWidgets-qt5)
 set(PROJECT_VERSION "")
-project(${LIBRARY_TARGET} CXX)
+project(${COLOR_WIDGETS_LIBRARY} CXX)
 
 # Qt
 find_package(Qt5Widgets REQUIRED)
@@ -96,7 +96,8 @@ qt5_wrap_ui(SOURCES src/color_dialog.ui src/color_palette_widget.ui)
 qt5_add_resources(SOURCES src/color_widgets.qrc)
 
 # Library
-add_library(${LIBRARY_TARGET} ${SOURCES})
-target_link_libraries(${LIBRARY_TARGET} Qt5::Widgets)
+add_library(${COLOR_WIDGETS_LIBRARY} ${SOURCES})
+target_link_libraries(${COLOR_WIDGETS_LIBRARY} Qt5::Widgets)
 
 add_subdirectory(gallery)
+add_subdirectory(color_widgets_designer_plugin)

@@ -3,9 +3,9 @@
 
 #include <QtCore/QtGlobal>
 
-#if defined(QTCOLORPICKER_LIBRARY)
+#if defined(QTCOLORWIDGETS_LIBRARY)
 #    define QCP_EXPORT Q_DECL_EXPORT
-#elif defined(QTCOLORPICKER_STATICALLY_LINKED)
+#elif defined(QTCOLORWIDGETS_STATICALLY_LINKED)
 #    define QCP_EXPORT
 #else
 #    define QCP_EXPORT Q_DECL_IMPORT

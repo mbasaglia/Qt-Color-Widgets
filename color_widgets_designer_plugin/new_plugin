@@ -226,9 +226,9 @@ private:
 PLUGIN
 
 sed -i -r \
-    -e "\\~# add new sources above this line~i\    $plugin_source \\\\" \
-    -e "\\~# add new headers above this line~i\    $plugin_header \\\\" \
-    "$plugin_path/color_widgets_plugin.pro"
+    -e "\\~# add new sources above this line~i\\$plugin_source" \
+    -e "\\~# add new headers above this line~i\\$plugin_header" \
+    "$plugin_path/CMakeLists.txt"
 
 sed -i -r \
     -e "\\~// add new plugin headers above this line~i#include \"$plugin_header\"" \
