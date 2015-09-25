@@ -100,4 +100,8 @@ add_library(${COLOR_WIDGETS_LIBRARY} ${SOURCES})
 target_link_libraries(${COLOR_WIDGETS_LIBRARY} Qt5::Widgets)
 
 add_subdirectory(gallery)
-add_subdirectory(color_widgets_designer_plugin)
+
+find_package(Qt5Designer)
+if(Qt5Designer_FOUND)
+    add_subdirectory(color_widgets_designer_plugin)
+endif()
