@@ -97,6 +97,11 @@ public:
     Q_INVOKABLE void loadColorTable(const QVector<QRgb>& color_table);
 
     /**
+     * \brief Convert to a color table
+     */
+    Q_INVOKABLE QVector<QRgb> colorTable() const;
+
+    /**
      * \brief Use the pixels on an image to set the palette colors
      */
     Q_INVOKABLE bool loadImage(const QImage& image);

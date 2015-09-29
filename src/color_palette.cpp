@@ -479,4 +479,13 @@ QVector<QColor> ColorPalette::onlyColors() const
     return out;
 }
 
+QVector<QRgb> ColorPalette::colorTable() const
+{
+    QVector<QRgb> out;
+    out.reserve(p->colors.size());
+    for ( const auto& color_pair : p->colors )
+        out.push_back(color_pair.first.rgba());
+    return out;
+}
+
 } // namespace color_widgets
