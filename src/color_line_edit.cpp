@@ -21,7 +21,6 @@
  */
 #include "color_line_edit.hpp"
 
-#include <QRegularExpression>
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
@@ -30,13 +29,10 @@
 #include <QStyleOptionFrame>
 
 #include "color_utils.hpp"
+#include "color_names.hpp"
 
 namespace color_widgets {
 
-static QRegularExpression regex_qcolor ("^(?:(?:#[[:xdigit:]]{3})|(?:#[[:xdigit:]]{6})|(?:[[:alpha:]]+))$");
-static QRegularExpression regex_func_rgb (R"(^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)");
-static QRegularExpression regex_hex_rgba ("^#[[:xdigit:]]{8}$");
-static QRegularExpression regex_func_rgba (R"(^rgba?\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)");
 
 class ColorLineEdit::Private
 {
@@ -45,62 +41,6 @@ public:
     bool show_alpha = false;
     bool preview_color = false;
     QBrush background;
-
-    QString stringFromColor(const QColor& c)
-    {
-        if ( !show_alpha || c.alpha() == 255 )
-            return c.name();
-        return c.name()+QString("%1").arg(c.alpha(), 2, 16, QChar('0'));
-    }
-
-    QColor colorFromString(const QString& s)
-    {
-        QString xs = s.trimmed();
-        QRegularExpressionMatch match;
-
-        match = regex_qcolor.match(xs);
-        if ( match.hasMatch() )
-        {
-            return QColor(xs);
-        }
-
-        match = regex_func_rgb.match(xs);
-        if ( match.hasMatch() )
-        {
-            return QColor(
-                match.captured(1).toInt(),
-                match.captured(2).toInt(),
-                match.captured(3).toInt()
-            );
-        }
-
-        if ( show_alpha )
-        {
-            match = regex_hex_rgba.match(xs);
-            if ( match.hasMatch() )
-            {
-                return QColor(
-                    xs.mid(1,2).toInt(nullptr,16),
-                    xs.mid(3,2).toInt(nullptr,16),
-                    xs.mid(5,2).toInt(nullptr,16),
-                    xs.mid(7,2).toInt(nullptr,16)
-                );
-            }
-
-            match = regex_func_rgba.match(xs);
-            if ( match.hasMatch() )
-            {
-                return QColor(
-                    match.captured(1).toInt(),
-                    match.captured(2).toInt(),
-                    match.captured(3).toInt(),
-                    match.captured(4).toInt()
-                );
-            }
-        }
-
-        return QColor();
-    }
 
     bool customAlpha()
     {
@@ -136,7 +76,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
             emit colorChanged(color);
     });*/
     connect(this, &QLineEdit::textEdited, [this](const QString& text){
-        QColor color = p->colorFromString(text);
+        QColor color = color_widgets::colorFromString(text, p->show_alpha);
         if ( color.isValid() )
         {
             p->color = color;
@@ -146,7 +86,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         }
     });
     connect(this, &QLineEdit::editingFinished, [this](){
-        QColor color = p->colorFromString(text());
+        QColor color = color_widgets::colorFromString(text(), p->show_alpha);
         if ( color.isValid() )
         {
             p->color = color;
@@ -155,7 +95,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         }
         else
         {
-            setText(p->stringFromColor(p->color));
+            setText(color_widgets::stringFromColor(p->color, p->show_alpha));
             emit colorEditingFinished(p->color);
             emit colorChanged(color);
         }
@@ -179,7 +119,7 @@ void ColorLineEdit::setColor(const QColor& color)
     {
         p->color = color;
         p->setPalette(p->color, this);
-        setText(p->stringFromColor(p->color));
+        setText(color_widgets::stringFromColor(p->color, p->show_alpha));
         emit colorChanged(p->color);
     }
 }
@@ -190,7 +130,7 @@ void ColorLineEdit::setShowAlpha(bool showAlpha)
     {
         p->show_alpha = showAlpha;
         p->setPalette(p->color, this);
-        setText(p->stringFromColor(p->color));
+        setText(color_widgets::stringFromColor(p->color, p->show_alpha));
         emit showAlphaChanged(p->show_alpha);
     }
 }
@@ -206,8 +146,11 @@ void ColorLineEdit::dragEnterEvent(QDragEnterEvent *event)
         return;
 
     if ( event->mimeData()->hasColor() ||
-         ( event->mimeData()->hasText() && p->colorFromString(event->mimeData()->text()).isValid() ) )
+         ( event->mimeData()->hasText() &&
+            color_widgets::colorFromString(event->mimeData()->text(), p->show_alpha).isValid() ) )
+    {
         event->acceptProposedAction();
+    }
 }
 
 
@@ -223,7 +166,7 @@ void ColorLineEdit::dropEvent(QDropEvent *event)
     }
     else if ( event->mimeData()->hasText() )
     {
-        QColor col =  p->colorFromString(event->mimeData()->text());
+        QColor col =  color_widgets::colorFromString(event->mimeData()->text(), p->show_alpha);
         if ( col.isValid() )
         {
             setColor(col);

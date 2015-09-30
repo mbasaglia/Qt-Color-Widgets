@@ -69,6 +69,7 @@ src/alphaback.png
 src/color_utils.hpp
 src/hue_slider.cpp
 src/color_wheel.cpp
+src/color_names.cpp
 )
 
 set(HEADERS
@@ -89,6 +90,7 @@ include/color_selector.hpp
 include/color_list_widget.hpp
 include/color_preview.hpp
 include/gradient_slider.hpp
+include/color_names.hpp
 )
 
 qt5_wrap_cpp(SOURCES ${HEADERS})
