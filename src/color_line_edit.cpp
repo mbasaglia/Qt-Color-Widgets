@@ -50,7 +50,7 @@ public:
     {
         if ( !show_alpha || c.alpha() == 255 )
             return c.name();
-        return c.name()+QString::number(c.alpha(),16);
+        return c.name()+QString("%1").arg(c.alpha(), 2, 16, QChar('0'));
     }
 
     QColor colorFromString(const QString& s)
