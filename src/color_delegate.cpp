@@ -22,11 +22,13 @@
 #include "color_delegate.hpp"
 #include "color_selector.hpp"
 #include "color_dialog.hpp"
+#include <QPainter>
+#include <QMouseEvent>
 
 namespace color_widgets {
 
 ColorDelegate::ColorDelegate(QWidget *parent) :
-    QStyledItemDelegate(parent)
+    QAbstractItemDelegate(parent)
 {
 }
 
@@ -35,74 +37,56 @@ void ColorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 {
     if (index.data().canConvert<QColor>())
     {
-        QColor col = qvariant_cast<QColor>(index.data());
-
-        ColorPreview cp;
-        cp.setColor(col);
-        cp.paint(*painter,option.rect);
-
+        QStyleOptionFrame panel;
+        panel.initFrom(option.widget);
+        if (option.widget->isEnabled())
+            panel.state = QStyle::State_Enabled;
+        panel.rect = option.rect;
+        panel.lineWidth = 2;
+        panel.midLineWidth = 0;
+        panel.state |= QStyle::State_Sunken;
+        option.widget->style()->drawPrimitive(QStyle::PE_Frame, &panel, painter, nullptr);
+        QRect r = option.widget->style()->subElementRect(QStyle::SE_FrameContents, &panel, nullptr);
+        painter->setClipRect(r);
+        painter->fillRect(option.rect, index.data().value<QColor>());
     }
-    else
-        QStyledItemDelegate::paint(painter, option, index);
 }
 
-QWidget *ColorDelegate::createEditor(QWidget *parent,
-                                      const QStyleOptionViewItem &option,
-                                      const QModelIndex &index) const
+bool ColorDelegate::editorEvent(QEvent* event,
+                                QAbstractItemModel* model,
+                                const QStyleOptionViewItem& option,
+                                const QModelIndex& index)
 {
-    if (index.data().canConvert<QColor>())
+
+    if ( event->type() == QEvent::MouseButtonRelease && index.data().canConvert<QColor>())
     {
-        ColorDialog *editor = new ColorDialog(parent);
-        editor->setMinimumSize(editor->sizeHint());
-        connect(editor, SIGNAL(colorChanged(QColor)), this, SLOT(color_changed()));
-        connect(editor, SIGNAL(accepted()), this, SLOT(close_editor()));
-        return editor;
+        QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+
+        if ( mouse_event->button() == Qt::LeftButton &&
+            ( index.flags() & Qt::ItemIsEditable) )
+        {
+            ColorDialog *editor = new ColorDialog(const_cast<QWidget*>(option.widget));
+            connect(this, &QObject::destroyed, editor, &QObject::deleteLater);
+            editor->setMinimumSize(editor->sizeHint());
+            auto original_color = index.data().value<QColor>();
+            editor->setColor(original_color);
+            auto set_color = [model, index](const QColor& color){
+                model->setData(index, QVariant(color));
+            };
+            connect(editor, &ColorDialog::colorSelected, this, set_color);
+            editor->show();
+        }
+
+        return true;
     }
-    else
-        return QStyledItemDelegate::createEditor(parent, option, index);
+
+    return QAbstractItemDelegate::editorEvent(event, model, option, index);
 }
 
-void ColorDelegate::color_changed()
-{
-    ColorDialog *editor = qobject_cast<ColorDialog*>(sender());
-    emit commitData(editor);
-}
-void ColorDelegate::close_editor()
-{
-    ColorDialog *editor = qobject_cast<ColorDialog*>(sender());
-    emit closeEditor(editor);
-}
-
-void ColorDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
-{
-
-    if (index.data().canConvert<QColor>())
-    {
-        ColorDialog *selector = qobject_cast<ColorDialog*>(editor);
-        selector->setColor(qvariant_cast<QColor>(index.data()));
-    }
-    else
-        QStyledItemDelegate::setEditorData(editor, index);
-}
-
-void ColorDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                  const QModelIndex &index) const
-{
-    if (index.data().canConvert<QColor>())
-    {
-        ColorDialog *selector = qobject_cast<ColorDialog *>(editor);
-        model->setData(index, QVariant::fromValue(selector->color()));
-    }
-    else
-        QStyledItemDelegate::setModelData(editor, model, index);
-}
 
 QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.data().canConvert<QColor>())
-        return QSize(24,16);
-
-    return QStyledItemDelegate::sizeHint(option, index);
+    return QSize(24,16);
 }
 
 } // namespace color_widgets

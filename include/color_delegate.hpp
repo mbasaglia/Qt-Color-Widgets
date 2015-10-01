@@ -24,14 +24,14 @@
 
 #include "colorwidgets_global.hpp"
 
-#include <QStyledItemDelegate>
+#include <QAbstractItemDelegate>
 
 namespace color_widgets {
 
 /**
     Delegate to use a ColorSelector in a color list
 */
-class QCP_EXPORT ColorDelegate : public QStyledItemDelegate
+class QCP_EXPORT ColorDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
@@ -40,19 +40,12 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
                     const QModelIndex &index) const;
 
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                               const QModelIndex &index) const;
-
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-
-    void setModelData(QWidget *editor, QAbstractItemModel *model,
-                        const QModelIndex &index) const;
+    bool editorEvent(QEvent* event,
+                     QAbstractItemModel* model,
+                     const QStyleOptionViewItem & option,
+                     const QModelIndex & index) override;
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private slots:
-    void color_changed();
-    void close_editor();
 };
 
 } // namespace color_widgets
