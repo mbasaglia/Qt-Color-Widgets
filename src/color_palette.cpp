@@ -488,4 +488,11 @@ QVector<QRgb> ColorPalette::colorTable() const
     return out;
 }
 
+ColorPalette ColorPalette::fromColorTable(const QVector<QRgb>& table)
+{
+    ColorPalette palette;
+    palette.loadColorTable(table);
+    return palette;
+}
+
 } // namespace color_widgets

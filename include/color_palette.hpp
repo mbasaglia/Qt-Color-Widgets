@@ -100,6 +100,11 @@ public:
      * \brief Convert to a color table
      */
     Q_INVOKABLE QVector<QRgb> colorTable() const;
+    
+    /**
+     * \brief Creates a ColorPalette from a color table
+     */
+    static ColorPalette fromColorTable(const QVector<QRgb>& table);
 
     /**
      * \brief Use the pixels on an image to set the palette colors
