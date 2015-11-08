@@ -35,7 +35,8 @@ SOURCES += \
     $$PWD/src/swatch.cpp \
     $$PWD/src/color_utils.cpp \
     $$PWD/src/color_2d_slider.cpp \
-    $$PWD/src/color_line_edit.cpp
+    $$PWD/src/color_line_edit.cpp \
+    $$PWD/src/color_names.cpp
 
 HEADERS += \
     $$PWD/include/color_wheel.hpp \
@@ -55,7 +56,8 @@ HEADERS += \
     $$PWD/include/swatch.hpp \
     $$PWD/src/color_utils.hpp \
     $$PWD/include/color_2d_slider.hpp \
-    $$PWD/include/color_line_edit.hpp
+    $$PWD/include/color_line_edit.hpp \
+    $$PWD/include/color_names.hpp
 
 FORMS += \
     $$PWD/src/color_dialog.ui \
