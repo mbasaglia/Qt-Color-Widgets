@@ -2,12 +2,12 @@ Color Widgets
 =============
 
 Here is a color dialog that is more user-friendly than the default QColorDialog
-and several color-related widgets
+and several other color-related widgets
 
 The provided widgets are:
 
 * ColorWheel,         An analog widget used to select a color
-* ColorPreview,       A simple widget that dislay a color
+* ColorPreview,       A simple widget that displays a color
 * GradientSlider,     A slider that has a gradient background
 * HueSlider,          A variant of GradientSlider that has a rainbow background
 * ColorSelector,      A ColorPreview that shows a ColorDialog when clicked
@@ -47,9 +47,10 @@ cd color_widgets_designer_plugin && qmake && make && make install
 Latest Version
 --------------
 
-The latest version of the sources can be found at the following locations
-https://github.com/mbasaglia/Qt-Color-Widgets
-git://github.com/mbasaglia/Qt-Color-Widgets.git
+The latest version of the sources can be found at the following locations:
+
+* https://github.com/mbasaglia/Qt-Color-Widgets
+* git://github.com/mbasaglia/Qt-Color-Widgets.git
 
 
 License
