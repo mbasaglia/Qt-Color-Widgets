@@ -149,6 +149,8 @@ QVariant ColorPaletteModel::data(const QModelIndex &index, int role) const
 
 bool ColorPaletteModel::removeRows(int row, int count, const QModelIndex & parent)
 {
+    Q_UNUSED(parent)
+
     if ( !p->acceptable(row) || count <= 0 )
         return false;
 
@@ -177,7 +179,7 @@ QSize ColorPaletteModel::iconSize() const
 void ColorPaletteModel::setIconSize(const QSize& iconSize)
 {
     if ( p->icon_size != iconSize )
-        emit iconSizeChanged( p->icon_size = iconSize );
+        Q_EMIT iconSizeChanged( p->icon_size = iconSize );
 }
 
 QString ColorPaletteModel::savePath() const
@@ -193,13 +195,13 @@ QStringList ColorPaletteModel::searchPaths() const
 void ColorPaletteModel::setSavePath(const QString& savePath)
 {
     if ( p->save_path != savePath )
-        emit savePathChanged( p->save_path = savePath );
+        Q_EMIT savePathChanged( p->save_path = savePath );
 }
 
 void ColorPaletteModel::setSearchPaths(const QStringList& searchPaths)
 {
     if ( p->search_paths != searchPaths )
-        emit searchPathsChanged( p->search_paths = searchPaths );
+        Q_EMIT searchPathsChanged( p->search_paths = searchPaths );
 }
 
 void ColorPaletteModel::addSearchPath(const QString& path)
@@ -209,7 +211,7 @@ void ColorPaletteModel::addSearchPath(const QString& path)
     if ( !p->search_paths.contains(path) )
     {
         p->search_paths.push_back(path);
-        emit searchPathsChanged( p->search_paths );
+        Q_EMIT searchPathsChanged( p->search_paths );
     }
 }
 

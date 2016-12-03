@@ -105,7 +105,7 @@ void AbstractWidgetList::remove(int i)
         else if ( i != 0 && i == count() )
             p->table->cellWidget(count()-1,2)->setEnabled(false);
 
-        emit removed(i);
+        Q_EMIT removed(i);
     }
 }
 

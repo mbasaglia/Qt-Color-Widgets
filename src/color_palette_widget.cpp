@@ -200,7 +200,7 @@ ColorPaletteWidget::ColorPaletteWidget(QWidget* parent)
     });
 
     QString image_formats;
-    foreach(QByteArray ba, QImageReader::supportedImageFormats())
+    Q_FOREACH(QByteArray ba, QImageReader::supportedImageFormats())
         image_formats += " *."+QString(ba);
 
     connect(p->button_palette_open, &QAbstractButton::clicked, [this, image_formats](){
@@ -326,7 +326,7 @@ void ColorPaletteWidget::setReadOnly(bool readOnly)
     p->swatch->setReadOnly(readOnly);
     p->group_edit_list->setVisible(!readOnly);
     p->group_edit_palette->setVisible(!readOnly);
-    emit readOnlyChanged(p->read_only = readOnly);
+    Q_EMIT readOnlyChanged(p->read_only = readOnly);
 }
 
 bool ColorPaletteWidget::setCurrentColor(const QColor& color)

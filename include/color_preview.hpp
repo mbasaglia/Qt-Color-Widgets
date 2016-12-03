@@ -48,6 +48,7 @@ public:
         SplitAlpha, ///< Show both solid and transparent side by side
         SplitColor  ///< Show current and comparison colors side by side
     };
+    Q_ENUMS(DisplayMode)
 
     explicit ColorPreview(QWidget *parent = 0);
     ~ColorPreview();
@@ -74,14 +75,14 @@ public:
 
     void paint(QPainter &painter, QRect rect) const;
     
-public slots:
+public Q_SLOTS:
     /// Set current color
     void setColor(const QColor &c);
 
     /// Set the comparison color
     void setComparisonColor(const QColor &c);
 
-signals:
+Q_SIGNALS:
     /// Emitted when the user clicks on the widget
     void clicked();
 
@@ -100,5 +101,6 @@ private:
 };
 
 } // namespace color_widgets
+Q_DECLARE_METATYPE(color_widgets::ColorPreview::DisplayMode)
 
 #endif // COLOR_PREVIEW_HPP

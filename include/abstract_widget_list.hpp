@@ -51,7 +51,7 @@ public:
     void setRowHeight(int row, int height);
 
 
-public slots:
+public Q_SLOTS:
     /**
      *  \brief Remove row i
      */
@@ -62,7 +62,7 @@ public slots:
      */
     virtual void append() = 0;
 
-signals:
+Q_SIGNALS:
     void removed(int i);
 
 protected:
@@ -93,7 +93,7 @@ protected:
      */
     void clear();
 
-private slots:
+private Q_SLOTS:
     void remove_clicked(QWidget* w);
     void up_clicked(QWidget* w);
     void down_clicked(QWidget* w);

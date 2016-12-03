@@ -56,7 +56,7 @@ void ColorListWidget::setColors(const QList<QColor> &colors)
     p->colors = colors;
     for(int i = 0;i < colors.size();i++ )
         append_widget(i);
-    emit colorsChanged(colors);
+    Q_EMIT colorsChanged(colors);
 }
 
 void ColorListWidget::swap(int a, int b)
@@ -68,7 +68,7 @@ void ColorListWidget::swap(int a, int b)
         QColor ca = sa->color();
         sa->setColor(sb->color());
         sb->setColor(ca);
-        emit colorsChanged(p->colors);
+        Q_EMIT colorsChanged(p->colors);
     }
 }
 
@@ -76,18 +76,18 @@ void ColorListWidget::append()
 {
     p->colors.push_back(Qt::black);
     append_widget(p->colors.size()-1);
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
 }
 
 void ColorListWidget::emit_changed()
 {
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
 }
 
 void ColorListWidget::handle_removed(int i)
 {
     p->colors.removeAt(i);
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
 }
 
 void ColorListWidget::color_changed(int row)
@@ -96,7 +96,7 @@ void ColorListWidget::color_changed(int row)
     if ( cs )
     {
         p->colors[row] = cs->color();
-        emit colorsChanged(p->colors);
+        Q_EMIT colorsChanged(p->colors);
     }
 }
 
@@ -124,7 +124,7 @@ void ColorListWidget::setWheelFlags(ColorWheel::DisplayFlags flags)
     if ( p->wheel_flags != flags )
     {
         p->wheel_flags = flags;
-        emit wheelFlagsChanged(flags);
+        Q_EMIT wheelFlagsChanged(flags);
     }
 }
 
