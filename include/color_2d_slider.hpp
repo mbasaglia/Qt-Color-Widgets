@@ -74,7 +74,7 @@ public:
     Component componentX() const;
     Component componentY() const;
 
-public slots:
+public Q_SLOTS:
 
     /// Set current color
     void setColor(const QColor& c);
@@ -97,7 +97,7 @@ public slots:
     void setComponentX(Component componentX);
     void setComponentY(Component componentY);
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the user selects a color or setColor is called
      */

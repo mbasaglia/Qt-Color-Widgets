@@ -114,7 +114,7 @@ public:
      */
     int indexFromFile(const QString& filename) const;
 
-public slots:
+public Q_SLOTS:
     void setSavePath(const QString& savePath);
     void setSearchPaths(const QStringList& searchPaths);
     void addSearchPath(const QString& path);
@@ -125,7 +125,7 @@ public slots:
      */
     void load();
 
-signals:
+Q_SIGNALS:
     void savePathChanged(const QString& savePath);
     void searchPathsChanged(const QStringList& searchPaths);
     void iconSizeChanged(const QSize& iconSize);

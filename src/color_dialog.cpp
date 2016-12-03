@@ -131,7 +131,7 @@ void ColorDialog::setAlphaEnabled(bool a)
         p->ui.slide_alpha->setVisible(a);
         p->ui.spin_alpha->setVisible(a);
 
-        emit alphaEnabledChanged(a);
+        Q_EMIT alphaEnabledChanged(a);
     }
 }
 
@@ -161,7 +161,7 @@ void ColorDialog::update_widgets()
 {
     bool blocked = signalsBlocked();
     blockSignals(true);
-    foreach(QWidget* w, findChildren<QWidget*>())
+    Q_FOREACH(QWidget* w, findChildren<QWidget*>())
         w->blockSignals(true);
 
     QColor col = color();
@@ -210,10 +210,10 @@ void ColorDialog::update_widgets()
     p->ui.preview->setColor(col);
 
     blockSignals(blocked);
-    foreach(QWidget* w, findChildren<QWidget*>())
+    Q_FOREACH(QWidget* w, findChildren<QWidget*>())
         w->blockSignals(false);
 
-    emit colorChanged(col);
+    Q_EMIT colorChanged(col);
 }
 
 void ColorDialog::set_hsv()
@@ -265,7 +265,7 @@ void ColorDialog::on_buttonBox_clicked(QAbstractButton *btn)
     case QDialogButtonBox::ApplyRole:
         // Explicitly select the color
         p->ui.preview->setComparisonColor(color());
-        emit colorSelected(color());
+        Q_EMIT colorSelected(color());
         break;
 
     case QDialogButtonBox::ActionRole:

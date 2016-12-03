@@ -94,17 +94,17 @@ void ColorPreview::paint(QPainter &painter, QRect rect) const
 {
     QColor c1, c2;
     switch(p->display_mode) {
-    case NoAlpha:
+    case DisplayMode::NoAlpha:
         c1 = c2 = p->col.rgb();
         break;
-    case AllAlpha:
+    case DisplayMode::AllAlpha:
         c1 = c2 = p->col;
         break;
-    case SplitAlpha:
+    case DisplayMode::SplitAlpha:
         c1 = p->col.rgb();
         c2 = p->col;
         break;
-    case SplitColor:
+    case DisplayMode::SplitColor:
         c1 = p->comparison;
         c2 = p->col;
         break;
@@ -132,7 +132,7 @@ void ColorPreview::setColor(const QColor &c)
 {
     p->col = c;
     update();
-    emit colorChanged(c);
+    Q_EMIT colorChanged(c);
 }
 
 void ColorPreview::setComparisonColor(const QColor &c)
@@ -156,7 +156,7 @@ void ColorPreview::resizeEvent(QResizeEvent *)
 void ColorPreview::mouseReleaseEvent(QMouseEvent * ev)
 {
     if ( QRect(QPoint(0,0),size()).contains(ev->pos()) )
-        emit clicked();
+        Q_EMIT clicked();
 }
 
 void ColorPreview::mouseMoveEvent(QMouseEvent *ev)

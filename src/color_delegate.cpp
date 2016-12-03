@@ -86,6 +86,8 @@ bool ColorDelegate::editorEvent(QEvent* event,
 
 QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index)
+    Q_UNUSED(option)
     return QSize(24,16);
 }
 

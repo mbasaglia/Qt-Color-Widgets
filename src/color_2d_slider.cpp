@@ -176,7 +176,7 @@ void Color2DSlider::setColor(const QColor& c)
     p->val = c.valueF();
     p->renderSquare(size());
     update();
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
 }
 
 void Color2DSlider::setHue(qreal h)
@@ -184,7 +184,7 @@ void Color2DSlider::setHue(qreal h)
     p->hue = h;
     p->renderSquare(size());
     update();
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
 }
 
 void Color2DSlider::setSaturation(qreal s)
@@ -192,7 +192,7 @@ void Color2DSlider::setSaturation(qreal s)
     p->sat = s;
     p->renderSquare(size());
     update();
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
 }
 
 void Color2DSlider::setValue(qreal v)
@@ -200,7 +200,7 @@ void Color2DSlider::setValue(qreal v)
     p->val = v;
     p->renderSquare(size());
     update();
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
 }
 
 void Color2DSlider::setComponentX(Color2DSlider::Component componentX)
@@ -210,7 +210,7 @@ void Color2DSlider::setComponentX(Color2DSlider::Component componentX)
         p->comp_x = componentX;
         p->renderSquare(size());
         update();
-        emit componentXChanged(p->comp_x);
+        Q_EMIT componentXChanged(p->comp_x);
     }
 }
 
@@ -221,7 +221,7 @@ void Color2DSlider::setComponentY(Color2DSlider::Component componentY)
         p->comp_y = componentY;
         p->renderSquare(size());
         update();
-        emit componentXChanged(p->comp_y);
+        Q_EMIT componentXChanged(p->comp_y);
     }
 }
 
@@ -239,21 +239,21 @@ void Color2DSlider::paintEvent(QPaintEvent*)
 void Color2DSlider::mousePressEvent(QMouseEvent* event)
 {
     p->setColorFromPos(event->pos(), size());
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
     update();
 }
 
 void Color2DSlider::mouseMoveEvent(QMouseEvent* event)
 {
     p->setColorFromPos(event->pos(), size());
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
     update();
 }
 
 void Color2DSlider::mouseReleaseEvent(QMouseEvent* event)
 {
     p->setColorFromPos(event->pos(), size());
-    emit colorChanged(color());
+    Q_EMIT colorChanged(color());
     update();
 }
 

@@ -47,14 +47,14 @@ public:
 
     ColorWheel::DisplayFlags wheelFlags() const;
 
-signals:
+Q_SIGNALS:
     void colorsChanged(const QList<QColor>&);
     void wheelFlagsChanged(ColorWheel::DisplayFlags flags);
 
-public slots:
+public Q_SLOTS:
     void setWheelFlags(ColorWheel::DisplayFlags flags);
 
-private slots:
+private Q_SLOTS:
     void emit_changed();
     void handle_removed(int);
     void color_changed(int row);

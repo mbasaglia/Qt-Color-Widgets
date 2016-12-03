@@ -132,7 +132,7 @@ public:
 
     bool readOnly() const;
 
-public slots:
+public Q_SLOTS:
     void setPalette(const ColorPalette& palette);
     void setSelected(int selected);
     void clearSelection();
@@ -147,7 +147,7 @@ public slots:
      **/
     void removeSelected();
 
-signals:
+Q_SIGNALS:
     void paletteChanged(const ColorPalette& palette);
     void selectedChanged(int selected);
     void colorSelected(const QColor& color);
@@ -178,7 +178,7 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
-protected slots:
+protected Q_SLOTS:
     /**
      * \brief Connected to the internal palette object to keep eveything consistent
      */

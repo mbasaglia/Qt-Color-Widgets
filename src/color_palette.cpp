@@ -103,11 +103,11 @@ ColorPalette& ColorPalette::operator=(ColorPalette&& other)
 
 void ColorPalette::emitUpdate()
 {
-    emit colorsChanged(p->colors);
-    emit columnsChanged(p->columns);
-    emit nameChanged(p->name);
-    emit fileNameChanged(p->fileName);
-    emit dirtyChanged(p->dirty);
+    Q_EMIT colorsChanged(p->colors);
+    Q_EMIT columnsChanged(p->columns);
+    Q_EMIT nameChanged(p->name);
+    Q_EMIT fileNameChanged(p->fileName);
+    Q_EMIT dirtyChanged(p->dirty);
 }
 
 QColor ColorPalette::colorAt(int index) const
@@ -150,7 +150,7 @@ void ColorPalette::loadColorTable(const QVector<QRgb>& color_table)
         color.setAlpha(255);
         p->colors.push_back(qMakePair(color,QString()));
     }
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
     setDirty(true);
 }
 
@@ -171,7 +171,7 @@ bool ColorPalette::loadImage(const QImage& image)
             p->colors.push_back(qMakePair(color,QString()));
         }
     }
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
     setDirty(true);
     return true;
 }
@@ -249,7 +249,7 @@ bool ColorPalette::load(const QString& name)
         p->colors.push_back(qMakePair(QColor(r, g, b), line));
     }
 
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
     setDirty(false);
 
     return true;
@@ -321,24 +321,24 @@ void ColorPalette::setColumns(int columns)
     if ( columns != p->columns )
     {
         setDirty(true);
-        emit columnsChanged( p->columns = columns );
+        Q_EMIT columnsChanged( p->columns = columns );
     }
 }
 
 void ColorPalette::setColors(const QVector<QColor>& colors)
 {
     p->colors.clear();
-    foreach(const QColor& col, colors)
+    Q_FOREACH(const QColor& col, colors)
         p->colors.push_back(qMakePair(col,QString()));
     setDirty(true);
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
 }
 
 void ColorPalette::setColors(const QVector<QPair<QColor,QString> >& colors)
 {
     p->colors = colors;
     setDirty(true);
-    emit colorsChanged(p->colors);
+    Q_EMIT colorsChanged(p->colors);
 }
 
 
@@ -350,8 +350,8 @@ void ColorPalette::setColorAt(int index, const QColor& color)
     p->colors[index].first = color;
 
     setDirty(true);
-    emit colorChanged(index);
-    emit colorsUpdated(p->colors);
+    Q_EMIT colorChanged(index);
+    Q_EMIT colorsUpdated(p->colors);
 }
 
 void ColorPalette::setColorAt(int index, const QColor& color, const QString& name)
@@ -362,8 +362,8 @@ void ColorPalette::setColorAt(int index, const QColor& color, const QString& nam
     p->colors[index].first = color;
     p->colors[index].second = name;
     setDirty(true);
-    emit colorChanged(index);
-    emit colorsUpdated(p->colors);
+    Q_EMIT colorChanged(index);
+    Q_EMIT colorsUpdated(p->colors);
 }
 
 void ColorPalette::setNameAt(int index, const QString& name)
@@ -374,8 +374,8 @@ void ColorPalette::setNameAt(int index, const QString& name)
     p->colors[index].second = name;
 
     setDirty(true);
-    emit colorChanged(index);
-    emit colorsUpdated(p->colors);
+    Q_EMIT colorChanged(index);
+    Q_EMIT colorsUpdated(p->colors);
 }
 
 
@@ -383,8 +383,8 @@ void ColorPalette::appendColor(const QColor& color, const QString& name)
 {
     p->colors.push_back(qMakePair(color,name));
     setDirty(true);
-    emit colorAdded(p->colors.size()-1);
-    emit colorsUpdated(p->colors);
+    Q_EMIT colorAdded(p->colors.size()-1);
+    Q_EMIT colorsUpdated(p->colors);
 }
 
 void ColorPalette::insertColor(int index, const QColor& color, const QString& name)
@@ -395,8 +395,8 @@ void ColorPalette::insertColor(int index, const QColor& color, const QString& na
     p->colors.insert(index, qMakePair(color, name));
 
     setDirty(true);
-    emit colorAdded(index);
-    emit colorsUpdated(p->colors);
+    Q_EMIT colorAdded(index);
+    Q_EMIT colorsUpdated(p->colors);
 }
 
 void ColorPalette::eraseColor(int index)
@@ -407,8 +407,8 @@ void ColorPalette::eraseColor(int index)
     p->colors.remove(index);
 
     setDirty(true);
-    emit colorRemoved(index);
-    emit colorsUpdated(p->colors);
+    Q_EMIT colorRemoved(index);
+    Q_EMIT colorsUpdated(p->colors);
 }
 
 void ColorPalette::setName(const QString& name)
@@ -467,7 +467,7 @@ bool ColorPalette::dirty() const
 void ColorPalette::setDirty(bool dirty)
 {
     if ( dirty != p->dirty )
-        emit dirtyChanged( p->dirty = dirty );
+        Q_EMIT dirtyChanged( p->dirty = dirty );
 }
 
 QVector<QColor> ColorPalette::onlyColors() const
