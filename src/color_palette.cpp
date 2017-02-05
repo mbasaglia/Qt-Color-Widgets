@@ -179,7 +179,7 @@ bool ColorPalette::loadImage(const QImage& image)
 ColorPalette ColorPalette::fromImage(const QImage& image)
 {
     ColorPalette p;
-    p.fromImage(image);
+    p.loadImage(image);
     return p;
 }
 
@@ -201,7 +201,7 @@ bool ColorPalette::load(const QString& name)
 
     QTextStream stream( &file );
 
-    if ( stream.readLine() != "GIMP Palette" )
+    if ( stream.readLine() != QLatin1String("GIMP Palette") )
     {
         emitUpdate();
         return false;
@@ -225,8 +225,8 @@ bool ColorPalette::load(const QString& name)
             line.right(line.size() - colon - 1).trimmed();
     }
     /// \todo Store extra properties in the palette object
-    setName(properties["name"]);
-    setColumns(properties["columns"].toInt());
+    setName(properties[QStringLiteral("name")]);
+    setColumns(properties[QStringLiteral("columns")].toInt());
 
     // Skip comments
     if ( !stream.atEnd() && line[0] == '#' )

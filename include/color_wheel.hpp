@@ -76,7 +76,7 @@ public:
     /// Get current color
     QColor color() const;
 
-    QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /// Get current hue in the range [0-1]
     qreal hue() const;

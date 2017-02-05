@@ -35,7 +35,7 @@ public:
 ColorListWidget::ColorListWidget(QWidget *parent)
     : AbstractWidgetList(parent), p(new Private)
 {
-    connect(this, SIGNAL(removed(int)), SLOT(handle_removed(int)));
+    connect(this, &AbstractWidgetList::removed, this, &ColorListWidget::handle_removed);
     connect(&p->mapper, SIGNAL(mapped(int)), SLOT(color_changed(int)));
     p->wheel_flags = ColorWheel::defaultDisplayFlags();
 }
@@ -108,8 +108,8 @@ void ColorListWidget::append_widget(int col)
     //connect(cbs,SIGNAL(colorChanged(QColor)),SLOT(emit_changed()));
     p->mapper.setMapping(cbs,col);
     connect(cbs,SIGNAL(colorChanged(QColor)),&p->mapper,SLOT(map()));
-    connect(this,SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)),
-            cbs,SLOT(setWheelFlags(ColorWheel::DisplayFlags)));
+    connect(this,&ColorListWidget::wheelFlagsChanged,
+            cbs,&ColorSelector::setWheelFlags);
     appendWidget(cbs);
     setRowHeight(count()-1,22);
 }

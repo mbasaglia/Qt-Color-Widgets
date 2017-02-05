@@ -55,11 +55,11 @@ ColorDialog::ColorDialog(QWidget *parent, Qt::WindowFlags f) :
 
     // Add "pick color" button
     QPushButton *pickButton = p->ui.buttonBox->addButton(tr("Pick"), QDialogButtonBox::ActionRole);
-    pickButton->setIcon(QIcon::fromTheme("color-picker"));
+    pickButton->setIcon(QIcon::fromTheme(QStringLiteral("color-picker")));
 
     setButtonMode(OkApplyCancel);
 
-    connect(p->ui.wheel,SIGNAL(displayFlagsChanged(ColorWheel::DisplayFlags)),SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)));
+    connect(p->ui.wheel,&ColorWheel::displayFlagsChanged,this, &ColorDialog::wheelFlagsChanged);
 }
 
 QSize ColorDialog::sizeHint() const
