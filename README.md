@@ -57,4 +57,4 @@ License
 -------
 
 LGPLv3+, See COPYING
-Copyright (C) 2012-2015 Mattia Basaglia <mattia.basaglia@gmail.com>
+Copyright (C) 2013-2017 Mattia Basaglia <mattia.basaglia@gmail.com>

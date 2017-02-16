@@ -4,7 +4,7 @@
  * \author Mattia Basaglia
  *
  * \copyright Copyright (C) 2014 Calle Laakkonen
- * \copyright Copyright (C) 2015 Mattia Basaglia
+ * \copyright Copyright (C) 2013-2017 Mattia Basaglia
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
