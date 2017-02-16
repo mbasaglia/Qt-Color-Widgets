@@ -67,13 +67,13 @@ public:
 ColorLineEdit::ColorLineEdit(QWidget* parent)
     : QLineEdit(parent), p(new Private)
 {
-    p->background.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
+    p->background.setTexture(QPixmap(QStringLiteral(":/color_widgets/alphaback.png")));
     setColor(Qt::white);
     /// \todo determine if having this connection might be useful
     /*connect(this, &QLineEdit::textChanged, [this](const QString& text){
         QColor color = p->colorFromString(text);
         if ( color.isValid() )
-            emit colorChanged(color);
+            Q_EMIT colorChanged(color);
     });*/
     connect(this, &QLineEdit::textEdited, [this](const QString& text){
         QColor color = color_widgets::colorFromString(text, p->show_alpha);
@@ -81,8 +81,8 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         {
             p->color = color;
             p->setPalette(color, this);
-            emit colorEdited(color);
-            emit colorChanged(color);
+            Q_EMIT colorEdited(color);
+            Q_EMIT colorChanged(color);
         }
     });
     connect(this, &QLineEdit::editingFinished, [this](){
@@ -90,14 +90,14 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         if ( color.isValid() )
         {
             p->color = color;
-            emit colorEditingFinished(color);
-            emit colorChanged(color);
+            Q_EMIT colorEditingFinished(color);
+            Q_EMIT colorChanged(color);
         }
         else
         {
             setText(color_widgets::stringFromColor(p->color, p->show_alpha));
-            emit colorEditingFinished(p->color);
-            emit colorChanged(color);
+            Q_EMIT colorEditingFinished(p->color);
+            Q_EMIT colorChanged(color);
         }
         p->setPalette(p->color, this);
     });
@@ -120,7 +120,7 @@ void ColorLineEdit::setColor(const QColor& color)
         p->color = color;
         p->setPalette(p->color, this);
         setText(color_widgets::stringFromColor(p->color, p->show_alpha));
-        emit colorChanged(p->color);
+        Q_EMIT colorChanged(p->color);
     }
 }
 
@@ -131,7 +131,7 @@ void ColorLineEdit::setShowAlpha(bool showAlpha)
         p->show_alpha = showAlpha;
         p->setPalette(p->color, this);
         setText(color_widgets::stringFromColor(p->color, p->show_alpha));
-        emit showAlphaChanged(p->show_alpha);
+        Q_EMIT showAlphaChanged(p->show_alpha);
     }
 }
 
@@ -191,7 +191,7 @@ void ColorLineEdit::setPreviewColor(bool previewColor)
         else
             setPalette(QApplication::palette());
 
-        emit previewColorChanged(p->preview_color);
+        Q_EMIT previewColorChanged(p->preview_color);
     }
 }
 

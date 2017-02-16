@@ -62,12 +62,12 @@ public:
     bool showAlpha() const;
     bool previewColor() const;
 
-public slots:
+public Q_SLOTS:
     void setColor(const QColor& color);
     void setShowAlpha(bool showAlpha);
     void setPreviewColor(bool previewColor);
 
-signals:
+Q_SIGNALS:
     /**
      * \brief Emitted when the color is changed by any means
      */

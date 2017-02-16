@@ -215,7 +215,7 @@ Swatch::Swatch(QWidget* parent)
     connect(&p->palette, &ColorPalette::colorsUpdated, this, (void(QWidget::*)())&QWidget::update);
     connect(&p->palette, &ColorPalette::colorChanged, [this](int index){
         if ( index == p->selected )
-            emit colorSelected( p->palette.colorAt(index) );
+            Q_EMIT colorSelected( p->palette.colorAt(index) );
     });
     connect(&p->palette, &ColorPalette::colorRemoved, [this](int index){
         if ( index == p->selected )
@@ -301,7 +301,7 @@ void Swatch::setPalette(const ColorPalette& palette)
     clearSelection();
     p->palette = palette;
     update();
-    emit paletteChanged(p->palette);
+    Q_EMIT paletteChanged(p->palette);
 }
 
 void Swatch::setSelected(int selected)
@@ -311,9 +311,9 @@ void Swatch::setSelected(int selected)
 
     if ( selected != p->selected )
     {
-        emit selectedChanged( p->selected = selected );
+        Q_EMIT selectedChanged( p->selected = selected );
         if ( selected != -1 )
-            emit colorSelected( p->palette.colorAt(p->selected) );
+            Q_EMIT colorSelected( p->palette.colorAt(p->selected) );
         update();
     }
 }
@@ -325,6 +325,7 @@ void Swatch::clearSelection()
 
 void Swatch::paintEvent(QPaintEvent* event)
 {
+    Q_UNUSED(event)
     QSize rowcols = p->rowcols();
     if ( rowcols.isEmpty() )
         return;
@@ -513,7 +514,7 @@ void Swatch::mousePressEvent(QMouseEvent *event)
     {
         int index = indexAt(event->pos());
         if ( index != -1 )
-            emit rightClicked(index);
+            Q_EMIT rightClicked(index);
     }
 }
 
@@ -555,7 +556,7 @@ void Swatch::mouseDoubleClickEvent(QMouseEvent *event)
     {
         int index = indexAt(event->pos());
         if ( index != -1 )
-            emit doubleClicked(index);
+            Q_EMIT doubleClicked(index);
     }
 }
 
@@ -597,6 +598,7 @@ void Swatch::dragMoveEvent(QDragMoveEvent* event)
 
 void Swatch::dragLeaveEvent(QDragLeaveEvent *event)
 {
+    Q_UNUSED(event)
     p->clearDrop();
 }
 
@@ -670,7 +672,7 @@ QSize Swatch::colorSize() const
 void Swatch::setColorSize(const QSize& colorSize)
 {
     if ( p->color_size != colorSize )
-        emit colorSizeChanged(p->color_size = colorSize);
+        Q_EMIT colorSizeChanged(p->color_size = colorSize);
 }
 
 Swatch::ColorSizePolicy Swatch::colorSizePolicy() const
@@ -685,7 +687,7 @@ void Swatch::setColorSizePolicy(ColorSizePolicy colorSizePolicy)
         setMinimumSize(0,0);
         setFixedSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
         paletteModified();
-        emit colorSizePolicyChanged(p->size_policy = colorSizePolicy);
+        Q_EMIT colorSizePolicyChanged(p->size_policy = colorSizePolicy);
     }
 }
 
@@ -706,8 +708,8 @@ void Swatch::setForcedColumns(int forcedColumns)
 
     if ( forcedColumns != p->forced_columns )
     {
-        emit forcedColumnsChanged(p->forced_columns = forcedColumns);
-        emit forcedRowsChanged(p->forced_rows = 0);
+        Q_EMIT forcedColumnsChanged(p->forced_columns = forcedColumns);
+        Q_EMIT forcedRowsChanged(p->forced_rows = 0);
     }
 }
 
@@ -718,8 +720,8 @@ void Swatch::setForcedRows(int forcedRows)
 
     if ( forcedRows != p->forced_rows )
     {
-        emit forcedColumnsChanged(p->forced_columns = 0);
-        emit forcedRowsChanged(p->forced_rows = forcedRows);
+        Q_EMIT forcedColumnsChanged(p->forced_columns = 0);
+        Q_EMIT forcedRowsChanged(p->forced_rows = forcedRows);
     }
 }
 
@@ -732,7 +734,7 @@ void Swatch::setReadOnly(bool readOnly)
 {
     if ( readOnly != p->readonly )
     {
-        emit readOnlyChanged(p->readonly = readOnly);
+        Q_EMIT readOnlyChanged(p->readonly = readOnly);
         setAcceptDrops(!p->readonly);
     }
 }
@@ -776,7 +778,7 @@ void Swatch::setBorder(const QPen& border)
     if ( border != p->border )
     {
         p->border = border;
-        emit borderChanged(border);
+        Q_EMIT borderChanged(border);
         update();
     }
 }

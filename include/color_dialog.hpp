@@ -86,7 +86,7 @@ public:
 
     ColorWheel::DisplayFlags wheelFlags() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * Change color
@@ -106,7 +106,7 @@ public slots:
      */
     void setAlphaEnabled(bool a);
 
-signals:
+Q_SIGNALS:
     /**
      * The current color was changed
      */
@@ -120,7 +120,7 @@ signals:
     void wheelFlagsChanged(ColorWheel::DisplayFlags flags);
     void alphaEnabledChanged(bool alphaEnabled);
 
-private slots:
+private Q_SLOTS:
     /// Update all the Ui elements to match the selected color
     void update_widgets();
     /// Update from HSV sliders

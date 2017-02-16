@@ -55,14 +55,14 @@ public:
 
     ColorWheel::DisplayFlags wheelFlags() const;
 
-signals:
+Q_SIGNALS:
     void wheelFlagsChanged(ColorWheel::DisplayFlags flags);
 
-public slots:
+public Q_SLOTS:
     void showDialog();
     void setWheelFlags(ColorWheel::DisplayFlags flags);
 
-private slots:
+private Q_SLOTS:
     void accept_dialog();
     void reject_dialog();
     void update_old_color(const QColor &c);

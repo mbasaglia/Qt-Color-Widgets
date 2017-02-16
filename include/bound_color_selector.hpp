@@ -37,7 +37,7 @@ private:
 public:
     explicit BoundColorSelector(QColor* reference, QWidget *parent = 0);
 
-private slots:
+private Q_SLOTS:
     void update_reference(QColor);
 };
 } // namespace color_widgets

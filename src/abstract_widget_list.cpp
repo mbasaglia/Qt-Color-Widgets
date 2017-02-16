@@ -63,11 +63,11 @@ AbstractWidgetList::AbstractWidgetList(QWidget *parent) :
     p->table->verticalHeader()->hide();
     p->table->setShowGrid(false);
 
-    QPushButton* add_button = new QPushButton(QIcon::fromTheme("list-add"),
+    QPushButton* add_button = new QPushButton(QIcon::fromTheme(QStringLiteral("list-add")),
                                               tr("Add New"));
 
     verticalLayout->addWidget(add_button);
-    connect(add_button,SIGNAL(clicked()),SLOT(append()));
+    connect(add_button,&QAbstractButton::clicked,this, &AbstractWidgetList::append);
 
 }
 
@@ -105,7 +105,7 @@ void AbstractWidgetList::remove(int i)
         else if ( i != 0 && i == count() )
             p->table->cellWidget(count()-1,2)->setEnabled(false);
 
-        emit removed(i);
+        Q_EMIT removed(i);
     }
 }
 
@@ -115,9 +115,9 @@ void AbstractWidgetList::appendWidget(QWidget *w)
     int row = count();
     p->table->insertRow(row);
 
-    QWidget* b_up = create_button(w,&p->mapper_up,"go-up",tr("Move Up"));
-    QWidget* b_down = create_button(w,&p->mapper_down,"go-down",tr("Move Down"));
-    QWidget* b_remove = create_button(w,&p->mapper_remove,"list-remove",tr("Remove"));
+    QWidget* b_up = create_button(w,&p->mapper_up,QStringLiteral("go-up"),tr("Move Up"));
+    QWidget* b_down = create_button(w,&p->mapper_down,QStringLiteral("go-down"),tr("Move Down"));
+    QWidget* b_remove = create_button(w,&p->mapper_remove,QStringLiteral("list-remove"),tr("Remove"));
     if ( row == 0 )
         b_up->setEnabled(false);
     else

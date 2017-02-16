@@ -46,12 +46,12 @@ ColorSelector::ColorSelector(QWidget *parent) :
     setUpdateMode(Continuous);
     p->old_color = color();
 
-    connect(this,SIGNAL(clicked()),this,SLOT(showDialog()));
+    connect(this,&ColorPreview::clicked,this,&ColorSelector::showDialog);
     connect(this,SIGNAL(colorChanged(QColor)),this,SLOT(update_old_color(QColor)));
-    connect(p->dialog,SIGNAL(rejected()),this,SLOT(reject_dialog()));
-    connect(p->dialog,SIGNAL(colorSelected(QColor)), this, SLOT(accept_dialog()));
-    connect(p->dialog,SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)),
-                SIGNAL(wheelFlagsChanged(ColorWheel::DisplayFlags)));
+    connect(p->dialog,&QDialog::rejected,this,&ColorSelector::reject_dialog);
+    connect(p->dialog,&ColorDialog::colorSelected, this, &ColorSelector::accept_dialog);
+    connect(p->dialog,&ColorDialog::wheelFlagsChanged,
+                this, &ColorSelector::wheelFlagsChanged);
 
     setAcceptDrops(true);
 }

@@ -76,7 +76,7 @@ public:
     /// Get current color
     QColor color() const;
 
-    QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /// Get current hue in the range [0-1]
     qreal hue() const;
@@ -109,7 +109,7 @@ public:
      */
     void setDisplayFlag(DisplayFlags flag, DisplayFlags mask);
 
-public slots:
+public Q_SLOTS:
 
     /// Set current color
     void setColor(QColor c);
@@ -135,7 +135,7 @@ public slots:
      */
     void setDisplayFlags(ColorWheel::DisplayFlags flags);
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when the user selects a color or setColor is called
      */

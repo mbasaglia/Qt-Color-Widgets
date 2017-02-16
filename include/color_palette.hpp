@@ -137,7 +137,7 @@ public:
      */
     QPixmap preview(const QSize& size, const QColor& background=Qt::transparent) const;
 
-public slots:
+public Q_SLOTS:
     void setColumns(int columns);
 
     void setColors(const QVector<QColor>& colors);
@@ -183,7 +183,7 @@ public slots:
     void setFileName(const QString& name);
     void setDirty(bool dirty);
 
-signals:
+Q_SIGNALS:
     /**
      * \brief Emitted when all the colors have changed
      */

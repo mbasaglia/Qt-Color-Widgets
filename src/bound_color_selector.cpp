@@ -27,7 +27,7 @@ BoundColorSelector::BoundColorSelector(QColor* reference, QWidget *parent) :
     ColorSelector(parent), ref(reference)
 {
     setColor(*reference);
-    connect(this,SIGNAL(colorChanged(QColor)),SLOT(update_reference(QColor)));
+    connect(this,&ColorPreview::colorChanged,this, &BoundColorSelector::update_reference);
 }
 
 void BoundColorSelector::update_reference(QColor c)

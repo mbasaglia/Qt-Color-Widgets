@@ -22,10 +22,10 @@
 #include "color_names.hpp"
 #include <QRegularExpression>
 
-static QRegularExpression regex_qcolor ("^(?:(?:#[[:xdigit:]]{3})|(?:#[[:xdigit:]]{6})|(?:[[:alpha:]]+))$");
-static QRegularExpression regex_func_rgb (R"(^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)");
-static QRegularExpression regex_hex_rgba ("^#[[:xdigit:]]{8}$");
-static QRegularExpression regex_func_rgba (R"(^rgba?\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)");
+static QRegularExpression regex_qcolor (QStringLiteral("^(?:(?:#[[:xdigit:]]{3})|(?:#[[:xdigit:]]{6})|(?:[[:alpha:]]+))$"));
+static QRegularExpression regex_func_rgb (QStringLiteral(R"(^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)"));
+static QRegularExpression regex_hex_rgba (QStringLiteral("^#[[:xdigit:]]{8}$"));
+static QRegularExpression regex_func_rgba (QStringLiteral(R"(^rgba?\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)"));
 
 namespace color_widgets {
 
@@ -34,7 +34,7 @@ QString stringFromColor(const QColor& color, bool alpha)
 {
     if ( !alpha || color.alpha() == 255 )
         return color.name();
-    return color.name()+QString("%1").arg(color.alpha(), 2, 16, QChar('0'));
+    return color.name()+QStringLiteral("%1").arg(color.alpha(), 2, 16, QChar('0'));
 }
 
 QColor colorFromString(const QString& string, bool alpha)
