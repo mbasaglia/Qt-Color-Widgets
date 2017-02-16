@@ -90,7 +90,7 @@ public:
             return true;
 
         // Get all of the files matching the pattern *.gpl
-        save_dir.setNameFilters(QStringList() << "*.gpl");
+        save_dir.setNameFilters(QStringList() << QStringLiteral("*.gpl"));
         save_dir.setFilter(QDir::Files);
         QStringList existing_files = save_dir.entryList();
 
@@ -109,7 +109,7 @@ public:
         }
 
         return attemptSave(palette,
-            save_dir.absoluteFilePath(QString("%1%2.gpl").arg(palette.name()).arg(max+1))
+            save_dir.absoluteFilePath(QStringLiteral("%1%2.gpl").arg(palette.name()).arg(max+1))
         );
     }
 };
@@ -220,7 +220,7 @@ void ColorPaletteModel::load()
     beginResetModel();
     p->palettes.clear();
     QStringList filters;
-    filters << "*.gpl";
+    filters << QStringLiteral("*.gpl");
     for ( const QString& directory_name : p->search_paths )
     {
         QDir directory(directory_name);

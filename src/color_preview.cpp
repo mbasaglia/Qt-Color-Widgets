@@ -45,7 +45,7 @@ public:
 ColorPreview::ColorPreview(QWidget *parent) :
     QWidget(parent), p(new Private)
 {
-    p->back.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
+    p->back.setTexture(QPixmap(QStringLiteral(":/color_widgets/alphaback.png")));
 }
 
 ColorPreview::~ColorPreview()

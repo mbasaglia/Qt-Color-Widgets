@@ -48,7 +48,7 @@ public:
         back(Qt::darkGray, Qt::DiagCrossPattern)
     {
         loadResource();
-        back.setTexture(QPixmap(QLatin1String(":/color_widgets/alphaback.png")));
+        back.setTexture(QPixmap(QStringLiteral(":/color_widgets/alphaback.png")));
         gradient.setCoordinateMode(QGradient::StretchToDeviceMode);
     }
 
