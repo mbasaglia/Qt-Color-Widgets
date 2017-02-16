@@ -28,9 +28,8 @@
 #include <QDesktopWidget>
 #include <QMimeData>
 #include <QPushButton>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QScreen>
-#endif
+
 namespace color_widgets {
 
 class ColorDialog::Private
@@ -311,16 +310,11 @@ void ColorDialog::dropEvent(QDropEvent *event)
 
 static QColor get_screen_color(const QPoint &global_pos)
 {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-    WId id = QApplication::desktop()->winId();
-    QImage img = QPixmap::grabWindow(id, global_pos.x(), global_pos.y(), 1, 1).toImage();
-#else
     int screenNum = QApplication::desktop()->screenNumber(global_pos);
     QScreen *screen = QApplication::screens().at(screenNum);
 
     WId wid = QApplication::desktop()->winId();
     QImage img = screen->grabWindow(wid, global_pos.x(), global_pos.y(), 1, 1).toImage();
-#endif
 
     return img.pixel(0,0);
 }

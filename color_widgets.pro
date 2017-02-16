@@ -1,16 +1,9 @@
 TEMPLATE=lib
 CONFIG += dll
-QT += core gui
+QT += core gui widgets
 DEFINES += QTCOLORWIDGETS_LIBRARY
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	message("Qt5 mode!")
-	QT += widgets
-	TARGET=ColorWidgets-qt5
-} else {
-	message("Qt4 mode!")
-	TARGET=ColorWidgets-qt4
-}
+TARGET=ColorWidgets-qt5
 
 VERSION=1.0.0
 
