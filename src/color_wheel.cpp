@@ -279,9 +279,6 @@ ColorWheel::ColorWheel(QWidget *parent) :
 {
     setDisplayFlags(FLAGS_DEFAULT);
     setAcceptDrops(true);
-    p->ring_components.emplace_back(0.5, false);
-    p->ring_components.emplace_back(0.125, true, -1, 2);
-    p->ring_components.emplace_back(0.625, true, -1, 1);
 }
 
 ColorWheel::~ColorWheel()
@@ -650,6 +647,29 @@ void ColorWheel::dropEvent(QDropEvent* event)
             event->accept();
         }
     }
+}
+
+void ColorWheel::clearHarmonies()
+{
+    p->ring_components.clear();
+    p->current_ring_component = -1;
+    update();
+}
+
+void ColorWheel::addHarmony(double hue_diff, bool editable, int symmetric_to, int opposite_to)
+{
+    hue_diff = normalize(hue_diff);
+    if (symmetric_to >= 0 && opposite_to >= 0)
+        throw std::runtime_error("incorrect call to addHarmony: harmony cannot be both symmetric and opposite");
+    int harmony_count = p->ring_components.size();
+    if (symmetric_to >= harmony_count || opposite_to >= harmony_count)
+        throw std::runtime_error("incorrect call to addHarmony: harmony number out of range");
+    p->ring_components.emplace_back(hue_diff, editable, symmetric_to, opposite_to);
+    if (symmetric_to >= 0)
+        p->ring_components[symmetric_to].symmetric_to = harmony_count;
+    else if (opposite_to >= 0)
+        p->ring_components[opposite_to].opposite_to = harmony_count;
+    update();
 }
 
 } //  namespace color_widgets
