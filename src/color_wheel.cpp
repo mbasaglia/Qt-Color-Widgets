@@ -4,6 +4,7 @@
  * \author Mattia Basaglia
  *
  * \copyright Copyright (C) 2013-2017 Mattia Basaglia
+ * \copyright Copyright (C) 2017 caryoscelus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +43,16 @@ static const ColorWheel::DisplayFlags hard_default_flags = ColorWheel::SHAPE_TRI
 static ColorWheel::DisplayFlags default_flags = hard_default_flags;
 static const double selector_radius = 6;
 
+struct RingComponent {
+    double hue_diff;
+    bool editable;
+    RingComponent(double hue_diff_, bool editable_) :
+        hue_diff(hue_diff_),
+        editable(editable_)
+    {
+    }
+};
+
 class ColorWheel::Private
 {
 private:
@@ -58,6 +69,8 @@ public:
     QColor (*color_from)(qreal,qreal,qreal,qreal);
     QColor (*rainbow_from_hue)(qreal);
     int max_size = 128;
+    std::vector<RingComponent> ring_components;
+    int current_ring_component = -1;
 
     Private(ColorWheel *widget)
         : w(widget), hue(0), sat(0), val(0),
@@ -253,6 +266,7 @@ ColorWheel::ColorWheel(QWidget *parent) :
 {
     setDisplayFlags(FLAGS_DEFAULT);
     setAcceptDrops(true);
+    p->ring_components.emplace_back(0.5, false);
 }
 
 ColorWheel::~ColorWheel()
@@ -321,6 +335,19 @@ void ColorWheel::paintEvent(QPaintEvent * )
     QPointF h2 = ray.p2();
     painter.drawLine(h1,h2);
 
+    for (auto const& component : p->ring_components)
+    {
+        // TODO: separate function
+        painter.setPen(QPen(Qt::white,3));
+        painter.setBrush(Qt::NoBrush);
+        QLineF ray(0, 0, p->outer_radius(), 0);
+        ray.setAngle((p->hue+component.hue_diff)*360);
+        QPointF h1 = ray.p2();
+        ray.setLength(p->inner_radius());
+        QPointF h2 = ray.p2();
+        painter.drawLine(h1,h2);
+    }
+
     // lum-sat square
     if(p->inner_selector.isNull())
         p->render_inner_selector();
@@ -375,12 +402,23 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
 {
     if (p->mouse_status == DragCircle )
     {
-        p->hue = p->line_to_point(ev->pos()).angle()/360.0;
-        p->render_inner_selector();
+        auto hue = p->line_to_point(ev->pos()).angle()/360.0;
+        if (p->current_ring_component == -1)
+        {
+            p->hue = hue;
+            p->render_inner_selector();
 
-        Q_EMIT colorSelected(color());
-        Q_EMIT colorChanged(color());
-        update();
+            Q_EMIT colorSelected(color());
+            Q_EMIT colorChanged(color());
+            update();
+        }
+        else
+        {
+            auto& component = p->ring_components[p->current_ring_component];
+            component.hue_diff = p->hue - hue;
+            // TODO: emit signals
+            update();
+        }
     }
     else if(p->mouse_status == DragSquare)
     {
@@ -426,7 +464,23 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
         if ( ray.length() <= p->inner_radius() )
             p->mouse_status = DragSquare;
         else if ( ray.length() <= p->outer_radius() )
+        {
             p->mouse_status = DragCircle;
+            auto hue_diff = p->hue - ray.angle()/360;
+            auto i = 0;
+            for (auto const& component : p->ring_components)
+            {
+                if (component.editable &&
+                    component.hue_diff <= hue_diff + 0.0625 &&
+                    component.hue_diff >= hue_diff - 0.0625)
+                {
+                    p->current_ring_component = i;
+                    // no need to update color..
+                    return;
+                }
+                ++i;
+            }
+        }
 
         // Update the color
         mouseMoveEvent(ev);
@@ -437,6 +491,7 @@ void ColorWheel::mouseReleaseEvent(QMouseEvent *ev)
 {
     mouseMoveEvent(ev);
     p->mouse_status = Nothing;
+    p->current_ring_component = -1;
 }
 
 void ColorWheel::resizeEvent(QResizeEvent *)
