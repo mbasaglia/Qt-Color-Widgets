@@ -56,13 +56,12 @@ struct RingComponent
     }
 };
 
-double normalize(double angle)
+/**
+ * Puts a double into [0; 1) range
+ */
+inline double normalize(double angle)
 {
-    if (angle < 0)
-        return angle + std::abs(std::floor(angle));
-    if (angle > 1)
-        return angle - std::floor(angle);
-    return angle;
+    return angle - std::floor(angle);
 }
 
 class ColorWheel::Private
