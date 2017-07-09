@@ -77,6 +77,12 @@ public:
     /// Get current color
     QColor color() const;
 
+    /// Get all harmony colors (including main)
+    QList<QColor> harmonyColors() const;
+
+    /// Get number of harmony colors (including main)
+    unsigned int harmonyCount() const;
+
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /// Get current hue in the range [0-1]
@@ -160,6 +166,11 @@ Q_SIGNALS:
     void colorSelected(QColor);
 
     void displayFlagsChanged(ColorWheel::DisplayFlags flags);
+
+    /**
+     * Emitted when harmony settings or harmony colors are changed (including due to main hue change)
+     */
+    void harmonyChanged();
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;

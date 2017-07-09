@@ -279,6 +279,7 @@ ColorWheel::ColorWheel(QWidget *parent) :
 {
     setDisplayFlags(FLAGS_DEFAULT);
     setAcceptDrops(true);
+    connect(this, SIGNAL(colorChanged(QColor)), this, SIGNAL(harmonyChanged()));
 }
 
 ColorWheel::~ColorWheel()
@@ -289,6 +290,20 @@ ColorWheel::~ColorWheel()
 QColor ColorWheel::color() const
 {
     return p->color_from(p->hue, p->sat, p->val, 1);
+}
+
+QList<QColor> ColorWheel::harmonyColors() const
+{
+    QList<QColor> result;
+    result.push_back(color());
+    for (auto const& harmony : p->ring_components)
+        result.push_back(p->color_from(p->hue+harmony.hue_diff, p->sat, p->val, 1));
+    return result;
+}
+
+unsigned int ColorWheel::harmonyCount() const
+{
+    return 1 + p->ring_components.size();
 }
 
 QSize ColorWheel::sizeHint() const
@@ -653,6 +668,7 @@ void ColorWheel::clearHarmonies()
 {
     p->ring_components.clear();
     p->current_ring_component = -1;
+    Q_EMIT harmonyChanged();
     update();
 }
 
@@ -669,6 +685,7 @@ void ColorWheel::addHarmony(double hue_diff, bool editable, int symmetric_to, in
         p->ring_components[symmetric_to].symmetric_to = harmony_count;
     else if (opposite_to >= 0)
         p->ring_components[opposite_to].opposite_to = harmony_count;
+    Q_EMIT harmonyChanged();
     update();
 }
 
