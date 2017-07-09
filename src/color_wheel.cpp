@@ -48,10 +48,12 @@ struct RingComponent
     double hue_diff;
     bool editable;
     int symmetric_to;
-    RingComponent(double hue_diff_, bool editable_, int symmetric_to_) :
+    int opposite_to;
+    RingComponent(double hue_diff_, bool editable_, int symmetric_to_=-1, int opposite_to_=-1) :
         hue_diff(hue_diff_),
         editable(editable_),
-        symmetric_to(symmetric_to_)
+        symmetric_to(symmetric_to_),
+        opposite_to(opposite_to_)
     {
     }
 };
@@ -277,8 +279,9 @@ ColorWheel::ColorWheel(QWidget *parent) :
 {
     setDisplayFlags(FLAGS_DEFAULT);
     setAcceptDrops(true);
-    p->ring_components.emplace_back(0.5, true, 1);
-    p->ring_components.emplace_back(0.5, true, 0);
+    p->ring_components.emplace_back(0.5, false);
+    p->ring_components.emplace_back(0.125, true, -1, 2);
+    p->ring_components.emplace_back(0.625, true, -1, 1);
 }
 
 ColorWheel::~ColorWheel()
@@ -432,6 +435,11 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
             {
                 auto& symmetric = p->ring_components[component.symmetric_to];
                 symmetric.hue_diff = normalize(p->hue - hue);
+            }
+            else if (component.opposite_to != -1)
+            {
+                auto& opposite = p->ring_components[component.opposite_to];
+                opposite.hue_diff = normalize(component.hue_diff-0.5);
             }
             // TODO: emit signals
             update();
