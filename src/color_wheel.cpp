@@ -43,7 +43,8 @@ static const ColorWheel::DisplayFlags hard_default_flags = ColorWheel::SHAPE_TRI
 static ColorWheel::DisplayFlags default_flags = hard_default_flags;
 static const double selector_radius = 6;
 
-struct RingComponent {
+struct RingComponent
+{
     double hue_diff;
     bool editable;
     RingComponent(double hue_diff_, bool editable_) :
@@ -52,6 +53,15 @@ struct RingComponent {
     {
     }
 };
+
+double normalize(double angle)
+{
+    if (angle < 0)
+        return angle + std::abs(std::floor(angle));
+    if (angle > 1)
+        return angle - std::floor(angle);
+    return angle;
+}
 
 class ColorWheel::Private
 {
@@ -266,7 +276,7 @@ ColorWheel::ColorWheel(QWidget *parent) :
 {
     setDisplayFlags(FLAGS_DEFAULT);
     setAcceptDrops(true);
-    p->ring_components.emplace_back(0.5, false);
+    p->ring_components.emplace_back(0.5, true);
 }
 
 ColorWheel::~ColorWheel()
@@ -415,7 +425,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
         else
         {
             auto& component = p->ring_components[p->current_ring_component];
-            component.hue_diff = p->hue - hue;
+            component.hue_diff = normalize(hue - p->hue);
             // TODO: emit signals
             update();
         }
@@ -466,7 +476,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
         else if ( ray.length() <= p->outer_radius() )
         {
             p->mouse_status = DragCircle;
-            auto hue_diff = p->hue - ray.angle()/360;
+            auto hue_diff = normalize(ray.angle()/360 - p->hue);
             auto i = 0;
             for (auto const& component : p->ring_components)
             {
