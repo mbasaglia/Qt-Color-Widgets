@@ -488,9 +488,10 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
             auto i = 0;
             for (auto const& component : p->ring_components)
             {
+                const double eps = 1.0/64;
                 if (component.editable &&
-                    component.hue_diff <= hue_diff + 0.0625 &&
-                    component.hue_diff >= hue_diff - 0.0625)
+                    component.hue_diff <= hue_diff + eps &&
+                    component.hue_diff >= hue_diff - eps)
                 {
                     p->current_ring_component = i;
                     // no need to update color..
