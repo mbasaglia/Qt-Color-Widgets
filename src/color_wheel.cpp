@@ -297,7 +297,10 @@ QList<QColor> ColorWheel::harmonyColors() const
     QList<QColor> result;
     result.push_back(color());
     for (auto const& harmony : p->ring_components)
-        result.push_back(p->color_from(p->hue+harmony.hue_diff, p->sat, p->val, 1));
+    {
+        auto hue = normalize(p->hue+harmony.hue_diff);
+        result.push_back(p->color_from(hue, p->sat, p->val, 1));
+    }
     return result;
 }
 
@@ -453,7 +456,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
                 auto& opposite = p->ring_components[component.opposite_to];
                 opposite.hue_diff = normalize(component.hue_diff-0.5);
             }
-            // TODO: emit signals
+            Q_EMIT harmonyChanged();
             update();
         }
     }
