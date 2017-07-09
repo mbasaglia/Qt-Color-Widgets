@@ -688,6 +688,10 @@ void ColorWheel::addHarmony(double hue_diff, bool editable, int symmetric_to, in
         p->ring_components[symmetric_to].symmetric_to = harmony_count;
     else if (opposite_to >= 0)
         p->ring_components[opposite_to].opposite_to = harmony_count;
+}
+
+void ColorWheel::applyHarmonies()
+{
     Q_EMIT harmonyChanged();
     update();
 }

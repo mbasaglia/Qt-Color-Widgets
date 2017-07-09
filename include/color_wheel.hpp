@@ -128,6 +128,9 @@ public:
      */
     void addHarmony(double hue_diff, bool editable, int symmetric_to=-1, int opposite_to=-1);
 
+    /// Apply previous added harmonies
+    void applyHarmonies();
+
 public Q_SLOTS:
 
     /// Set current color
