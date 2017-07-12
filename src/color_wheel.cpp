@@ -43,13 +43,13 @@ static const ColorWheel::DisplayFlags hard_default_flags = ColorWheel::SHAPE_TRI
 static ColorWheel::DisplayFlags default_flags = hard_default_flags;
 static const double selector_radius = 6;
 
-struct RingComponent
+struct RingEditor
 {
     double hue_diff;
     bool editable;
     int symmetric_to;
     int opposite_to;
-    RingComponent(double hue_diff_, bool editable_, int symmetric_to_=-1, int opposite_to_=-1) :
+    RingEditor(double hue_diff_, bool editable_, int symmetric_to_=-1, int opposite_to_=-1) :
         hue_diff(hue_diff_),
         editable(editable_),
         symmetric_to(symmetric_to_),
@@ -82,8 +82,8 @@ public:
     QColor (*color_from)(qreal,qreal,qreal,qreal);
     QColor (*rainbow_from_hue)(qreal);
     int max_size = 128;
-    std::vector<RingComponent> ring_components;
-    int current_ring_component = -1;
+    std::vector<RingEditor> ring_editors;
+    int current_ring_editor = -1;
 
     Private(ColorWheel *widget)
         : w(widget), hue(0), sat(0), val(0),
@@ -296,7 +296,7 @@ QList<QColor> ColorWheel::harmonyColors() const
 {
     QList<QColor> result;
     result.push_back(color());
-    for (auto const& harmony : p->ring_components)
+    for (auto const& harmony : p->ring_editors)
     {
         auto hue = normalize(p->hue+harmony.hue_diff);
         result.push_back(p->color_from(hue, p->sat, p->val, 1));
@@ -306,7 +306,7 @@ QList<QColor> ColorWheel::harmonyColors() const
 
 unsigned int ColorWheel::harmonyCount() const
 {
-    return 1 + p->ring_components.size();
+    return 1 + p->ring_editors.size();
 }
 
 QSize ColorWheel::sizeHint() const
@@ -365,13 +365,13 @@ void ColorWheel::paintEvent(QPaintEvent * )
     QPointF h2 = ray.p2();
     painter.drawLine(h1,h2);
 
-    for (auto const& component : p->ring_components)
+    for (auto const& editor : p->ring_editors)
     {
         // TODO: separate function
         painter.setPen(QPen(Qt::white,3));
         painter.setBrush(Qt::NoBrush);
         QLineF ray(0, 0, p->outer_radius(), 0);
-        ray.setAngle((p->hue+component.hue_diff)*360);
+        ray.setAngle((p->hue+editor.hue_diff)*360);
         QPointF h1 = ray.p2();
         ray.setLength(p->inner_radius());
         QPointF h2 = ray.p2();
@@ -433,7 +433,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
     if (p->mouse_status == DragCircle )
     {
         auto hue = p->line_to_point(ev->pos()).angle()/360.0;
-        if (p->current_ring_component == -1)
+        if (p->current_ring_editor == -1)
         {
             p->hue = hue;
             p->render_inner_selector();
@@ -444,17 +444,17 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
         }
         else
         {
-            auto& component = p->ring_components[p->current_ring_component];
-            component.hue_diff = normalize(hue - p->hue);
-            if (component.symmetric_to != -1)
+            auto& editor = p->ring_editors[p->current_ring_editor];
+            editor.hue_diff = normalize(hue - p->hue);
+            if (editor.symmetric_to != -1)
             {
-                auto& symmetric = p->ring_components[component.symmetric_to];
+                auto& symmetric = p->ring_editors[editor.symmetric_to];
                 symmetric.hue_diff = normalize(p->hue - hue);
             }
-            else if (component.opposite_to != -1)
+            else if (editor.opposite_to != -1)
             {
-                auto& opposite = p->ring_components[component.opposite_to];
-                opposite.hue_diff = normalize(component.hue_diff-0.5);
+                auto& opposite = p->ring_editors[editor.opposite_to];
+                opposite.hue_diff = normalize(editor.hue_diff-0.5);
             }
             Q_EMIT harmonyChanged();
             update();
@@ -508,14 +508,14 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev)
             p->mouse_status = DragCircle;
             auto hue_diff = normalize(ray.angle()/360 - p->hue);
             auto i = 0;
-            for (auto const& component : p->ring_components)
+            for (auto const& editor : p->ring_editors)
             {
                 const double eps = 1.0/64;
-                if (component.editable &&
-                    component.hue_diff <= hue_diff + eps &&
-                    component.hue_diff >= hue_diff - eps)
+                if (editor.editable &&
+                    editor.hue_diff <= hue_diff + eps &&
+                    editor.hue_diff >= hue_diff - eps)
                 {
-                    p->current_ring_component = i;
+                    p->current_ring_editor = i;
                     // no need to update color..
                     return;
                 }
@@ -532,7 +532,7 @@ void ColorWheel::mouseReleaseEvent(QMouseEvent *ev)
 {
     mouseMoveEvent(ev);
     p->mouse_status = Nothing;
-    p->current_ring_component = -1;
+    p->current_ring_editor = -1;
 }
 
 void ColorWheel::resizeEvent(QResizeEvent *)
@@ -669,8 +669,8 @@ void ColorWheel::dropEvent(QDropEvent* event)
 
 void ColorWheel::clearHarmonies()
 {
-    p->ring_components.clear();
-    p->current_ring_component = -1;
+    p->ring_editors.clear();
+    p->current_ring_editor = -1;
     Q_EMIT harmonyChanged();
     update();
 }
@@ -680,14 +680,14 @@ void ColorWheel::addHarmony(double hue_diff, bool editable, int symmetric_to, in
     hue_diff = normalize(hue_diff);
     if (symmetric_to >= 0 && opposite_to >= 0)
         throw std::runtime_error("incorrect call to addHarmony: harmony cannot be both symmetric and opposite");
-    int harmony_count = p->ring_components.size();
+    int harmony_count = p->ring_editors.size();
     if (symmetric_to >= harmony_count || opposite_to >= harmony_count)
         throw std::runtime_error("incorrect call to addHarmony: harmony number out of range");
-    p->ring_components.emplace_back(hue_diff, editable, symmetric_to, opposite_to);
+    p->ring_editors.emplace_back(hue_diff, editable, symmetric_to, opposite_to);
     if (symmetric_to >= 0)
-        p->ring_components[symmetric_to].symmetric_to = harmony_count;
+        p->ring_editors[symmetric_to].symmetric_to = harmony_count;
     else if (opposite_to >= 0)
-        p->ring_components[opposite_to].opposite_to = harmony_count;
+        p->ring_editors[opposite_to].opposite_to = harmony_count;
 }
 
 void ColorWheel::applyHarmonies()
