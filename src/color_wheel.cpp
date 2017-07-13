@@ -49,11 +49,11 @@ struct RingEditor
     bool editable;
     int symmetric_to;
     int opposite_to;
-    RingEditor(double hue_diff_, bool editable_, int symmetric_to_=-1, int opposite_to_=-1) :
-        hue_diff(hue_diff_),
-        editable(editable_),
-        symmetric_to(symmetric_to_),
-        opposite_to(opposite_to_)
+    RingEditor(double hue_diff, bool editable, int symmetric_to=-1, int opposite_to=-1) :
+        hue_diff(hue_diff),
+        editable(editable),
+        symmetric_to(symmetric_to),
+        opposite_to(opposite_to)
     {
     }
 };
