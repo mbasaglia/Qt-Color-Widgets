@@ -272,6 +272,17 @@ public:
             val = detail::color_lumaF(c);
         }
     }
+
+    void draw_ring_editor(double editor_hue, QPainter& painter, QColor color) {
+        painter.setPen(QPen(color,3));
+        painter.setBrush(Qt::NoBrush);
+        QLineF ray(0, 0, outer_radius(), 0);
+        ray.setAngle(editor_hue*360);
+        QPointF h1 = ray.p2();
+        ray.setLength(inner_radius());
+        QPointF h2 = ray.p2();
+        painter.drawLine(h1,h2);
+    }
 };
 
 ColorWheel::ColorWheel(QWidget *parent) :
@@ -356,26 +367,14 @@ void ColorWheel::paintEvent(QPaintEvent * )
     painter.drawPixmap(-p->outer_radius(), -p->outer_radius(), p->hue_ring);
 
     // hue selector
-    painter.setPen(QPen(Qt::black,3));
-    painter.setBrush(Qt::NoBrush);
-    QLineF ray(0, 0, p->outer_radius(), 0);
-    ray.setAngle(p->hue*360);
-    QPointF h1 = ray.p2();
-    ray.setLength(p->inner_radius());
-    QPointF h2 = ray.p2();
-    painter.drawLine(h1,h2);
+    p->draw_ring_editor(p->hue, painter, Qt::black);
 
     for (auto const& editor : p->ring_editors)
     {
-        // TODO: separate function
-        painter.setPen(QPen(Qt::white,3));
-        painter.setBrush(Qt::NoBrush);
-        QLineF ray(0, 0, p->outer_radius(), 0);
-        ray.setAngle((p->hue+editor.hue_diff)*360);
-        QPointF h1 = ray.p2();
-        ray.setLength(p->inner_radius());
-        QPointF h2 = ray.p2();
-        painter.drawLine(h1,h2);
+        auto hue = p->hue+editor.hue_diff;
+        // TODO: better color for uneditable indicator
+        auto color = editor.editable ? Qt::white : Qt::gray;
+        p->draw_ring_editor(hue, painter, color);
     }
 
     // lum-sat square
