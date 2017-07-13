@@ -123,10 +123,25 @@ public:
      * @brief Add harmony color
      * @param hue_diff     Initial hue difference (in [0-1) range)
      * @param editable     Whether this harmony should be editable
-     * @param symmetric_to Index of other harmony that should symmetric relative to main hue (or -1 for none)
-     * @param opposite_to  Index of other harmony that should be opposite to this (or -1)
+     * @returns Index of newly added harmony
      */
-    void addHarmony(double hue_diff, bool editable, int symmetric_to=-1, int opposite_to=-1);
+    unsigned addHarmony(double hue_diff, bool editable);
+
+    /**
+     * @brief Add symmetric harmony color
+     * @param relative_to  Index of other harmony that should be symmetric relative to main hue
+     * @param editable     Whether this harmony should be editable
+     * @returns Index of newly added harmony
+     */
+    unsigned addSymmetricHarmony(unsigned relative_to, bool editable);
+
+    /**
+     * @brief Add opposite harmony color
+     * @param relative_to  Index of other harmony that should be opposite to this
+     * @param editable     Whether this harmony should be editable
+     * @returns Index of newly added harmony
+     */
+    unsigned addOppositeHarmony(unsigned relative_to, bool editable);
 
     /// Apply previous added harmonies
     void applyHarmonies();

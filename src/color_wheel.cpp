@@ -675,19 +675,33 @@ void ColorWheel::clearHarmonies()
     update();
 }
 
-void ColorWheel::addHarmony(double hue_diff, bool editable, int symmetric_to, int opposite_to)
+unsigned ColorWheel::addHarmony(double hue_diff, bool editable)
 {
-    hue_diff = normalize(hue_diff);
-    if (symmetric_to >= 0 && opposite_to >= 0)
-        throw std::runtime_error("incorrect call to addHarmony: harmony cannot be both symmetric and opposite");
-    int harmony_count = p->ring_editors.size();
-    if (symmetric_to >= harmony_count || opposite_to >= harmony_count)
-        throw std::runtime_error("incorrect call to addHarmony: harmony number out of range");
-    p->ring_editors.emplace_back(hue_diff, editable, symmetric_to, opposite_to);
-    if (symmetric_to >= 0)
-        p->ring_editors[symmetric_to].symmetric_to = harmony_count;
-    else if (opposite_to >= 0)
-        p->ring_editors[opposite_to].opposite_to = harmony_count;
+    auto count = p->ring_editors.size();
+    p->ring_editors.emplace_back(normalize(hue_diff), editable, -1, -1);
+    return count;
+}
+
+unsigned ColorWheel::addSymmetricHarmony(unsigned relative_to, bool editable)
+{
+    auto count = p->ring_editors.size();
+    if (relative_to >= count)
+        throw std::out_of_range("incorrect call to addSymmetricHarmony: harmony number out of range");
+    p->ring_editors[relative_to].symmetric_to = count;
+    auto hue_diff = -p->ring_editors[relative_to].hue_diff;
+    p->ring_editors.emplace_back(hue_diff, editable, relative_to, -1);
+    return count;
+}
+
+unsigned ColorWheel::addOppositeHarmony(unsigned relative_to, bool editable)
+{
+    auto count = p->ring_editors.size();
+    if (relative_to >= count)
+        throw std::out_of_range("incorrect call to addOppositeHarmony: harmony number out of range");
+    p->ring_editors[relative_to].opposite_to = count;
+    auto hue_diff = 0.5+p->ring_editors[relative_to].hue_diff;
+    p->ring_editors.emplace_back(hue_diff, editable, -1, relative_to);
+    return count;
 }
 
 void ColorWheel::applyHarmonies()
