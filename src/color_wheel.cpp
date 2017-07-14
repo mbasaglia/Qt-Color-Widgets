@@ -681,25 +681,25 @@ unsigned ColorWheel::addHarmony(double hue_diff, bool editable)
     return count;
 }
 
-unsigned ColorWheel::addSymmetricHarmony(unsigned relative_to, bool editable)
+unsigned ColorWheel::addSymmetricHarmony(unsigned relative_to)
 {
     auto count = p->ring_editors.size();
     if (relative_to >= count)
         throw std::out_of_range("incorrect call to addSymmetricHarmony: harmony number out of range");
-    p->ring_editors[relative_to].symmetric_to = count;
-    auto hue_diff = -p->ring_editors[relative_to].hue_diff;
-    p->ring_editors.emplace_back(hue_diff, editable, relative_to, -1);
+    auto& relative = p->ring_editors[relative_to];
+    relative.symmetric_to = count;
+    p->ring_editors.emplace_back(-relative.hue_diff, relative.editable, relative_to, -1);
     return count;
 }
 
-unsigned ColorWheel::addOppositeHarmony(unsigned relative_to, bool editable)
+unsigned ColorWheel::addOppositeHarmony(unsigned relative_to)
 {
     auto count = p->ring_editors.size();
     if (relative_to >= count)
         throw std::out_of_range("incorrect call to addOppositeHarmony: harmony number out of range");
-    p->ring_editors[relative_to].opposite_to = count;
-    auto hue_diff = 0.5+p->ring_editors[relative_to].hue_diff;
-    p->ring_editors.emplace_back(hue_diff, editable, -1, relative_to);
+    auto& relative = p->ring_editors[relative_to];
+    relative.opposite_to = count;
+    p->ring_editors.emplace_back(0.5+relative.hue_diff, relative.editable, -1, relative_to);
     return count;
 }
 

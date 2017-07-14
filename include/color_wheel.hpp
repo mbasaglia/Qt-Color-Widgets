@@ -130,18 +130,18 @@ public:
     /**
      * @brief Add symmetric harmony color
      * @param relative_to  Index of other harmony that should be symmetric relative to main hue
-     * @param editable     Whether this harmony should be editable
      * @returns Index of newly added harmony
+     * Editability is inherited from symmetric editor
      */
-    unsigned addSymmetricHarmony(unsigned relative_to, bool editable);
+    unsigned addSymmetricHarmony(unsigned relative_to);
 
     /**
      * @brief Add opposite harmony color
      * @param relative_to  Index of other harmony that should be opposite to this
-     * @param editable     Whether this harmony should be editable
      * @returns Index of newly added harmony
+     * Editability is inherited from opposite editor
      */
-    unsigned addOppositeHarmony(unsigned relative_to, bool editable);
+    unsigned addOppositeHarmony(unsigned relative_to);
 
     /// Apply previous added harmonies
     void applyHarmonies();
