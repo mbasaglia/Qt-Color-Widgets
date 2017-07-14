@@ -283,6 +283,12 @@ public:
         QPointF h2 = ray.p2();
         painter.drawLine(h1,h2);
     }
+
+    /// Apply harmony changes
+    void apply_harmonies() {
+        Q_EMIT w->harmonyChanged();
+        w->update();
+    }
 };
 
 ColorWheel::ColorWheel(QWidget *parent) :
@@ -455,8 +461,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *ev)
                 auto& opposite = p->ring_editors[editor.opposite_to];
                 opposite.hue_diff = normalize(editor.hue_diff-0.5);
             }
-            Q_EMIT harmonyChanged();
-            update();
+            p->apply_harmonies();
         }
     }
     else if(p->mouse_status == DragSquare)
@@ -670,14 +675,14 @@ void ColorWheel::clearHarmonies()
 {
     p->ring_editors.clear();
     p->current_ring_editor = -1;
-    Q_EMIT harmonyChanged();
-    update();
+    p->apply_harmonies();
 }
 
 unsigned ColorWheel::addHarmony(double hue_diff, bool editable)
 {
     auto count = p->ring_editors.size();
     p->ring_editors.emplace_back(normalize(hue_diff), editable, -1, -1);
+    p->apply_harmonies();
     return count;
 }
 
@@ -689,6 +694,7 @@ unsigned ColorWheel::addSymmetricHarmony(unsigned relative_to)
     auto& relative = p->ring_editors[relative_to];
     relative.symmetric_to = count;
     p->ring_editors.emplace_back(normalize(-relative.hue_diff), relative.editable, relative_to, -1);
+    p->apply_harmonies();
     return count;
 }
 
@@ -700,13 +706,8 @@ unsigned ColorWheel::addOppositeHarmony(unsigned relative_to)
     auto& relative = p->ring_editors[relative_to];
     relative.opposite_to = count;
     p->ring_editors.emplace_back(normalize(0.5+relative.hue_diff), relative.editable, -1, relative_to);
+    p->apply_harmonies();
     return count;
-}
-
-void ColorWheel::applyHarmonies()
-{
-    Q_EMIT harmonyChanged();
-    update();
 }
 
 } //  namespace color_widgets

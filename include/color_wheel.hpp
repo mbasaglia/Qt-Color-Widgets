@@ -143,9 +143,6 @@ public:
      */
     unsigned addOppositeHarmony(unsigned relative_to);
 
-    /// Apply previous added harmonies
-    void applyHarmonies();
-
 public Q_SLOTS:
 
     /// Set current color
