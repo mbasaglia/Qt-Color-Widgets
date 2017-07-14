@@ -688,7 +688,7 @@ unsigned ColorWheel::addSymmetricHarmony(unsigned relative_to)
         throw std::out_of_range("incorrect call to addSymmetricHarmony: harmony number out of range");
     auto& relative = p->ring_editors[relative_to];
     relative.symmetric_to = count;
-    p->ring_editors.emplace_back(-relative.hue_diff, relative.editable, relative_to, -1);
+    p->ring_editors.emplace_back(normalize(-relative.hue_diff), relative.editable, relative_to, -1);
     return count;
 }
 
@@ -699,7 +699,7 @@ unsigned ColorWheel::addOppositeHarmony(unsigned relative_to)
         throw std::out_of_range("incorrect call to addOppositeHarmony: harmony number out of range");
     auto& relative = p->ring_editors[relative_to];
     relative.opposite_to = count;
-    p->ring_editors.emplace_back(0.5+relative.hue_diff, relative.editable, -1, relative_to);
+    p->ring_editors.emplace_back(normalize(0.5+relative.hue_diff), relative.editable, -1, relative_to);
     return count;
 }
 
