@@ -4,6 +4,7 @@
  * \author Mattia Basaglia
  *
  * \copyright Copyright (C) 2013-2017 Mattia Basaglia
+ * \copyright Copyright (C) 2017 caryoscelus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -76,6 +77,12 @@ public:
     /// Get current color
     QColor color() const;
 
+    /// Get all harmony colors (including main)
+    QList<QColor> harmonyColors() const;
+
+    /// Get number of harmony colors (including main)
+    unsigned int harmonyCount() const;
+
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /// Get current hue in the range [0-1]
@@ -108,6 +115,33 @@ public:
      * @param mask  Mask to be cleared
      */
     void setDisplayFlag(DisplayFlags flag, DisplayFlags mask);
+
+    /// Clear harmony color scheme
+    void clearHarmonies();
+
+    /**
+     * @brief Add harmony color
+     * @param hue_diff     Initial hue difference (in [0-1) range)
+     * @param editable     Whether this harmony should be editable
+     * @returns Index of newly added harmony
+     */
+    unsigned addHarmony(double hue_diff, bool editable);
+
+    /**
+     * @brief Add symmetric harmony color
+     * @param relative_to  Index of other harmony that should be symmetric relative to main hue
+     * @returns Index of newly added harmony
+     * Editability is inherited from symmetric editor
+     */
+    unsigned addSymmetricHarmony(unsigned relative_to);
+
+    /**
+     * @brief Add opposite harmony color
+     * @param relative_to  Index of other harmony that should be opposite to this
+     * @returns Index of newly added harmony
+     * Editability is inherited from opposite editor
+     */
+    unsigned addOppositeHarmony(unsigned relative_to);
 
 public Q_SLOTS:
 
@@ -147,6 +181,11 @@ Q_SIGNALS:
     void colorSelected(QColor);
 
     void displayFlagsChanged(ColorWheel::DisplayFlags flags);
+
+    /**
+     * Emitted when harmony settings or harmony colors are changed (including due to main hue change)
+     */
+    void harmonyChanged();
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
