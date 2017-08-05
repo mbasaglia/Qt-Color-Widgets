@@ -5,6 +5,7 @@
  *
  * \copyright Copyright (C) 2014 Calle Laakkonen
  * \copyright Copyright (C) 2013-2017 Mattia Basaglia
+ * \copyright Copyright (C) 2017 caryoscelus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -135,6 +136,9 @@ qreal HueSlider::colorHue() const
 
 void HueSlider::setColorHue(qreal colorHue)
 {
+    // TODO: consider supporting invertedAppearance?
+    if (orientation() == Qt::Vertical)
+        colorHue = 1 - colorHue;
     setValue(minimum()+colorHue*(maximum()-minimum()));
 }
 
