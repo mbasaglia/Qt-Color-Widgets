@@ -40,7 +40,7 @@ public:
     {
         w->setRange(0, 359);
         connect(w, &QSlider::valueChanged, [this]{
-            Q_EMIT w->colorHueChanged(percent());
+            Q_EMIT w->colorHueChanged(w->colorHue());
             Q_EMIT w->colorChanged(w->color());
         });
         updateGradient();
@@ -54,11 +54,6 @@ public:
         for ( int i = 0; i <= n_colors; ++i )
             colors.append(QGradientStop(i/n_colors, QColor::fromHsvF(i/n_colors, saturation, value)));
         w->setColors(colors);
-    }
-
-    qreal percent()
-    {
-        return qreal(w->value() - w->minimum()) / (w->maximum() - w->minimum());
     }
 };
 
@@ -112,7 +107,7 @@ void HueSlider::setColorAlpha(qreal alpha)
 
 QColor HueSlider::color() const
 {
-    return QColor::fromHsvF(p->percent(), p->saturation, p->value, p->alpha);
+    return QColor::fromHsvF(colorHue(), p->saturation, p->value, p->alpha);
 }
 
 void HueSlider::setColor(const QColor& color)
@@ -131,7 +126,10 @@ void HueSlider::setFullColor(const QColor& color)
 
 qreal HueSlider::colorHue() const
 {
-    return p->percent();
+    auto hue = qreal(value() - minimum()) / (maximum() - minimum());
+    if (orientation() == Qt::Vertical)
+        hue = 1 - hue;
+    return hue;
 }
 
 void HueSlider::setColorHue(qreal colorHue)
