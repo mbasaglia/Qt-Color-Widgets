@@ -84,6 +84,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void colorHueChanged(qreal colorHue);
+    void colorChanged(QColor);
 
 private:
     class Private;

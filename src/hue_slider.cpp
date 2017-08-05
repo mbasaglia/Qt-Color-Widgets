@@ -40,6 +40,7 @@ public:
         w->setRange(0, 359);
         connect(w, &QSlider::valueChanged, [this]{
             Q_EMIT w->colorHueChanged(percent());
+            Q_EMIT w->colorChanged(w->color());
         });
         updateGradient();
     }
