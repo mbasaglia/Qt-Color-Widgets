@@ -31,7 +31,7 @@
 namespace color_widgets {
 
 /**
- * \brief A slider that mover on top of a gradient
+ * \brief A slider that moves on top of a gradient
  */
 class QCP_EXPORT GradientSlider : public QSlider
 {
