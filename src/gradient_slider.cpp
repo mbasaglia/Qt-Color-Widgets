@@ -1,10 +1,11 @@
 /**
- * \file
+ * \file gradient_slider.cpp
  *
  * \author Mattia Basaglia
  *
  * \copyright Copyright (C) 2013-2017 Mattia Basaglia
  * \copyright Copyright (C) 2014 Calle Laakkonen
+ * \copyright Copyright (C) 2017 caryoscelus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +26,7 @@
 #include <QPainter>
 #include <QStyleOptionSlider>
 #include <QLinearGradient>
+#include <QMouseEvent>
 
 static void loadResource()
 {
@@ -65,6 +67,19 @@ GradientSlider::GradientSlider(Qt::Orientation orientation, QWidget *parent) :
 GradientSlider::~GradientSlider()
 {
     delete p;
+}
+
+void GradientSlider::mousePressEvent(QMouseEvent *ev)
+{
+    bool vertical = orientation() == Qt::Vertical;
+    bool reverse = vertical != invertedAppearance();
+    double pos = vertical ? ev->y() : ev->x();
+    double max_pos = vertical ? size().height() : size().width();
+    double offset = pos / max_pos;
+    if (reverse)
+        offset = 1 - offset;
+    setValue(minimum()+offset*(maximum()-minimum()));
+    QSlider::mousePressEvent(ev);
 }
 
 QBrush GradientSlider::background() const

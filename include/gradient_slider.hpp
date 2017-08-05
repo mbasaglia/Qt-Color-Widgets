@@ -1,10 +1,11 @@
 /**
- * \file
+ * \file gradient_slider.hpp
  *
  * \author Mattia Basaglia
  *
  * \copyright Copyright (C) 2013-2017 Mattia Basaglia
  * \copyright Copyright (C) 2014 Calle Laakkonen
+ * \copyright Copyright (C) 2017 caryoscelus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +47,8 @@ public:
     explicit GradientSlider(QWidget *parent = 0);
     explicit GradientSlider(Qt::Orientation orientation, QWidget *parent = 0);
     ~GradientSlider();
+
+    void mousePressEvent(QMouseEvent *ev) override;
 
     /// Get the background, it's visible for transparent gradient stops
     QBrush background() const;
