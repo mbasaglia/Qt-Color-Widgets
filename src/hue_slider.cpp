@@ -126,6 +126,8 @@ void HueSlider::setFullColor(const QColor& color)
 
 qreal HueSlider::colorHue() const
 {
+    if (maximum() == minimum())
+        return 0;
     auto hue = qreal(value() - minimum()) / (maximum() - minimum());
     if (orientation() == Qt::Vertical)
         hue = 1 - hue;
