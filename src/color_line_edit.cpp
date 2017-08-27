@@ -4,6 +4,7 @@
  * \author Mattia Basaglia
  *
  * \copyright Copyright (C) 2013-2017 Mattia Basaglia
+ * \copyright Copyright (C) 2017 caryoscelus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -51,15 +52,12 @@ public:
     {
         if ( preview_color )
         {
-            QPalette pal = parent->palette();
-
-            if ( customAlpha() )
-                pal.setColor(QPalette::Base, Qt::transparent);
-            else
-                pal.setColor(QPalette::Base, color.rgb());
-            pal.setColor(QPalette::Text,
-                detail::color_lumaF(color) > 0.5 || color.alphaF() < 0.2 ? Qt::black : Qt::white);
-            parent->setPalette(pal);
+            QColor bg = customAlpha() ? Qt::transparent : color;
+            QColor text = detail::color_lumaF(color) > 0.5 || color.alphaF() < 0.2 ? Qt::black : Qt::white;
+            parent->setStyleSheet(
+                QString("background-color: %1; color: %2;")
+                .arg(bg.name()).arg(text.name())
+            );
         }
     }
 };
