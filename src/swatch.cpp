@@ -211,15 +211,13 @@ Swatch::Swatch(QWidget* parent)
     : QWidget(parent), p(new Private(this))
 {
     connect(&p->palette, &ColorPalette::colorsChanged, this, &Swatch::paletteModified);
+    connect(&p->palette, &ColorPalette::colorAdded, this, &Swatch::paletteModified);
+    connect(&p->palette, &ColorPalette::colorRemoved, this, &Swatch::paletteModified);
     connect(&p->palette, &ColorPalette::columnsChanged, this, (void(QWidget::*)())&QWidget::update);
     connect(&p->palette, &ColorPalette::colorsUpdated, this, (void(QWidget::*)())&QWidget::update);
     connect(&p->palette, &ColorPalette::colorChanged, [this](int index){
         if ( index == p->selected )
             Q_EMIT colorSelected( p->palette.colorAt(index) );
-    });
-    connect(&p->palette, &ColorPalette::colorRemoved, [this](int index){
-        if ( index == p->selected )
-            clearSelection();
     });
     setFocusPolicy(Qt::StrongFocus);
     setAcceptDrops(true);
@@ -656,10 +654,18 @@ void Swatch::paletteModified()
     if ( p->selected >= p->palette.count() )
         clearSelection();
 
-    if ( p->size_policy == Minimum )
-        setMinimumSize(sizeHint());
-    else if ( p->size_policy == Fixed )
-        setFixedSize(sizeHint());
+    if ( p->size_policy != Hint )
+    {
+        QSize size_hint = sizeHint();
+
+        if ( size_hint.isValid() )
+        {
+            if ( p->size_policy == Minimum )
+                setMinimumSize(size_hint);
+            else if ( p->size_policy == Fixed )
+                setFixedSize(size_hint);
+        }
+    }
 
     update();
 }
@@ -686,8 +692,8 @@ void Swatch::setColorSizePolicy(ColorSizePolicy colorSizePolicy)
     {
         setMinimumSize(0,0);
         setFixedSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
-        paletteModified();
         Q_EMIT colorSizePolicyChanged(p->size_policy = colorSizePolicy);
+        paletteModified();
     }
 }
 
