@@ -100,7 +100,7 @@ public:
     QColor lastColor() const;
     
 protected:
-    void paintEvent(QPaintEvent *ev);
+    void paintEvent(QPaintEvent *ev) override;
 
 private:
     class Private;

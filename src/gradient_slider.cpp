@@ -52,6 +52,7 @@ public:
         loadResource();
         back.setTexture(QPixmap(QStringLiteral(":/color_widgets/alphaback.png")));
         gradient.setCoordinateMode(QGradient::StretchToDeviceMode);
+        gradient.setSpread(QGradient::RepeatSpread);
     }
 
 };
@@ -180,10 +181,12 @@ void GradientSlider::paintEvent(QPaintEvent *)
     QRect r = style()->subElementRect(QStyle::SE_FrameContents, &panel, this);
     painter.setClipRect(r);
 
+    qreal gradient_direction = invertedAppearance() ? -1 : 1;
+
     if(orientation() == Qt::Horizontal)
-        p->gradient.setFinalStop(1, 0);
+        p->gradient.setFinalStop(gradient_direction, 0);
     else
-        p->gradient.setFinalStop(0, 1);
+        p->gradient.setFinalStop(0, -gradient_direction);
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(p->back);
