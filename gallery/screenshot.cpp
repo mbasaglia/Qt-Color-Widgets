@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <cstring>
 #include <algorithm>
+#include <QDebug>
 
 #include "color_2d_slider.hpp"
 #include "color_delegate.hpp" /// \todo show it
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
 
     QColor demo_color(64,172,143,128);
 
-    color_widgets::ColorPalette palette1;
+    /*color_widgets::ColorPalette palette1;
     color_widgets::ColorPalette palette2;
     int palette_columns = 12;
     palette1.setName("Palette 1");
@@ -115,15 +116,18 @@ int main(int argc, char *argv[])
     palette_widget.setModel(&palette_model);
     screenshot(palette_widget);
     palette_widget.setReadOnly(true);
-    screenshot(palette_widget, "ColorPaletteWidget_readonly");
+    screenshot(palette_widget, "ColorPaletteWidget_readonly");*/
 
     color_widgets::HueSlider hue_slider;
-    hue_slider.resize(192, hue_slider.sizeHint().height());
     hue_slider.setColor(demo_color);
+    hue_slider.resize(192, hue_slider.sizeHint().height());
+    QObject::connect(&hue_slider, &color_widgets::HueSlider::valueChanged, [](int i){qDebug() << i;});
+//     hue_slider.setInvertedAppearance(true);
+//     hue_slider.setOrientation(Qt::Vertical);
     screenshot(hue_slider);
 
 
-    color_widgets::ColorListWidget list_widget;
+    /*color_widgets::ColorListWidget list_widget;
     list_widget.setColors({
         demo_color,
         palette1.colorAt(palette_columns*0),
@@ -132,7 +136,7 @@ int main(int argc, char *argv[])
         palette1.colorAt(palette_columns*5),
     });
     list_widget.resize(list_widget.sizeHint());
-    screenshot(list_widget);
+    screenshot(list_widget);*/
 
     if ( run )
         return a.exec();

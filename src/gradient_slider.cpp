@@ -103,12 +103,14 @@ public:
 };
 
 GradientSlider::GradientSlider(QWidget *parent) :
-    QSlider(Qt::Horizontal, parent), p(new Private)
+    GradientSlider(Qt::Horizontal, parent)
 {}
 
 GradientSlider::GradientSlider(Qt::Orientation orientation, QWidget *parent) :
     QSlider(orientation, parent), p(new Private)
-{}
+{
+    setTickPosition(NoTicks);
+}
 
 GradientSlider::~GradientSlider()
 {
@@ -272,6 +274,7 @@ void GradientSlider::paintEvent(QPaintEvent *)
     painter.setClipping(false);
     QStyleOptionSlider opt_slider;
     initStyleOption(&opt_slider);
+    opt_slider.tickPosition = TicksBothSides;
     opt_slider.state &= ~QStyle::State_HasFocus;
     opt_slider.subControls = QStyle::SC_SliderHandle;
     if (isSliderDown())

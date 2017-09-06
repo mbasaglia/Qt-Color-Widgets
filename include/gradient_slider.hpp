@@ -48,10 +48,6 @@ public:
     explicit GradientSlider(Qt::Orientation orientation, QWidget *parent = 0);
     ~GradientSlider();
 
-    void mousePressEvent(QMouseEvent *ev) override;
-    void mouseMoveEvent(QMouseEvent *ev) override;
-    void mouseReleaseEvent(QMouseEvent *ev) override;
-
     /// Get the background, it's visible for transparent gradient stops
     QBrush background() const;
     /// Set the background, it's visible for transparent gradient stops
@@ -103,6 +99,10 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *ev) override;
+
+    void mousePressEvent(QMouseEvent *ev) override;
+    void mouseMoveEvent(QMouseEvent *ev) override;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
 
 private:
     class Private;
