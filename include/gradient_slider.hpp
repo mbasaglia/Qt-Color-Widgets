@@ -49,6 +49,8 @@ public:
     ~GradientSlider();
 
     void mousePressEvent(QMouseEvent *ev) override;
+    void mouseMoveEvent(QMouseEvent *ev) override;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
 
     /// Get the background, it's visible for transparent gradient stops
     QBrush background() const;
