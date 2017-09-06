@@ -78,6 +78,7 @@ public:
     MouseStatus mouse_status;
     QPixmap hue_ring;
     QImage inner_selector;
+    std::vector<uint32_t> inner_selector_buffer;
     DisplayFlags display_flags;
     QColor (*color_from)(qreal,qreal,qreal,qreal);
     QColor (*rainbow_from_hue)(qreal);
@@ -131,18 +132,35 @@ public:
         return QLineF (w->geometry().width()/2, w->geometry().height()/2, p.x(), p.y());
     }
 
+    /**
+     * Ensures the internal image buffer is the correct size
+     * and that the QImage is associated to it
+     */
+    void init_buffer(QSize size)
+    {
+        auto linear_size = size.width() * size.height();
+        if ( inner_selector_buffer.size() == linear_size )
+            return;
+        inner_selector_buffer.resize(linear_size);
+        inner_selector = QImage(
+            reinterpret_cast<uchar*>(inner_selector_buffer.data()),
+            size.width(),
+            size.height(),
+            QImage::Format_RGB32
+        );
+    }
+
     void render_square()
     {
         int width = qMin<int>(square_size(), max_size);
-        QSize size(width, width);
-        inner_selector = QImage(size, QImage::Format_RGB32);
+        init_buffer(QSize(width, width));
 
         for ( int y = 0; y < width; ++y )
         {
             for ( int x = 0; x < width; ++x )
             {
-                inner_selector.setPixel( x, y,
-                        color_from(hue,double(x)/width,double(y)/width,1).rgb());
+                QRgb color = color_from(hue,double(x)/width,double(y)/width,1).rgb();
+                inner_selector_buffer[width * y + x] = color;
             }
         }
     }
@@ -158,18 +176,20 @@ public:
             size *= max_size / size.height();
 
         qreal ycenter = size.height()/2;
-        inner_selector = QImage(size.toSize(), QImage::Format_RGB32);
 
-        for (int x = 0; x < inner_selector.width(); x++ )
+        QSize isize = size.toSize();
+        init_buffer(isize);
+
+        for (int x = 0; x < isize.width(); x++ )
         {
             qreal pval = x / size.height();
             qreal slice_h = size.height() * pval;
-            for (int y = 0; y < inner_selector.height(); y++ )
+            for (int y = 0; y < isize.height(); y++ )
             {
                 qreal ymin = ycenter-slice_h/2;
                 qreal psat = qBound(0.0,(y-ymin)/slice_h,1.0);
-
-                inner_selector.setPixel(x,y,color_from(hue,psat,pval,1).rgb());
+                QRgb color = color_from(hue,psat,pval,1).rgb();
+                inner_selector_buffer[isize.width() * y + x] = color;
             }
         }
     }
