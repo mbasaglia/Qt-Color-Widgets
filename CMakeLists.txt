@@ -14,96 +14,146 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-cmake_minimum_required(VERSION 2.6)
-set(COLOR_WIDGETS_LIBRARY ColorWidgets-qt5)
-set(PROJECT_VERSION "")
-project(${COLOR_WIDGETS_LIBRARY} CXX)
 
-# Qt
-find_package(Qt5Widgets REQUIRED)
-set(CMAKE_AUTOMOC OFF)
-set(CMAKE_AUTOUIC OFF)
-set(CMAKE_AUTORCC OFF)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Debug
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -pedantic -Wextra")
+cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
-# C++11
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# For some reason the above flags don't really work...
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
-    include(CheckCXXCompilerFlag)
-    check_cxx_compiler_flag(--std=c++${CMAKE_CXX_STANDARD} STD_CXX)
-    if(STD_CXX)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++${CMAKE_CXX_STANDARD}")
-    else()
-        message(SEND_ERROR "Requires C++${CMAKE_CXX_STANDARD} or better")
-    endif()
-else()
-    message(WARNING "Unrecognized compiler: ${CMAKE_CXX_COMPILER_ID}, make sure it supports C++${CMAKE_CXX_STANDARD}")
-endif()
+project (QtColorWidgets CXX)
 
-# Sources
-include_directories("${PROJECT_SOURCE_DIR}/include")
 
-set(SOURCES
-src/color_list_widget.cpp
-src/gradient_slider.cpp
-src/color_line_edit.cpp
-src/swatch.cpp
-src/bound_color_selector.cpp
-src/color_palette_widget.cpp
-src/color_palette_model.cpp
-src/color_2d_slider.cpp
-src/abstract_widget_list.cpp
-src/color_delegate.cpp
-src/color_widgets.qrc
-src/color_utils.cpp
-src/color_dialog.cpp
-src/color_palette.cpp
-src/color_selector.cpp
-src/color_preview.cpp
-src/alphaback.png
-src/color_utils.hpp
-src/hue_slider.cpp
-src/color_wheel.cpp
-src/color_names.cpp
-)
+set (CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH}
+  ${CMAKE_SOURCE_DIR}/cmake/modules
+  ${CMAKE_CURRENT_LIST_DIR})
 
-set(HEADERS
-include/color_palette_model.hpp
-include/color_palette_widget.hpp
-include/colorwidgets_global.hpp
-include/color_wheel.hpp
-include/color_line_edit.hpp
-include/swatch.hpp
-include/color_delegate.hpp
-include/color_palette.hpp
-include/hue_slider.hpp
-include/abstract_widget_list.hpp
-include/bound_color_selector.hpp
-include/color_dialog.hpp
-include/color_2d_slider.hpp
-include/color_selector.hpp
-include/color_list_widget.hpp
-include/color_preview.hpp
-include/gradient_slider.hpp
-include/color_names.hpp
-)
 
-qt5_wrap_cpp(SOURCES ${HEADERS})
-qt5_wrap_ui(SOURCES src/color_dialog.ui src/color_palette_widget.ui)
-qt5_add_resources(SOURCES src/color_widgets.qrc)
+include (CheckCXXCompilerFlag)
 
-# Library
-add_library(${COLOR_WIDGETS_LIBRARY} ${SOURCES})
-target_link_libraries(${COLOR_WIDGETS_LIBRARY} Qt5::Widgets)
+include (cmake/install.cmake)
+include (cmake/qt-configuration.cmake)
+include (cmake/versioning.cmake)
 
-add_subdirectory(gallery)
 
-find_package(Qt5Designer)
-if(Qt5Designer_FOUND)
-    add_subdirectory(color_widgets_designer_plugin)
-endif()
+SET (${CMAKE_PROJECT_NAME}_VERSION_MAJOR 2)
+SET (${CMAKE_PROJECT_NAME}_VERSION_MINOR 0)
+SET (${CMAKE_PROJECT_NAME}_VERSION_PATCH 0)
+SET (${CMAKE_PROJECT_NAME}_VERSION "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}.${${CMAKE_PROJECT_NAME}_VERSION_MINOR}.${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
+
+
+set (QT_SUPPORTED_VERSIONS 5)
+
+select_qt (
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  QT_DEFAULT_VERSION 5)
+
+set (REQUIRED_QT_COMPONENTS
+  Widgets
+  )
+find_qt (
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+  OPTIONAL_COMPONENTS "")
+
+# Auto generate moc files
+set(CMAKE_AUTOMOC ON)
+# Auto generate moc files
+set(CMAKE_AUTOUIC ON)
+# Auto generate moc files
+set(CMAKE_AUTORCC ON)
+
+
+option(BUILD_SHARED_LIBS "Build the shared library" ON)
+option(BUILD_STATIC_LIBS "Build the static library" OFF)
+
+set (TARGET_NAME ${CMAKE_PROJECT_NAME})
+set (TARGET_OUTPUT_SUFFIX "-Qt${QT_VERSION}${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}")
+set (INCLUDE_PREFIX "QtColorWidgets")
+set (COLOR_WIDGETS_LIBRARY "${TARGET_NAME}")
+
+
+add_library (${TARGET_NAME} "")
+set_target_properties(${TARGET_NAME}
+  PROPERTIES
+  EXPORT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
+
+
+set_target_properties (${TARGET_NAME}
+  PROPERTIES
+  CXX_STANDARD 11
+  CXX_STANDARD_REQUIRED ON
+  VERSION ${${CMAKE_PROJECT_NAME}_VERSION}
+  SOVERSION ${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}
+  "INTERFACE_${CMAKE_PROJECT_NAME}_MAJOR_VERSION" ${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}
+  COMPATIBLE_INTERFACE_STRING "${CMAKE_PROJECT_NAME}_MAJOR_VERSION"
+  COMPILE_DEFINITIONS QTCOLORWIDGETS_LIBRARY
+  OUTPUT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
+
+check_cxx_compiler_flag ("-Wall" Wall_FLAG_SUPPORTED)
+
+if (Wall_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+endif (Wall_FLAG_SUPPORTED)
+
+check_cxx_compiler_flag ("-pedantic" pedantic_FLAG_SUPPORTED)
+
+if (pedantic_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
+endif (pedantic_FLAG_SUPPORTED)
+
+check_cxx_compiler_flag ("-Wextra" Wextra_FLAG_SUPPORTED)
+
+if (Wextra_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wextra")
+endif (Wextra_FLAG_SUPPORTED)
+
+
+set (EXPORT_HEADER "${INCLUDE_PREFIX}/colorwidgets_global.hpp")
+
+
+generate_versioning_information (
+  TARGET_NAME ${TARGET_NAME}
+  EXPORT_HEADER ${EXPORT_HEADER}
+  EXPORT_MACRO QCP_EXPORT
+  VERSIONED_ENTITY ${CMAKE_PROJECT_NAME}
+  INCLUDE_PREFIX ${INCLUDE_PREFIX})
+
+
+target_include_directories(${TARGET_NAME}
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+  $<INSTALL_INTERFACE:include>
+  )
+
+
+add_subdirectory (${CMAKE_SOURCE_DIR}/include/${INCLUDE_PREFIX})
+add_subdirectory (${CMAKE_SOURCE_DIR}/resources/${INCLUDE_PREFIX})
+add_subdirectory (${CMAKE_SOURCE_DIR}/src/${INCLUDE_PREFIX})
+
+
+use_qt (
+  TARGET_NAME ${TARGET_NAME}
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+  OPTIONAL_COMPONENTS "")
+
+
+install_project (
+  PROJECT_NAME ${CMAKE_PROJECT_NAME}
+  TARGET_NAME ${TARGET_NAME}
+  TARGET_OUTPUT_SUFFIX ${TARGET_OUTPUT_SUFFIX}
+  EXPORT_HEADER ${EXPORT_HEADER}
+  INCLUDE_PREFIX ${INCLUDE_PREFIX}
+  HEADER_MATCHING_REGEX "^.*\.h$|^.*\.hpp$|^.*$"
+  VERSION_HEADER ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_version.h
+  NAMESPACE "")
+
+
+add_subdirectory (gallery)
+
+find_package (Qt5Designer)
+if (Qt5Designer_FOUND)
+    add_subdirectory (color_widgets_designer_plugin)
+endif(Qt5Designer_FOUND)

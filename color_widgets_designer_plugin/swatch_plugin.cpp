@@ -20,7 +20,7 @@
  *
  */
 #include "swatch_plugin.hpp"
-#include "swatch.hpp"
+#include "QtColorWidgets/swatch.hpp"
 
 Swatch_Plugin::Swatch_Plugin(QObject *parent) :
     QObject(parent), initialized(false)

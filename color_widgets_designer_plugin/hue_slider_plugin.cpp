@@ -21,7 +21,7 @@
  *
  */
 #include "hue_slider_plugin.hpp"
-#include "hue_slider.hpp"
+#include "QtColorWidgets/hue_slider.hpp"
 #include <QtPlugin>
 
 HueSlider_Plugin::HueSlider_Plugin(QObject *parent)
@@ -96,5 +96,3 @@ QString HueSlider_Plugin::includeFile() const
 {
     return "hue_slider.hpp";
 }
-
-

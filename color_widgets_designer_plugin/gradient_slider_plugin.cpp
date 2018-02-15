@@ -20,7 +20,7 @@
  *
  */
 #include "gradient_slider_plugin.hpp"
-#include "gradient_slider.hpp"
+#include "QtColorWidgets/gradient_slider.hpp"
 #include <QtPlugin>
 
 GradientSlider_Plugin::GradientSlider_Plugin(QObject *parent)
@@ -100,5 +100,3 @@ QString GradientSlider_Plugin::includeFile() const
 {
     return "gradient_slider.hpp";
 }
-
-

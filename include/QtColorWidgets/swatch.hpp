@@ -31,7 +31,7 @@ namespace color_widgets {
 /**
  * \brief A widget drawing a palette
  */
-class Swatch : public QWidget
+class QCP_EXPORT Swatch : public QWidget
 {
     Q_OBJECT
 

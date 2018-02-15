@@ -14,89 +14,163 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Color Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 2.6)
-set(COLOR_WIDGETS_PLUGIN ColorWidgetsPlugin)
-set(PROJECT_VERSION "")
-project(${COLOR_WIDGETS_PLUGIN} CXX)
+cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
-# Qt
-find_package(Qt5Designer REQUIRED)
-set(CMAKE_AUTOMOC OFF)
-set(CMAKE_AUTOUIC OFF)
-set(CMAKE_AUTORCC OFF)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-include_directories(${Qt5Designer_INCLUDE_DIRS})
+project(QtColorWidgetsPlugin CXX)
 
-# Debug
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -pedantic -Werror")
 
-# C++11
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# For some reason the above flags don't really work...
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
-    include(CheckCXXCompilerFlag)
-    check_cxx_compiler_flag(--std=c++${CMAKE_CXX_STANDARD} STD_CXX)
-    if(STD_CXX)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++${CMAKE_CXX_STANDARD}")
-    else()
-        message(SEND_ERROR "Requires C++${CMAKE_CXX_STANDARD} or better")
-    endif()
-else()
-    message(WARNING "Unrecognized compiler: ${CMAKE_CXX_COMPILER_ID}, make sure it supports C++${CMAKE_CXX_STANDARD}")
-endif()
+set (CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH}
+  ${CMAKE_SOURCE_DIR}/cmake/modules
+  ${CMAKE_CURRENT_LIST_DIR}/..)
+
+
+include (CheckCXXCompilerFlag)
+
+include (../cmake/qt-configuration.cmake)
+include (../cmake/versioning.cmake)
+
+
+SET (${PROJECT_NAME}_VERSION_MAJOR 2)
+SET (${PROJECT_NAME}_VERSION_MINOR 0)
+SET (${PROJECT_NAME}_VERSION_PATCH 0)
+SET (${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
+
+
+set (QT_SUPPORTED_VERSIONS 5)
+
+select_qt (
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  QT_DEFAULT_VERSION 5)
+
+set (REQUIRED_QT_COMPONENTS
+  Designer
+  )
+find_qt (
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+  OPTIONAL_COMPONENTS "")
+
+# Auto generate moc files
+set(CMAKE_AUTOMOC ON)
+# Auto generate moc files
+set(CMAKE_AUTOUIC ON)
+# Auto generate moc files
+set(CMAKE_AUTORCC ON)
+
+check_cxx_compiler_flag ("-Wall" Wall_FLAG_SUPPORTED)
+
+if (Wall_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+endif (Wall_FLAG_SUPPORTED)
+
+check_cxx_compiler_flag ("-pedantic" pedantic_FLAG_SUPPORTED)
+
+if (pedantic_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
+endif (pedantic_FLAG_SUPPORTED)
+
+check_cxx_compiler_flag ("-Wextra" Wextra_FLAG_SUPPORTED)
+
+if (Wextra_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wextra")
+endif (Wextra_FLAG_SUPPORTED)
+
+# Library
+set (TARGET_NAME ${PROJECT_NAME})
+set (TARGET_OUTPUT_SUFFIX "-Qt${QT_VERSION}${${PROJECT_NAME}_VERSION_MAJOR}")
+
+add_library (${TARGET_NAME} SHARED "")
+set_target_properties(${TARGET_NAME}
+  PROPERTIES
+  EXPORT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
+
+set_target_properties (${TARGET_NAME}
+  PROPERTIES
+  CXX_STANDARD 11
+  CXX_STANDARD_REQUIRED ON
+  VERSION ${${PROJECT_NAME}_VERSION}
+  SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
+  "INTERFACE_${PROJECT_NAME}_MAJOR_VERSION" ${${PROJECT_NAME}_VERSION_MAJOR}
+  COMPATIBLE_INTERFACE_STRING "${PROJECT_NAME}_MAJOR_VERSION"
+  OUTPUT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
+
+
+target_link_libraries(${TARGET_NAME}
+  PRIVATE
+  ${COLOR_WIDGETS_LIBRARY})
+
+use_qt (
+  TARGET_NAME ${TARGET_NAME}
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+  OPTIONAL_COMPONENTS "")
+
 
 # Sources
 set(SOURCES
-color_preview_plugin.cpp
-color_wheel_plugin.cpp
-color_widget_plugin_collection.cpp
-gradient_slider_plugin.cpp
-hue_slider_plugin.cpp
-color_selector_plugin.cpp
-color_list_plugin.cpp
-swatch_plugin.cpp
-color_palette_widget_plugin.cpp
-color_2d_slider_plugin.cpp
-color_line_edit_plugin.cpp
-# add new sources above this line
-)
+  color_preview_plugin.cpp
+  color_wheel_plugin.cpp
+  color_widget_plugin_collection.cpp
+  gradient_slider_plugin.cpp
+  hue_slider_plugin.cpp
+  color_selector_plugin.cpp
+  color_list_plugin.cpp
+  swatch_plugin.cpp
+  color_palette_widget_plugin.cpp
+  color_2d_slider_plugin.cpp
+  color_line_edit_plugin.cpp
+  # add new sources above this line
+  )
+
+foreach (SOURCE IN LISTS SOURCES)
+  target_sources (${TARGET_NAME}
+    PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${SOURCE}>)
+endforeach (SOURCE IN SOURCES)
 
 set(HEADERS
-color_preview_plugin.hpp
-color_wheel_plugin.hpp
-color_widget_plugin_collection.hpp
-gradient_slider_plugin.hpp
-hue_slider_plugin.hpp
-color_selector_plugin.hpp
-color_list_plugin.hpp
-swatch_plugin.hpp
-color_palette_widget_plugin.hpp
-color_2d_slider_plugin.hpp
-color_line_edit_plugin.hpp
-# add new headers above this line
-)
+  color_preview_plugin.hpp
+  color_wheel_plugin.hpp
+  color_widget_plugin_collection.hpp
+  gradient_slider_plugin.hpp
+  hue_slider_plugin.hpp
+  color_selector_plugin.hpp
+  color_list_plugin.hpp
+  swatch_plugin.hpp
+  color_palette_widget_plugin.hpp
+  color_2d_slider_plugin.hpp
+  color_line_edit_plugin.hpp
+  # add new headers above this line
+  )
 
-qt5_wrap_cpp(SOURCES ${HEADERS})
+foreach (HEADER IN LISTS HEADERS)
+  target_sources (${TARGET_NAME}
+    PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${HEADER}>)
+endforeach (HEADER IN HEADERS)
 
-# Library
-add_definitions(-DQTCOLORWIDGETS_LIBRARY)
-add_library(${COLOR_WIDGETS_PLUGIN} MODULE EXCLUDE_FROM_ALL ${SOURCES})
-target_link_libraries(${COLOR_WIDGETS_PLUGIN} Qt5::Designer)
-target_link_libraries(${COLOR_WIDGETS_PLUGIN} ${COLOR_WIDGETS_LIBRARY})
 
 # install
-get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
-execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
-    OUTPUT_VARIABLE QT_INSTALL_PLUGINS OUTPUT_STRIP_TRAILING_WHITESPACE)
+get_target_property (QT_QMAKE_EXECUTABLE
+  Qt5::qmake LOCATION)
+
+execute_process (
+  COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
+  OUTPUT_VARIABLE QT_INSTALL_PLUGINS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 # install(TARGETS ${COLOR_WIDGETS_PLUGIN} DESTINATION ${QT_INSTALL_PLUGINS}/designer OPTIONAL)
 
-execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS
-    OUTPUT_VARIABLE QT_INSTALL_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (
+  COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS
+  OUTPUT_VARIABLE QT_INSTALL_LIBS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 # install(TARGETS ${COLOR_WIDGETS_PLUGIN} DESTINATION ${QT_INSTALL_LIBS}/qtcreator/plugins OPTIONAL)
 
-add_custom_target(${COLOR_WIDGETS_PLUGIN}_install
-    COMMAND cp $<TARGET_FILE:${COLOR_WIDGETS_PLUGIN}> ${QT_INSTALL_PLUGINS}/designer
-    COMMAND cp $<TARGET_FILE:${COLOR_WIDGETS_PLUGIN}> ${QT_INSTALL_LIBS}/qtcreator/plugins
-    DEPENDS ${COLOR_WIDGETS_PLUGIN}
+add_custom_target(${TARGET_NAME}_install
+    COMMAND cp $<TARGET_FILE:${TARGET_NAME}> ${QT_INSTALL_PLUGINS}/designer
+    COMMAND cp $<TARGET_FILE:${TARGET_NAME}> ${QT_INSTALL_LIBS}/qtcreator/plugins
+    DEPENDS ${TARGET_NAME}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

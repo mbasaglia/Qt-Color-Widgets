@@ -20,7 +20,7 @@
  *
  */
 #include "color_palette_widget_plugin.hpp"
-#include "color_palette_widget.hpp"
+#include "QtColorWidgets/color_palette_widget.hpp"
 
 ColorPaletteWidget_Plugin::ColorPaletteWidget_Plugin(QObject *parent) :
     QObject(parent), initialized(false)

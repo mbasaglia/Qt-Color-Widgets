@@ -27,7 +27,7 @@
 
 namespace color_widgets {
 
-class ColorPaletteModel : public QAbstractListModel
+class QCP_EXPORT ColorPaletteModel : public QAbstractListModel
 {
     Q_OBJECT
     /**
