@@ -37,25 +37,28 @@ function (install_project
 
   include(CMakePackageConfigHelpers)
 
+  string (TOLOWER ${i_target_name} CMAKE_BASE_FILE_NAME)
+  string (TOLOWER ${i_target_output_suffix} CMAKE_FILE_OUTPUT_SUFFIX)
+
   write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${i_target_name}${i_target_output_suffix}-config-version.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${CMAKE_BASE_FILE_NAME}${CMAKE_FILE_OUTPUT_SUFFIX}-config-version.cmake"
     VERSION ${${i_project_name}_VERSION}
     COMPATIBILITY SameMajorVersion
     )
 
   export(EXPORT ${i_target_name}
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${i_target}${i_target_output_suffix}-targets.cmake"
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${CMAKE_BASE_FILE_NAME}${CMAKE_FILE_OUTPUT_SUFFIX}-targets.cmake"
     )
 
   configure_file("cmake/${i_project_name}-config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${i_target_name}${i_target_output_suffix}-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${CMAKE_BASE_FILE_NAME}${CMAKE_FILE_OUTPUT_SUFFIX}-config.cmake"
     @ONLY
     )
 
   set(ConfigPackageLocation "lib/cmake/${i_target_name}${i_target_output_suffix}")
   install(EXPORT ${i_target_name}
     FILE
-    "${i_target_name}${i_target_output_suffix}-targets.cmake"
+    "${CMAKE_BASE_FILE_NAME}${CMAKE_FILE_OUTPUT_SUFFIX}-targets.cmake"
     NAMESPACE
     "${i_namespace}"
     DESTINATION
@@ -63,8 +66,8 @@ function (install_project
     )
   install(
     FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${i_target_name}${i_target_output_suffix}-config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${i_target_name}${i_target_output_suffix}-config-version.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${CMAKE_BASE_FILE_NAME}${CMAKE_FILE_OUTPUT_SUFFIX}-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${i_target_name}/${CMAKE_BASE_FILE_NAME}${CMAKE_FILE_OUTPUT_SUFFIX}-config-version.cmake"
     DESTINATION
     ${ConfigPackageLocation}
     COMPONENT
