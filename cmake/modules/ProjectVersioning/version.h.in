@@ -2,8 +2,6 @@
 #define @CMAKE_PROJECT_NAME@_VERSION_H
 
 
-#include <stdint.h>
-
 #include "@i_export_header@"
 
 
