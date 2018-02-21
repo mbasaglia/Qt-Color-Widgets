@@ -20,7 +20,7 @@
  *
  */
 #include "color_selector_plugin.hpp"
-#include "color_selector.hpp"
+#include "QtColorWidgets/color_selector.hpp"
 #include <QtPlugin>
 
 ColorSelector_Plugin::ColorSelector_Plugin(QObject *parent)
@@ -90,6 +90,3 @@ QString ColorSelector_Plugin::includeFile() const
 {
     return "color_selector.hpp";
 }
-
-
-

@@ -20,7 +20,7 @@
  *
  */
 #include "color_list_plugin.hpp"
-#include "color_list_widget.hpp"
+#include "QtColorWidgets/color_list_widget.hpp"
 
 ColorListWidget_Plugin::ColorListWidget_Plugin(QObject *parent) :
     QObject(parent)

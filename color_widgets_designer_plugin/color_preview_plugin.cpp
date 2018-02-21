@@ -20,8 +20,9 @@
  *
  */
 #include "color_preview_plugin.hpp"
-#include "color_preview.hpp"
+#include "QtColorWidgets/color_preview.hpp"
 #include <QtPlugin>
+
 
 ColorPreview_Plugin::ColorPreview_Plugin(QObject *parent)
     : QObject(parent), initialized(false)
@@ -92,6 +93,3 @@ QString ColorPreview_Plugin::includeFile() const
 }
 
 //Q_EXPORT_PLUGIN2(color_widgets, ColorPreview_Plugin);
-
-
-

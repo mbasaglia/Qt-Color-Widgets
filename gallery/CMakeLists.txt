@@ -13,11 +13,33 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
+set (QT_SUPPORTED_VERSIONS 5)
+
+select_qt (
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  QT_DEFAULT_VERSION 5)
+
+set (REQUIRED_QT_COMPONENTS
+  Widgets
+  )
+find_qt (
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+  OPTIONAL_COMPONENTS "")
+
 set(SCREENSHOT_SOURCES screenshot.cpp)
 set(SCREENSHOT_BINARY screenshot_bin)
+
 add_executable(${SCREENSHOT_BINARY} EXCLUDE_FROM_ALL ${SCREENSHOT_SOURCES})
-target_link_libraries(${SCREENSHOT_BINARY} ${COLOR_WIDGETS_LIBRARY})
+
+use_qt (
+  TARGET_NAME ${SCREENSHOT_BINARY}
+  QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+  REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+  OPTIONAL_COMPONENTS "")
+target_link_libraries(${SCREENSHOT_BINARY}
+  PRIVATE
+  ${COLOR_WIDGETS_LIBRARY})
 
 add_custom_target(gallery
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${SCREENSHOT_BINARY}

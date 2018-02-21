@@ -19,9 +19,9 @@ CONFIG += dll
 QT += core gui widgets
 DEFINES += QTCOLORWIDGETS_LIBRARY
 
-TARGET=ColorWidgets-qt5
+TARGET=QtColorWidgets-Qt5
 
-VERSION=1.0.0
+VERSION=2.0.0
 
 OBJECTS_DIR = out/obj
 MOC_DIR = out/generated

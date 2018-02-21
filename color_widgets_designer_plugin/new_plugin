@@ -95,7 +95,7 @@ cat >"$plugin_path/$plugin_source" <<PLUGIN
  *
  */
 #include "$plugin_header"
-#include "$header"
+#include "QtColorWidgets/$header"
 
 QWidget* $plugin::createWidget(QWidget *parent)
 {
@@ -234,4 +234,3 @@ sed -i -r \
     -e "\\~// add new plugin headers above this line~i#include \"$plugin_header\"" \
     -e "\\~// add new plugins above this line~i\    widgets.push_back(new $plugin(this));" \
     "$plugin_path/color_widget_plugin_collection.cpp"
-

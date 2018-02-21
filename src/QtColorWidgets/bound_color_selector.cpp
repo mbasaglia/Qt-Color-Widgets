@@ -19,37 +19,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef COLOR_WIDGETS_COLOR_NAMES_HPP
-#define COLOR_WIDGETS_COLOR_NAMES_HPP
-
-#include <QColor>
-#include <QString>
+#include "QtColorWidgets/bound_color_selector.hpp"
 
 namespace color_widgets {
 
-/**
- * \brief Convert a string into a color
- *
- * Supported string formats:
- *  * Short hex strings #f00
- *  * Long hex strings  #ff0000
- *  * Color names       red
- *  * Function-like     rgb(255,0,0)
- *
- * Additional string formats supported only when \p alpha is true:
- *  * Long hex strings  #ff0000ff
- *  * Function like     rgba(255,0,0,255)
- */
-QColor colorFromString(const QString& string, bool alpha = true);
+BoundColorSelector::BoundColorSelector(QColor* reference, QWidget *parent) :
+    ColorSelector(parent), ref(reference)
+{
+    setColor(*reference);
+    connect(this,&ColorPreview::colorChanged,this, &BoundColorSelector::update_reference);
+}
 
-/**
- * \brief Convert a color into a string
- *
- * Format:
- *  * If the color has full alpha: #ff0000
- *  * If alpha is true and the color has non-full alpha: #ff000088
- */
-QString stringFromColor(const QColor& color, bool alpha = true);
+void BoundColorSelector::update_reference(QColor c)
+{
+    *ref = c;
+}
 
 } // namespace color_widgets
-#endif // COLOR_WIDGETS_COLOR_NAMES_HPP

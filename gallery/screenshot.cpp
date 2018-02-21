@@ -24,15 +24,15 @@
 #include <algorithm>
 #include <QDebug>
 
-#include "color_2d_slider.hpp"
-#include "color_delegate.hpp" /// \todo show it
-#include "color_dialog.hpp"
-#include "color_line_edit.hpp"
-#include "color_list_widget.hpp"
-#include "color_palette_widget.hpp"
-#include "color_preview.hpp"
-#include "color_wheel.hpp"
-#include "hue_slider.hpp"
+#include "QtColorWidgets/color_2d_slider.hpp"
+#include "QtColorWidgets/color_delegate.hpp" /// \todo show it
+#include "QtColorWidgets/color_dialog.hpp"
+#include "QtColorWidgets/color_line_edit.hpp"
+#include "QtColorWidgets/color_list_widget.hpp"
+#include "QtColorWidgets/color_palette_widget.hpp"
+#include "QtColorWidgets/color_preview.hpp"
+#include "QtColorWidgets/color_wheel.hpp"
+#include "QtColorWidgets/hue_slider.hpp"
 
 bool run = false;
 

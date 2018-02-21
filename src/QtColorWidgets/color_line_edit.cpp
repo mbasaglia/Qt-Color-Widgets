@@ -29,8 +29,8 @@
 #include <QPainter>
 #include <QStyleOptionFrame>
 
-#include "color_utils.hpp"
-#include "color_names.hpp"
+#include "QtColorWidgets/color_utils.hpp"
+#include "QtColorWidgets/color_names.hpp"
 
 namespace color_widgets {
 

@@ -20,7 +20,7 @@
  *
  */
 #include "color_wheel_plugin.hpp"
-#include "color_wheel.hpp"
+#include "QtColorWidgets/color_wheel.hpp"
 
 ColorWheel_Plugin::ColorWheel_Plugin(QObject *parent) :
     QObject(parent), initialized(false)
@@ -95,5 +95,3 @@ QString ColorWheel_Plugin::includeFile() const
 {
     return "color_wheel.hpp";
 }
-
-

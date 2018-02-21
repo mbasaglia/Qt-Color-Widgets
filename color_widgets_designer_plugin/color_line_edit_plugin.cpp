@@ -20,7 +20,7 @@
  *
  */
 #include "color_line_edit_plugin.hpp"
-#include "color_line_edit.hpp"
+#include "QtColorWidgets/color_line_edit.hpp"
 
 QWidget* ColorLineEdit_Plugin::createWidget(QWidget *parent)
 {
@@ -85,4 +85,3 @@ QString ColorLineEdit_Plugin::includeFile() const
 {
     return "color_line_edit.hpp";
 }
-

@@ -19,50 +19,50 @@ CONFIG += c++11
 INCLUDEPATH += $$PWD/src $$PWD/include
 
 SOURCES += \
-    $$PWD/src/color_preview.cpp \
-    $$PWD/src/color_wheel.cpp \
-    $$PWD/src/gradient_slider.cpp \
-    $$PWD/src/hue_slider.cpp \
-    $$PWD/src/color_dialog.cpp \
-    $$PWD/src/color_selector.cpp \
-    $$PWD/src/color_delegate.cpp \
-    $$PWD/src/color_list_widget.cpp \
-    $$PWD/src/bound_color_selector.cpp \
-    $$PWD/src/abstract_widget_list.cpp \
-    $$PWD/src/color_palette.cpp \
-    $$PWD/src/color_palette_model.cpp \
-    $$PWD/src/color_palette_widget.cpp \
-    $$PWD/src/swatch.cpp \
-    $$PWD/src/color_utils.cpp \
-    $$PWD/src/color_2d_slider.cpp \
-    $$PWD/src/color_line_edit.cpp \
-    $$PWD/src/color_names.cpp
+    $$PWD/src/QtColorWidgets/color_preview.cpp \
+    $$PWD/src/QtColorWidgets/color_wheel.cpp \
+    $$PWD/src/QtColorWidgets/gradient_slider.cpp \
+    $$PWD/src/QtColorWidgets/hue_slider.cpp \
+    $$PWD/src/QtColorWidgets/color_dialog.cpp \
+    $$PWD/src/QtColorWidgets/color_selector.cpp \
+    $$PWD/src/QtColorWidgets/color_delegate.cpp \
+    $$PWD/src/QtColorWidgets/color_list_widget.cpp \
+    $$PWD/src/QtColorWidgets/bound_color_selector.cpp \
+    $$PWD/src/QtColorWidgets/abstract_widget_list.cpp \
+    $$PWD/src/QtColorWidgets/color_palette.cpp \
+    $$PWD/src/QtColorWidgets/color_palette_model.cpp \
+    $$PWD/src/QtColorWidgets/color_palette_widget.cpp \
+    $$PWD/src/QtColorWidgets/swatch.cpp \
+    $$PWD/src/QtColorWidgets/color_utils.cpp \
+    $$PWD/src/QtColorWidgets/color_2d_slider.cpp \
+    $$PWD/src/QtColorWidgets/color_line_edit.cpp \
+    $$PWD/src/QtColorWidgets/color_names.cpp
 
 HEADERS += \
-    $$PWD/include/color_wheel.hpp \
-    $$PWD/include/color_preview.hpp \
-    $$PWD/include/gradient_slider.hpp \
-    $$PWD/include/hue_slider.hpp \
-    $$PWD/include/color_dialog.hpp \
-    $$PWD/include/color_selector.hpp \
-    $$PWD/include/color_delegate.hpp \
-    $$PWD/include/color_list_widget.hpp \
-    $$PWD/include/bound_color_selector.hpp \
-    $$PWD/include/abstract_widget_list.hpp \
-    $$PWD/include/colorwidgets_global.hpp \
-    $$PWD/include/color_palette.hpp \
-    $$PWD/include/color_palette_model.hpp \
-    $$PWD/include/color_palette_widget.hpp \
-    $$PWD/include/swatch.hpp \
-    $$PWD/src/color_utils.hpp \
-    $$PWD/include/color_2d_slider.hpp \
-    $$PWD/include/color_line_edit.hpp \
-    $$PWD/include/color_names.hpp
+    $$PWD/include/QtColorWidgets/color_wheel.hpp \
+    $$PWD/include/QtColorWidgets/color_preview.hpp \
+    $$PWD/include/QtColorWidgets/gradient_slider.hpp \
+    $$PWD/include/QtColorWidgets/hue_slider.hpp \
+    $$PWD/include/QtColorWidgets/color_dialog.hpp \
+    $$PWD/include/QtColorWidgets/color_selector.hpp \
+    $$PWD/include/QtColorWidgets/color_delegate.hpp \
+    $$PWD/include/QtColorWidgets/color_list_widget.hpp \
+    $$PWD/include/QtColorWidgets/bound_color_selector.hpp \
+    $$PWD/include/QtColorWidgets/abstract_widget_list.hpp \
+    $$PWD/include/QtColorWidgets/colorwidgets_global.hpp \
+    $$PWD/include/QtColorWidgets/color_palette.hpp \
+    $$PWD/include/QtColorWidgets/color_palette_model.hpp \
+    $$PWD/include/QtColorWidgets/color_palette_widget.hpp \
+    $$PWD/include/QtColorWidgets/swatch.hpp \
+    $$PWD/src/QtColorWidgets/color_utils.hpp \
+    $$PWD/include/QtColorWidgets/color_2d_slider.hpp \
+    $$PWD/include/QtColorWidgets/color_line_edit.hpp \
+    $$PWD/include/QtColorWidgets/color_names.hpp
 
 FORMS += \
-    $$PWD/src/color_dialog.ui \
-    $$PWD/src/color_palette_widget.ui
+    $$PWD/src/QtColorWidgets/color_dialog.ui \
+    $$PWD/src/QtColorWidgets/color_palette_widget.ui
 
 RESOURCES += \
-    $$PWD/src/color_widgets.qrc
+    $$PWD/resources/QtColorWidgets/color_widgets.qrc
 

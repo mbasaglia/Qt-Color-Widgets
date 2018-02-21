@@ -20,7 +20,7 @@
  *
  */
 #include "color_2d_slider_plugin.hpp"
-#include "color_2d_slider.hpp"
+#include "QtColorWidgets/color_2d_slider.hpp"
 
 Color2DSlider_Plugin::Color2DSlider_Plugin(QObject *parent) :
     QObject(parent), initialized(false)
@@ -88,5 +88,3 @@ QString Color2DSlider_Plugin::includeFile() const
 {
     return "color_2d_slider.hpp";
 }
-
-
