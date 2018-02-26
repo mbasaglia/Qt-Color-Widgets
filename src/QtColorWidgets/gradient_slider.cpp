@@ -282,8 +282,6 @@ void GradientSlider::paintEvent(QPaintEvent *)
         opt_slider.state |= QStyle::State_Sunken;
         opt_slider.activeSubControls = QStyle::SC_SliderHandle;
     }
-    opt_slider.rect = style()->subControlRect(QStyle::CC_Slider,&opt_slider,
-                                              QStyle::SC_SliderHandle,this);
 
     style()->drawComplexControl(QStyle::CC_Slider, &opt_slider, &painter, this);
 }
