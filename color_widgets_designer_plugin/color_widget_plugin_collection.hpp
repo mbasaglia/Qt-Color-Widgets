@@ -22,7 +22,7 @@
 #ifndef COLOR_WIDGET_PLUGIN_COLLECTION_HPP
 #define COLOR_WIDGET_PLUGIN_COLLECTION_HPP
 
-#include <QDesignerCustomWidgetCollectionInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetCollectionInterface>
 
 class ColorWidgets_PluginCollection : public QObject, public QDesignerCustomWidgetCollectionInterface
 {

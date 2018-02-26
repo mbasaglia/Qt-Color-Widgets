@@ -23,7 +23,7 @@
 #define COLOR_WHEEL_PLUGIN_HPP
 
 #include <QObject>
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class ColorWheel_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

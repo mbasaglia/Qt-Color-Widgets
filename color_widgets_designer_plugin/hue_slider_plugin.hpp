@@ -1,7 +1,7 @@
 #ifndef HUE_SLIDER_PLUGIN_HPP
 #define HUE_SLIDER_PLUGIN_HPP
 
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class HueSlider_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

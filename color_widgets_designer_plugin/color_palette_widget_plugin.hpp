@@ -23,7 +23,7 @@
 #define COLOR_WIDGETS_COLOR_PALETTE_WIDGET_PLUGIN_HPP
 
 #include <QObject>
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class ColorPaletteWidget_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

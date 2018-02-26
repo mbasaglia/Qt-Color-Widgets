@@ -23,7 +23,7 @@
 #define COLOR_WIDGETS_SWATCH_PLUGIN_HPP
 
 #include <QObject>
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class Swatch_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

@@ -22,7 +22,7 @@
 #ifndef COLOR_LIST_PLUGIN_HPP
 #define COLOR_LIST_PLUGIN_HPP
 
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class ColorListWidget_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

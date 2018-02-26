@@ -23,7 +23,7 @@
 #define COLOR_WIDGETS_COLOR_LINE_EDIT_PLUGIN_HPP
 
 #include <QObject>
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class ColorLineEdit_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

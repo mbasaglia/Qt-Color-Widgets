@@ -22,7 +22,7 @@
 #ifndef COLOR_PREVIEW_PLUGIN_HPP
 #define COLOR_PREVIEW_PLUGIN_HPP
 
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class ColorPreview_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

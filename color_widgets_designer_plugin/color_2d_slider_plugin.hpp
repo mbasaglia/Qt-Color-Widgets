@@ -23,7 +23,7 @@
 #define COLOR_WIDGETS_COLOR_2D_SLIDER_PLUGIN_HPP
 
 #include <QObject>
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class Color2DSlider_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {

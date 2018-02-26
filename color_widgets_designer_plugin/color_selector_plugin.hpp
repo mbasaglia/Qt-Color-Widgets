@@ -22,7 +22,7 @@
 #ifndef COLOR_SELECTOR_PLUGIN_HPP
 #define COLOR_SELECTOR_PLUGIN_HPP
 
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class ColorSelector_Plugin : public QObject, public QDesignerCustomWidgetInterface
 {
