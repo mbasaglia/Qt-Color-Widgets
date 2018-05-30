@@ -7,3 +7,6 @@ moc_*.cpp
 Makefile
 out/*
 build/
+
+cmake-build-*/
+.idea/
