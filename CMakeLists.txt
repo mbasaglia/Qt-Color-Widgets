@@ -154,7 +154,10 @@ install_project (
 
 add_subdirectory (gallery)
 
-find_package (Qt5Designer)
-if (Qt5Designer_FOUND)
-    add_subdirectory (color_widgets_designer_plugin)
-endif(Qt5Designer_FOUND)
+option(QTCOLORWIDGETS_DESIGNER_PLUGIN "Build QtDesigner plugin" ON)
+if (${QTCOLORWIDGETS_DESIGNER_PLUGIN})
+    find_package (Qt5Designer)
+    if (Qt5Designer_FOUND)
+        add_subdirectory (color_widgets_designer_plugin)
+    endif(Qt5Designer_FOUND)
+endif()
