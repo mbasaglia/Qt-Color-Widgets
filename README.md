@@ -28,7 +28,7 @@ Using it in a project
 
 For QMake-based projects, include color_widgets.pri in the QMake project file.
 For CMake-based projects, add this as subdirectory, it will be compiled as a
-library and you can link the required targets to ColorWidgets-qt5.
+library and you can link the required targets to ColorWidgets.
 All the required files are in ./src and ./include.
 
 
