@@ -14,8 +14,8 @@ New Uris for this repos
 -----------------------
 
 For webview, replace
-`https://github.com/mbasaglia/<repo>` with
-`https://gitlab.com/mattia.basaglia/<repo>`
+https://github.com/mbasaglia/<repo> with
+https://gitlab.com/mattia.basaglia/<repo>
 
 For SSH remotes replace
 `git@github.com:mbasaglia/<repo>.git` with
