@@ -1,3 +1,8 @@
+tl;dr
+=====
+
+Go to https://gitlab.com/mattia.basaglia/Qt-Color-Widgets for the current version.
+
 Notice
 ======
 
